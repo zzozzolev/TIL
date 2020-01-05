@@ -7,5 +7,7 @@
     - Learning Scala (textbook)
 ---
 ## Technical Stacks
+- DB
+    - Learning SQL (textbook)
 ---
 ## ETC
