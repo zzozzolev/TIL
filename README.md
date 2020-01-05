@@ -3,6 +3,8 @@
 ## Languages
 - C
     - Cprimal (textbook)
+- Scala
+    - Learning Scala (textbook)
 ---
 ## Technical Stacks
 ---
