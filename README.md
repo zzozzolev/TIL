@@ -12,5 +12,6 @@
 ## Technical Stacks
 - DB
     - Learning SQL (textbook)
+    - Beginning Database Design Solutions (textbook)
 ---
 ## ETC
