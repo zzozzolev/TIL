@@ -16,3 +16,5 @@
     - django
 ---
 ## ETC
+- CodingTest
+- Git
