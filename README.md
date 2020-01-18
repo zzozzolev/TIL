@@ -2,7 +2,6 @@
 
 ## Languages
 - Python
-    - itself
 - C
     - Cprimal (textbook)
 - ~~Scala~~ (hasty)
