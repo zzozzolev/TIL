@@ -73,3 +73,70 @@ int sump(int * start, int * end)
 
 ```
 - `*start++;` The unary operators `*` and `++` have the same precedence but associate from right to left. This means the `++` applies to start, not to `*start`. That is, the pointer is incremented, not the value pointed to. The use of the postfix form (`start++` rather than `++start`) means that the pointer is not incremented until after the pointed-to value is added to total.
+- pointer에 ++을 하더라도 pointing 하는 게 바뀌지 자체의 메모리 주소는 바뀌지 않는다.
+- 같은 값을 pointing 할 수 있음.
+- Do not dereference an uninitialized pointer. Remember, creating a pointer only allocates memory to store the pointer itself; it doesn't allocate memory to store data. Therefore, before you use a pointer, it should be assigned a memory location that has already been allocated.
+```
+int * pt;
+*pt = 5;
+```
+### Protecting Array Contents
+- If a function's intent is that it not change the contents of the array, use the keyword `const` when declaring the formal parameter in the prototype and in the function definition. It's important to understand that using const this way does not require that the original array be constant; it just says that the function has to treat the array as though it were constant.
+- array 자체를 `const`로 선언할 수도 있고 pointer 자체를 `const`로 선언할 수도 있음. 근데 pointer 자체를 `const`로 선언했을 때 값을 할당하지 못하지만 다른 곳은 point하게 할 수 있음. 
+```
+const double * pd = rates;
+*pd = 29.89; // not allowed
+pd[2] = 222.22; // not allowed
+pd++; // make pd point to rates[1] -- allowed
+```
+- A pointer-to-constant is normally used as a function parameter to indicate that the function won't use the pointer to change data.
+- There are some rules you should know about pointer assignments and const. First, it's valid to assign the address of either constant data or nonconstant data to a pointer-to-constant. However, only the addresses of nonconstant data can be assigned to regular pointers.
+```
+double rates[5] = {88.99, 100.12, 59.45, 183.11, 340.5};
+const double locked[4] = {0.08, 0.075, 0.0725, 0.07};
+
+const double * pc = rates; // valid
+pc = locked; // valid
+pc = &rates[3]; //valid
+
+double * pnc = rates; // valid
+pnc = locked; // not valid
+pnc = &rates[3]; // valid
+```
+- Therefore, using const in a function parameter definition not only protects data, it also allows the function to work with arrays that have been declared const.
+- You can declare and initialize a pointer so that it can't be made to point elsewhere.
+```
+double rates[5] = {88.99, 100.12, 59.45, 183.11, 340.5};
+double * const pc = rates;
+pc = &rates[2]; // not allowed
+*pc = 92.99; // ok -- changes rates[0]
+```
+### Multidimensional array
+```
+int zippo[4][2]; /* an array of arrays of ints */
+*zippo = &zippo[0]
+*zippo+2 = &zippo[1][0] // ?
+```
+- How would you declare a pointer variable pz that can point to a two-dimensional array such as zippo? `int (* pz)[2]; // pz points to an array of 2 ints` `[ ]`가 더 높은 우선 순위를 가지기 때문에 꼭 괄호를 해줘야 됨. Foraml parameter라면 `int pz[][2];` 이렇게 쓸 수도 있음. 앞에 있는 index에 숫자를 쓸 수 있지만 무시됨.
+- you can use notation such as  `pz[2][1]`, even though pz is a pointer, not an array name.
+### Variable-Length Arrays (VLAs)
+- Here's how to declare a function with a two-dimensional VLA argument.
+```
+int sum2d(int rows, int cols, int ar[rows][cols]); // ar a VLA, rows와 cols 이전에 ar을 선언하면 error
+```
+- The C99 standard says you can omit names from the prototype; but in that case, you need to replace the omitted dimensions with asterisks.
+```
+int sum2d(int, int, int ar[*][*]); // ar a VLA, names omitted
+```
+### Compound Literals
+- python에서 lambda 개념인가?
+- Here's a compound literal that creates a nameless array containing the same two int
+values.
+```
+(int [2]){10, 20} // a compound literal
+```
+- Because these compound literals are nameless, you can't just create them in one statement and then use them later. Instead, you have to use them somehow when you make them. One way is to use a pointer to keep track of the location.
+- You can extend the technique to two-dimensional arrays, and beyond.
+```
+int (*pt2)[4]; // declare a pointer to an array of 4-int arrays pt2 = (int [2][4]) { {1,2,3,-9}, {4,5,6,-8} };
+```
