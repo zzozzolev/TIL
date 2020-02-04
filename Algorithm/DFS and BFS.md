@@ -14,3 +14,11 @@
 
 ## 주의할 점
 - tree와 graph를 DFS, BFS로 순회하는 건 다르다
+
+## 뭐가 더 좋을 까?
+- https://stackoverflow.com/questions/3332947/when-is-it-practical-to-use-depth-first-search-dfs-vs-breadth-first-search-bf
+- https://www.quora.com/When-should-we-use-BFS-instead-of-DFS-and-vice-versa
+
+## best first search
+- cost function을 정의할 수 있다면
+- https://www.geeksforgeeks.org/best-first-search-informed-search/
