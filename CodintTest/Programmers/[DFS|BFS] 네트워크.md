@@ -6,7 +6,7 @@
     - 포기하기 까지: 6분
 
 ### 통과율
-- 23.1%
+- 100%
 
 ### 접근법
 - union 이용. 
@@ -16,14 +16,16 @@
 - unique한 parents 개수 반환.
 
 ### 문제점
-- 왜 안 될까 ㅠㅜ...?
+- 필요 없는 ranks 사용
+- element 값이 아닌 인덱스를 사용해 건너건너 연결된 경우 잘못된 부모 값을 가짐.
+    - 1-3, 3-5 일 때 3번의 부모를 1로 바꿨다가 나중에 3번이랑 5번이 연결 돼있길래 5번의 부모를 1로 바꿔야 하는데 인덱스로 하면 3으로 바뀜
+
 
 ### my solution
 ```
 def solution(n, computers):
     # 자기 자신으로 부모 초기화
     parents = list(range(n))
-    ranks = [1] * n
     
     for i in range(len(computers)):
         for j in range(len(computers[i])):            
@@ -32,30 +34,16 @@ def solution(n, computers):
                 continue
             else:
                 if computers[i][j]:
-                    if ranks[i] < ranks[j]:
-                        parents, ranks = update(parents, i, j, ranks)
-                    elif ranks[i] > ranks[j]:
-                        parents, ranks = update(parents, j, i, ranks)
-                    else:
-                        if i < j:
-                            parents, ranks = update(parents, i, j, ranks)
-                        else:
-                            parents, ranks = update(parents, j, i, ranks)
-    
+                    update_child(parents, i, j)
+
     return len(set(parents))
         
-def update(parents, old, new, ranks):
-    parents, count = update_child(parents, old, new)
-    ranks[new] += count
-    return parents, ranks
-
 def update_child(parents, old, new):
-    count = 0
+    old_parents = parents[old]
     for idx, p in enumerate(parents):
-        if p == old:
-            parents[idx] = new
-            count += 1
-    return parents, count
+        if p == old_parents:
+            parents[idx] = parents[new]
+    return parents
 ```
 
 ### other solution
