@@ -14,12 +14,10 @@
 - target의 level을 반환
 
 ### 문제점
-
+- 아무리해도 target을 구할 수 없는 부분이 커버되지 않은 거 같다.
 
 ### my solution
 ```
-from collections import defaultdict
-
 def solution(begin, target, words):
     if target not in words:
         return 0
