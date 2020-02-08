@@ -86,3 +86,70 @@ int main()
     extern int stayhome; // use global stayhome
     ...
 ```
+
+### Multiple Files
+- Complex C programs often use several separate files of code. Sometimes these files might need to share an external variable.
+
+### Storage-Class Specifiers
+- you can't use one of the other storage-class specifiers as part of a `typedef`.
+- The `auto` specifier indicates a variable with automatic storage duration. It can be used only in declarations of variables with block scope, which already have automatic storage duration, so its main use is documenting intent.
+- The `register` specifier also can be used only with variables of block scope. It puts a variable into the register storage class, which amounts to a request that the variable be stored in a register for faster access. It also prevents you from taking the address of the variable.
+- The `static` specifier, when used in a declaration for a variable with block scope, gives that variable static storage duration so it exists and retains its value as long as the program is running, even at times the containing block isn't in use. The variable retains block scope and no linkage. When used in a declaration with file scope, it indicates that the variable has internal linkage.
+- The `extern` specifier indicates that you are declaring a variable that has been defined elsewhere. If the declaration containing `extern` has file scope, the variable referred to must have external linkage. If the declaration containing `extern` has block scope, the referred-to variable can have either external linkage or internal linkage, depending on the defining declaration for that variable.
+
+### Storage Classes and Functions
+- A function can be either external (the default) or static.
+- An external function can be accessed by functions in other files, but a static function can be used only within the defining file.
+
+### Allocated Memory: `malloc()` and `free()`
+- C goes beyond this. You can allocate more memory as a program runs. The main tool is the `malloc()` function, which takes one argument: the number of bytes of memory you want.
+- The memory is anonymous; that is, `malloc()` allocates memory but it doesn't assign a name to it. However, it does return the address of the first byte of that block. Therefore, you can assign that address to a pointer variable and use the pointer to access the memory.
+- The ANSI C standard, however, uses a new type: pointer-to-`void`. This type is intended to be a "generic pointer."
+- Assigning a pointer-to-`void` value to a pointer of another type is not considered a type clash. 
+- If `malloc()` fails to find the required space, it returns the null pointer.
+- This code requests space for 30 type `double` values and sets `ptd` to point to the location. Note that `ptd` is declared as a pointer to a single double and not to a block of 30 `double` values. Remember that the name of an array is the address of its first element. Therefore, if you make ptd point to the first element of the block, you can use it just like an array name.
+- Normally, you should balance each use of `malloc()` with a use of `free()`. The `free()` function takes as its argument an address returned earlier by `malloc()` and frees up the memory that had been allocated.
+- The argument to `free()` should be a pointer to a block of memory allocated by `malloc()`; you can't use `free()` to free memory allocated by other means, such as declaring an array. 
+
+### The Importance of `free()`
+- pointer는 automatic variable로 function이 끝나면 사라지지만 이게 가리키던 여전히 남아있어서 재활용을 못 함.
+- This sort of problem is called a `memory leak`, and it could have been prevented by having a call to `free()` at the end of the function.
+
+### The `calloc()` Function
+- `malloc()`이랑 argument 똑같음. 
+- It sets all the bits in the block to zero.
+
+### Dynamic Memory Allocation and Variable-Length Arrays
+- One difference is that the VLA is automatic storage. One consequence of automatic storage is that the memory space used by the VLA is freed automatically when the execution leaves the defining block. Therefore, you don't have to worry about using `free()`.
+-  On the other hand, the array created using `malloc()` needn't have its access limited to one function.
+- VLAs are more convenient for multidimensional arrays. You can create a two-dimensional array using `malloc()`, but the syntax is awkward.
+
+### ANSI C Type Qualifiers
+- `const`, `volatile`, `restrict`
+- you can use the same qualifier more than once in a declaration, and the superfluous(필요 없는) ones are ignored.
+-  In short, a const anywhere to the left of the `*` makes the data constant, and a const to the right of the `*` makes the pointer itself constant.
+
+### Using `const` with Global Data
+- You can have `const` variables, `const` arrays, and `const` structures.
+```
+/* file1.c -- defines some global constants */ const double PI = 3.14159;
+const char * MONTHS[12] =
+{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+/* file2.c -- use global constants defined elsewhere */ extern const double PI;
+extern const * MONTHS[];
+```
+- The advantage of the header file approach is that you don't have to remember to use defining declarations in one file and reference declarations in the next; all files simply include the same header file. The disadvantage is that the data is duplicated. For the preceding examples, that's not a real problem, but it might be one if your constant data includes enormous arrays.
+```
+/* constant.h -- defines some global constants */ static const double PI = 3.14159;
+static const char * MONTHS[12] =
+{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+/* file1.c -- use global constants defined elsewhere */ #include "constant.h"
+/* file2.c -- use global constants defined elsewhere */ #include "constant.h"
+```
+
+### The volatile Type Qualifier
+- The `volatile` qualifier tells the compiler that a variable can have its value altered by agencies other than the program.
+
+### The restrict Type Qualifier
+- The `restrict` keyword enhances computational support by giving the compiler permission to optimize certain kinds of code. It can be applied only to pointers, and it indicates that a pointer is the sole initial means of accessing a data object.
+- You can use the `restrict` keyword as a qualifier for function parameters that are pointers. This means that the compiler can assume that no other identifiers modify the pointed-to data within the body of the function.
