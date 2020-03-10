@@ -194,3 +194,82 @@ char s1[20];                // 변환한 문자열을 저장할 배열
 float num1 = 38.972340f;    // 38.972340은 실수
 sprintf(s1, "%e", num1);    // %e를 지정하여 실수를 지수 표기법으로 된 문자열로 저장
 ```
+
+## struct 전역 변수로 만들기
+- `main` 밖에 structure가 선언된 경우.
+```
+struct something {
+    type member...
+} variable;
+
+struct Person {    // 구조체 정의
+    char name[20];        // 구조체 멤버 1
+    int age;              // 구조체 멤버 2
+    char address[100];    // 구조체 멤버 3
+} p1;               // 구조체를 정의하는 동시에 변수 p1 선언
+```
+
+## `typedef`로 `struct` 키워드 없이 구조체 선언하기
+```
+# 구조체이름 생략 가능
+typedef struct 구조체이름 {
+    자료형 멤버이름;
+} 구조체별칭;
+
+typedef struct _Person {   // 구조체 이름은 _Person
+    char name[20];            // 구조체 멤버 1
+    int age;                  // 구조체 멤버 2
+    char address[100];        // 구조체 멤버 3
+} Person;                  // typedef를 사용하여 구조체 별칭을 Person으로 정의
+
+Person p1;    // 구조체 별칭 Person으로 변수 선언
+```
+
+## 구조체 포인터를 선언하고 메모리 할당하기
+```
+struct Person {    // 구조체 정의
+    char name[20];        // 구조체 멤버 1
+    int age;              // 구조체 멤버 2
+    char address[100];    // 구조체 멤버 3
+};
+
+# malloc 사용
+struct 구조체이름 *포인터이름 = malloc(sizeof(struct 구조체이름));
+struct Person *p1 = malloc(sizeof(struct Person));    // 구조체 포인터 선언, 메모리 할당
+
+# 주소 연산자 사용
+구조체포인터 = &구조체변수;
+struct Person p1;      // 구조체 변수 선언
+struct Person *ptr;    // 구조체 포인터 선언
+
+ptr = &p1;    // p1의 메모리 주소를 구하여 ptr에 할당
+
+```
+
+## 구조체 변수나 메모리 내용 한꺼번에 설정
+```
+memset(구조체포인터, 설정할값, sizeof(struct 구조체));
+
+struct Point2D p1;
+memset(&p1, 0, sizeof(struct Point2D));    // p1을 구조체 크기만큼 0으로 설정
+
+struct Point2D *p1 = malloc(sizeof(struct Point2D));    // 구조체 크기만큼 메모리 할당
+memset(p1, 0, sizeof(struct Point2D));    // p1을 구조체 크기만큼 0으로 설정
+```
+
+## 구조체와 메모리 복사하기
+- `memcpy(목적지포인터, 원본포인터, 크기); void *memcpy(void *_Dst, void const *_Src, size_t _Size);`
+```
+struct Point2D {
+    int x;
+    int y;
+};
+
+struct Point2D p1;
+struct Point2D p2;
+
+p1.x = 10;    // p1의 멤버에만 값 저장
+p1.y = 20;    // p1의 멤버에만 값 저장
+
+memcpy(&p2, &p1, sizeof(struct Point2D));    // Point2D 구조체 크기만큼 p1의 내용을 p2로 복사
+```
