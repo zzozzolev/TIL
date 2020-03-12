@@ -220,7 +220,7 @@ typedef struct _Person {   // 구조체 이름은 _Person
     char name[20];            // 구조체 멤버 1
     int age;                  // 구조체 멤버 2
     char address[100];        // 구조체 멤버 3
-} Person;                  // typedef를 사용하여 구조체 별칭을 Person으로 정의
+} Person, *PPerson;                  // typedef를 사용하여 구조체 별칭을 Person으로, 구조체 포인터 별칭을 PPerson으로 정의
 
 Person p1;    // 구조체 별칭 Person으로 변수 선언
 ```
@@ -272,4 +272,70 @@ p1.x = 10;    // p1의 멤버에만 값 저장
 p1.y = 20;    // p1의 멤버에만 값 저장
 
 memcpy(&p2, &p1, sizeof(struct Point2D));    // Point2D 구조체 크기만큼 p1의 내용을 p2로 복사
+```
+
+## 구조체 내에 구조체 선언하기
+- A 구조체를 다른 곳에서는 쓰지 않고 B 구조체 안에서만 쓴다면 B 구조체 안에 A 구조체를 정의하는 게 더 편리함.
+- 단, 이때는 A 구조체를 정의한 뒤 반드시 변수를 선언해야 함.
+```
+struct Person {    // 사람 구조체
+    char name[20];    // 이름
+    int age;          // 나이
+    struct Phone {    // 휴대전화 구조체를 사람 구조체 안에 정의
+        int areacode;                 // 국가번호
+        unsigned long long number;    // 휴대전화 번호
+    } phone;                          // 구조체를 정의하는 동시에 변수 선언
+};
+```
+
+## 열거형 초기화
+- 처음에만 할당해주면 그 아래에 오는 값들은 1씩 증가하면서 자동으로 할당.
+- 아무 값도 할당하지 않으면 0부터 시작.
+```
+enum DayOfWeek {    // 열거형 정의
+    Sunday = 0,         // 초깃값 할당
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday
+};
+```
+
+## 열거형 반복문에 사용
+- 열거형 값을 나열하다가 맨 마지막에는 열거형 값의 개수를 나타내는 항목을 넣어줌.
+```
+typedef enum _DayOfWeek {    // 열거형 이름은 _DayOfWeek
+    Sunday = 0,                  // 초깃값을 0으로 할당
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    DayOfWeekCount               // 열거형 값의 총 개수를 뜻하는 값 추가
+} DayOfWeek;                 // typedef를 사용하여 열거형 별칭을 DayOfWeek로 정의
+```
+
+## 구조체 포인터 변환하기 (`void` -> `struct`)
+- `->`가 typecast보다 우선순위가 높기 때문에 typecast한 뒤, 괄호를 해줘야 됨.
+```
+struct Data {
+    char c1;
+    int num1;
+};
+
+struct Data *d1 = malloc(sizeof(struct Data));    // 포인터에 구조체 크기만큼 메모리 할당
+void *ptr;    // void 포인터 선언
+
+d1->c1 = 'a';
+d1->num1 = 10;
+
+ptr = d1;    // void 포인터에 d1 할당. 포인터 자료형이 달라도 컴파일 경고가 발생하지 않음.
+
+printf("%c\n", ((struct Data *)ptr)->c1);      // 'a' : 구조체 포인터로 변환하여 멤버에 접근
+printf("%d\n", ((struct Data *)ptr)->num1);    // 10  : 구조체 포인터로 변환하여 멤버에 접근
+
+free(d1);    // 동적 메모리 해제
 ```
