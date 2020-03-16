@@ -339,3 +339,79 @@ printf("%d\n", ((struct Data *)ptr)->num1);    // 10  : 구조체 포인터로 �
 
 free(d1);    // 동적 메모리 해제
 ```
+
+## string literal life time
+- https://stackoverflow.com/questions/9970295/life-time-of-string-literal-in-c
+- String literals are different from local variables and they remain alive throughout the program lifetime.They have static duration lifetime.
+- However, note that any attempt to modify the contents of an string literal is an Undefined Behavior. User programs are not allowed to modify contents of a string literal. Hence, it is always encouraged to use a const while declaring a string literal.
+- `const char*p = "string";` instead of, `char*p = "string";`
+
+## Pointers as function arguments in C
+- https://stackoverflow.com/questions/18698317/pointers-as-function-arguments-in-c
+- A reasonable rule of thumb is that you can't exactly change the exact thing that is passed is such a way that the caller sees the change. Passing pointers is the workaround.
+- Pass By Value: `void fcn(int foo)` When passing by value, you get a copy of the value. If you change the value in your function, the caller still sees the original value regardless of your changes.
+- Pass By Pointer to Value: `void fcn(int* foo)` Passing by pointer gives you a copy of the pointer - it points to the same memory location as the original. This memory location is where the original is stored. This lets you change the pointed-to value. However, you can't change the actual pointer to the data since you only received a copy of the pointer.
+- Pass Pointer to Pointer to Value: `void fcn(int** foo)` You get around the above by passing a pointer to a pointer to a value. As above, you can change the value so that the caller will see the change because it's the same memory location as the caller code is using. For the same reason, you can change the pointer to the value. This lets you do such things as allocate memory within the function and return it; `&arg2 = calloc(len);`. You still can't change the pointer to the pointer, since that's the thing you recieve a copy of.
+
+## 함수의 배열 매개변수에서 요소의 최소 개수 지정하기
+```
+반환값자료형 함수이름(자료형 매개변수[static 최소개수])
+{
+}
+```
+
+## 2차원 배열 함수 parameter로 넘겨주기
+- 함수에서 2차원 배열을 매개변수로 사용할 때는 매개변수 이름 뒤에 []를 두 개 붙이고 두 번째 대괄호에는 배열의 가로 크기를 지정해야됨.
+- 지정하지 않은 경우 컴파일 에러 남.
+```
+void print2DArray(int arr[][5], int col, int row)
+
+# 2차원 배열을 매개변수로 사용할 때는 포인터와 대괄호를 사용할 수도 있음
+void print2DArray(int (*arr)[5], int col, int row)
+```
+
+## 구조체 매개변수 사용하기
+- 함수를 호출할 때 구조체 변수를 넣어주면 구조체 변수의 모든 멤버가 매개변수로 복사됨.
+- 구조체 크기가 커지면 복사할 공간이 그만큼 더 필요하게 되므로 공간이 낭비되어 비효율적.
+- 보통 매개변수로 구조체를 전달할 때는 포인터를 활용하는 것이 좋음.
+
+## GCC va_arg
+- GCC에서 가변 인자로 받은 값의 자료형이 `int`보다 작다면 `int`로, `float`라면 `double`로 지정
+
+## 함수 포인터
+- 함수도 호출하지 않고 변수에 할당할 수 있음.
+- `반환값자료형 (*함수포인터이름)();`: 함수 포인터를 선언할 때는 함수 포인터와 저장될 함수의 반환값 자료형, 매개변수 자료형과 개수가 일치해야함.
+```
+#include <stdio.h>
+
+void hello()     // 반환값과 매개변수가 없음
+{
+    printf("Hello, world!\n");
+}
+
+void bonjour()    // 반환값과 매개변수가 없음
+{
+    printf("bonjour le monde!\n");
+}
+
+int main()
+{
+    void (*fp)();   // 반환값과 매개변수가 없는 함수 포인터 fp 선언
+
+    fp = hello;     // hello 함수의 메모리 주소를 함수 포인터 fp에 저장
+    fp();           // Hello, world!: 함수 포인터로 hello 함수 호출
+
+    fp = bonjour;   // bonjour 함수의 메모리 주소를 함수 포인터 fp에 저장
+    fp();           // bonjour le monde!: 함수 포인터로 bonjour 함수 호출
+
+    return 0;
+}
+```
+- 함수 포인터 배열은 함수 포인터를 선언할 때 함수 포인터 이름 뒤에 [ ] 대괄호 안에 배열의 크기를 지정 
+```
+반환값자료형 (*함수포인터이름[크기])(매개변수자료형1, 매개변수자료형2);
+
+int (*fp[4])(int, int);    // int형 반환값, int형 매개변수 두 개가 있는 함수 포인터 배열 선언
+
+int (*fp[4])(int, int) = { add, sub, mul, div };    // 중괄호로 함수의 메모리 주소를 저장
+```
