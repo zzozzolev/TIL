@@ -2,10 +2,6 @@
 
 ## Languages
 - Python
-- C
-    - Cprimal (textbook)
-- ~~Scala~~ (hasty)
-    - Learning Scala (textbook)
 ---
 ## Technical Stacks
 - Backend
