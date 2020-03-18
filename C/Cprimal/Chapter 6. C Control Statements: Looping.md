@@ -1,8 +1,0 @@
-- loop condition에서 값을 조절하면 아예 해당 조건을 충족하면 body로 들어가지 않지만 body에서 값을 조절하면 조건을 충족하지 않는 상태여도 body가 실행될 수 있음. 그리고 이걸 아는 게 중요함! 예를 들면 `while(++n < 7)` 이런 식으로 하면 n이 7일 때는 body가 실행되지 않겠지만 `while(n < 7){ n++; }` 이런 식으로 하면 n이 7일 때도 body가 실행됨.
-- Many C programmers make use of this property of test conditions. For example, the phrase `while (goats != 0)` can be replaced by `while (goats)`.
-- C99에서 int 대신 _Bool 사용
-- C99  also  provides  for  a  `stdbool.h`  header  file.  This  header  file  makes  bool  an  alias  for  `_Bool` and defines `true` and `false` as symbolic constants for the values 1 and 0.
-- The comma operator extends the flexibility of the for loop by enabling you to include more than one  initialization  or  update  expression  in  a  single  for  loop  specification.  라고 하는데 java에서도 가능할 거 같지만 이렇게 여러 개를 초기화하거나 업데이트했던 적은 거의 없는 거 같다.
-- the  comma  is  a  sequence  point,  so  all  side effects  to  the  left  of  the  comma  take  place  before  the  program  moves  to  the  right  of  the comma.
-- In  terms  of  prevailing  style,  a  for  loop  is  appropriate  when  the  loop  involves  initializing  and updating a variable, and a while loop is better when the conditions are otherwise.
-- One potential pitfall is that, in the interest of speed of execution, C doesn't check to see whether you use a correct subscript. -> 미쳤다 😵
