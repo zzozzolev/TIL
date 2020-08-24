@@ -5,9 +5,6 @@
 ---
 ## Technical Stacks
 - Backend
-    - DB
-        - Learning SQL (textbook)
-        - Beginning Database Design Solutions (textbook)
     - django
     - Bash
     - Docker
