@@ -5,7 +5,12 @@
 - 100%
 
 ### 접근법
-- 
+- `intervals`의 길이가 0이면 빈리스트를 반환한다.
+- `intervals`를 오름차순으로 정렬한다.
+- `answer`에 `intervals`의 첫번째 튜플을 pop해서 초기화한다.
+- `len(intervals)`만큼 반복문을 돌면서 다음을 반복한다.
+    - `answer[-1][1]`이 `intervals[i][0]`보다 크거나 같다면 merge를 해야하므로 `answer`를 pop하고 `answer`에 `[popped[0], max(popped[1], intervals[i][1])]`을 추가한다.
+    - 그렇지 않다면 `answer`에 `intervals[i]`를 추가한다.
 
 ### 문제점
 - 새로운 리스트를 만들지 않고 기존 리스트를 pop해서 정답을 얻으려고 했는데 길이가 들쑥날쑥이어서 `list index out of range` 에러가 나서 났다. pop을 하면서 index를 이용하지 말아야겠다.
