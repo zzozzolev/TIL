@@ -29,7 +29,10 @@ def largestRectangleArea(self, height):
 - 기본 원리는 stack에 있는 height를 항상 오름차순으로 유지하는 것이다.
 - stack의 top보다 `height[i]`가 작다면 그렇지 않을 때까지 pop을 한다. 오름차순을 유지하기 위함이다.
 - 이렇게 하면서 높이와 축적된 너비를 이용해 면적을 구한다.
-이미지 여기
+
+![rec1.png](./rec1.png)
+![rec2.png](./rec2.png)
+![rec3.png](./rec3.png)
 
 # 주목할 점
 - 문제를 풀 때 많이 고민한 부분은 개별 하나는 작지만 쭉 이어진게 클 수도 있고 하나가 무진장 클 수도 있는데 이걸 어떻게 효율적으로 아냐였다. 하지만 생각이 나지 않아 left, right 접근법을 썼고 시간초과에 걸리게 됐다 ㅠㅠ
