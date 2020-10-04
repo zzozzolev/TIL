@@ -27,3 +27,8 @@
 - 대표적으로 LCS가 있고 비슷하게 최대값을 구하는 문제도 있다. 
     - [LCS 문제](https://www.acmicpc.net/problem/9251), [LCS 해설](https://suri78.tistory.com/11)
     - [이동하기 문제](https://www.acmicpc.net/problem/11048), [이동하기 해설](https://github.com/zzozzolev/TIL/blob/master/CodintTest/%EB%B0%B1%EC%A4%80/silver1/DP/%EC%9D%B4%EB%8F%99%ED%95%98%EA%B8%B0.md)
+
+# 2차원에서 경우의 수 나누고 이전 케이스 이용하기
+- 보통 이럴 때는 뭐가 되고 안 되는지 케이스가 분명하게 정해져있고 한정돼있다.
+- 이전의 케이스가 현재 케이스에 영향을 끼친다.
+- 예를 들면 이전에 이렇게 배치했으면 다음에는 어떻게 배치해야된다든지 조건이 있다. -> [동물원 문제](https://www.acmicpc.net/problem/1309), [동물원 해설](https://sihyungyou.github.io/baekjoon-1309/)
