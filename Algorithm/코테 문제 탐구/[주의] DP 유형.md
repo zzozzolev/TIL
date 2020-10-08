@@ -33,3 +33,8 @@
 - 이전의 케이스가 현재 케이스에 영향을 끼친다.
 - 예를 들면 이전에 이렇게 배치했으면 다음에는 어떻게 배치해야된다든지 조건이 있다. -> [동물원 문제](https://www.acmicpc.net/problem/1309), [동물원 해설](https://sihyungyou.github.io/baekjoon-1309/)
 - 특정한 조건이 있고 가능한 레인지가 있다. -> [기타리스트](https://www.acmicpc.net/problem/1495), [기타리스트 해설](https://m.blog.naver.com/PostView.nhn?blogId=occidere&logNo=221078781781&proxyReferer=https:%2F%2Fwww.google.com%2F)
+
+# 3차원으로 DP 배열 만들기
+- 변수가 3개가 있다.
+- 문제에서 변수가 몇 개가 주어지는지 잘 봐야겠다.
+- [자두나무 문제](https://www.acmicpc.net/problem/2240), [자두나무 해설](https://mygumi.tistory.com/140)
