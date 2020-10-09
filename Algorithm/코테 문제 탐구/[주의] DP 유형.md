@@ -38,3 +38,8 @@
 - 변수가 3개가 있다.
 - 문제에서 변수가 몇 개가 주어지는지 잘 봐야겠다.
 - [자두나무 문제](https://www.acmicpc.net/problem/2240), [자두나무 해설](https://mygumi.tistory.com/140)
+
+# 재귀 이용하기
+- 현재 상태에 따라 결과값이 달라진다. 
+- 갈 수 있는 상태가 여러가지이다. DP 배열 자체만 달라지는 게 아니라 인풋 자체가 달라질 수 있다.
+- [카드게임](https://www.acmicpc.net/problem/10835), [카드게임 해설](https://fenslett.tistory.com/entry/%EB%B0%B1%EC%A4%80-10835-%EC%B9%B4%EB%93%9C-%EA%B2%8C%EC%9E%84?category=301370)
