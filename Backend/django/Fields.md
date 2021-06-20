@@ -26,3 +26,26 @@
 - If you try to save a model with a duplicate value in a unique field, a django.db.IntegrityError will be raised by the model’s `save()` method.
 - This option is valid on all field types except ManyToManyField and OneToOneField.
 - Note that when unique is True, you don’t need to specify `db_index`, because unique implies the creation of an index.
+
+# Custom relational fields
+- [drf 문서](https://www.django-rest-framework.org/api-guide/relations/#custom-relational-fields)
+- model instance로부터 output representation이 어떻게 보여져야하는지 직접 정의할 수 있음.
+- 필요 조건
+    - `serializers.RelatedField`를 상속해야함.
+    - `.to_representation(self, value)`를 구현해야함. `value`는 모델 인스턴스임.
+- `.to_internal_value(self, value)`를 구현해 real-write를 할 수 있도록 만들 수 있음.
+- context에 따라 dynamic queryset을 제공하기 위해서는 `.get_queryset(self)`를 오버라이드하면 됨.
+- 예시 (출처는 [여기](https://github.com/gothinkster/django-realworld-example-app/blob/master/conduit/apps/articles/relations.py#L6))
+  ```python
+  class TagRelatedField(serializers.RelatedField):
+    def get_queryset(self):
+        return Tag.objects.all()
+
+    def to_internal_value(self, data):
+        tag, created = Tag.objects.get_or_create(tag=data, slug=data.lower())
+
+        return tag
+
+    def to_representation(self, value):
+        return value.tag
+  ```
