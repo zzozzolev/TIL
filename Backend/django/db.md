@@ -8,7 +8,7 @@
 
 ## Tying transactions to HTTP requests
 - 웹에서 트랜잭션을 다루는 흔한 방법은 트랜잭션에 각각의 리퀘스트 감싸는 것이다.
-- 만약 이런 행동을 원한다면 database 설정에서 `ATOMIC_REQUESTS`를 `True`로 하면 된다. (이게 디폴트임)
+- 만약 이런 행동을 원한다면 database 설정에서 `ATOMIC_REQUESTS`를 `True`로 하면 된다. (`False`가 디폴트임)
 - 다음과 같이 작동한다. view 함수를 부르기 전에 장고는 트랜잭션을 시작한다. 만약 응답이 문제 없이 생성된다면, 장고는 트랜잭션을 커밋한다. 만약 예외가 발생한다면 장고는 트랜잭션을 롤백한다.
 - view 코드에서 subtracsactions를 수행할 수도 있는데 보통 `atomic` 매니저를 이용한다.
 - 하지만 view의 끝에서 변경 사항들이 전부 커밋되거나 전부 커밋되지 않는다.
