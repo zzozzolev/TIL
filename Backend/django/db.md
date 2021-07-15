@@ -29,3 +29,18 @@
 - `AUTOCOMMIT`을 `False`로 하면 장고의 트랜잭션 관리를 디스에이블할 수도 있다.
 - 그렇게 한다면 장고는 오토 커밋이 가능하게 하지 않고 어떤 커밋도 수행하지 않는다. 기본적인 데이터 베이스 라이브버리와 비슷하게 된다.
 - 장고에 의해서 시작되든 third-party 라이브러리에서 시작되든 명시적으로 모든 트랜잭션을 커밋해야한다.
+
+## 실제 코드로 테스트
+- 수도 코드
+```
+Save User
+Raise Error
+Save Profile
+```
+
+| `ATOMIC_REQUESTS` | transaction manager | `@transaction.atomic` decorator | result |
+| --- | --- | --- | --- |
+| `False` | X | X | User 저장 |
+| `True` | X | X | User 저장 X |
+| `False` | O | X | User 저장 X |
+| `False` | X | O | User 저장 X |
