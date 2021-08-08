@@ -17,3 +17,10 @@
  # 이제 Article은 `created_at`과 `updated_at`을 가진다.
  class Article(TimestampedModel):
  ```
+
+ # 필드 파라미터 얻기
+ - `_meta.get_field(<field name>)`을 이용하면 해당 필드의 파라미터들을 얻을 수 있다.
+ - 예를 들어 최대 길이를 알고 싶다면 다음과 같이 할 수 있다.
+    ```
+    Post._meta.get_field("slug").max_length
+    ```
