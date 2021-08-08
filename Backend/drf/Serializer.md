@@ -35,3 +35,15 @@
 
     return self.instance
   ```
+
+### Including extra context
+- https://www.django-rest-framework.org/api-guide/serializers/#including-extra-context
+- serializer에 추가로 context를 제공해야할 수도 있다.
+- 흔한 케이스 중 하나는 serializer가 다른 모델과 relation을 맺고 있을 때이다. (문서에서는 hyperlinked relation을 언급했음)
+- 이때는 serializer가 현재 request에 접근해서 적절한 정보를 얻을 수 있어야한다.
+- 딱 정해진 건 아니고 아무 정보나 넘겨줄 수 있다.
+```
+serializer = AccountSerializer(account, context={'request': request})
+serializer.data
+# {'id': 6, 'owner': 'denvercoder9', 'created': datetime.datetime(2013, 2, 12, 09, 44, 56, 678870), 'details': 'http://example.com/accounts/6/details'}
+```
