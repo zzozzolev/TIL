@@ -22,6 +22,7 @@
 ### Default time zone and current time zone
 
 - default time zone은 `TIME_ZONE` setting에 의해 정의되는 time zone이고 current time zone은 렌더링에 사용되는 time zone이다.
+- `activate()`를 사용해 current time zone을 앤드 유저의 actual time zone으로 설정해야한다. 그렇지 않다면 default time zone이 사용된다.
 - `TIME_ZONE`의 문서에서 설명된 대로 Django는 프로세스가 default time zone에서 실행되도록 환경 변수를 설정한다. 이 문제는 `USE_TZ` 값과 current time zone에 관계없이 발생한다.
 - `USE_TZ`가 `True`인 경우, 여전히 local time에 의존하는 어플리케이션과의 backwards-compatibility를 유지하는 데 유용하다. 그러나 위에서 설명한 것처럼, 이것은 전적으로 신뢰할 수 있는 것은 아니며, 항상 UTC의 aware datetimes을 코드에서 사용해야한다. 예를 들어 `fromtimestamp()`를 사용하고 `tz` 매개 변수를 `utc`로 설정한다.
 
@@ -34,4 +35,18 @@
 - naive datetime일 때는 그렇지 않다.
   ```
   "2011-09-01T13:20:30"
+  ```
+
+### Selecting the current time zone
+
+- current time zone은 current locale과 동일하다.
+- 하지만 locale처럼 헤더에서 `Accept-Language`같은 정보는 얻지 못한다.
+- Django는 time zone을 선택하는 함수들을 제공한다. time zone을 선택할 때 이걸 사용해라.
+- time zone을 신경쓰는 대부분의 웹 사이트들은 유저들에게 어떤 time zone에서 사는지 물어보고 이 정보를 유저의 프로필에 저장한다.
+- 구체적인 구현은 제외하고 대략적인 것만 보면 다음과 같이 time zone을 activate한다.
+  ```
+  import pytz
+  from django.utils import timezone
+  ...
+  timezone.activate(pytz.timezone(tzname))
   ```
