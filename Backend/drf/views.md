@@ -16,3 +16,9 @@
         if author is not None:
             queryset = queryset.filter(author__user__username=author)
   ```
+
+# ViewSet
+## 정의하지 않은 메서드
+- `ViewSet`에 정의하지 않은 메서드는 요청시 `405 METHOD_NOT_ALLOWED`가 응답으로 온다.
+  - 예를 들면 `ViewSet`에 `partial_update`만 정의하고 `PUT`으로 요청하면 해당 응답이 온다.
+  - 단, `APIView`는 `http_method_names`로 직접 지정하지 않으면 이렇게 처리가 안 되는 것 같다.
