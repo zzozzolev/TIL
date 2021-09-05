@@ -22,3 +22,7 @@
             print(request.user)
             return self.list(request, *args, **kwargs)
     ```
+
+# jwt
+- auth token과의 차이점은 다음과 같다.
+  - [Django : DRF Token based Authentication VS JSON Web Token](https://stackoverflow.com/questions/31600497/django-drf-token-based-authentication-vs-json-web-token)
