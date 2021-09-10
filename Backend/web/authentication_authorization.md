@@ -18,9 +18,22 @@
   - 위의 1,2번은 정의한 대로 써야하고 그 외에 나머지는 자유롭게 정의해도 된다.
 
 ## 인증 과정
-- 보통은 대칭키(암호화와 복호화에 같은 키 사용)인 secret key를 이용해 서버가 인코딩된 header와 payload를 서명하고 클라이언트에게 `access token`으로 넘겨준다.
+- [jwt-security-nobody-talks-about](https://www.pingidentity.com/en/company/blog/posts/2019/jwt-security-nobody-talks-about.html)
+
+### 대칭키
+- 암호화와 복호화에 같은 키를 사용한다.
+- 대칭키인 secret key를 이용해 서버가 인코딩된 header와 payload를 서명하고 클라이언트에게 `access token`으로 넘겨준다.
 - 클라이언트는 authorization을 하고 싶을 때, 이 `access token`을 서버에게 넘겨준다.
-- 서버는 클라이언트에게 받은 `access token`을 header, payload, signature로 분류한 뒤, 자신의 secret key로 signature를 생선한다. 그리고 새로 만든 signature와 클라이언트에게 받은 signature가 같은지 비교한다.
+- 서버는 클라이언트에게 받은 `access token`을 header, payload, signature로 분류한 뒤, 자신의 secret key로 signature를 생선한다. 그리고 새로 만든 signature와 클라이언트에게 받은 signature가 같은지 검증한다.
+- 한계: 모든 서비스가 같은 secret key를 공유하고 있어야한다. secret key는 말 그대로 비밀스럽게 신뢰할 수 있는 곳에서만 가지고 있어야한다.
+
+### 비대칭키
+- 대칭키의 보안상 한계를 보완하기 위해 사용한다.
+- secret key는 signature 생성에 public key는 signature 복호화에 사용한다.
+- secret key는 안전한 장소에만 보관된다. public key는 검증이 필요한 모든 서버가 공유한다.
+- 클라이언트에게 요청을 받은 public key를 가지고 있는 서버가 secret key를 들고 있는 서버에 jwt 생성을 요청한다. 해당 서버에서 header와 payload를 이용해 secret key로 signature를 생성한다. 클라이언트까지 `access token`을 넘겨준다.
+- 클라이언트는 authorization을 하고 싶을 때, 이 `access token`을 public key를 가지고 있는 서버에게 넘겨준다.
+- 서버는 클라이언트에게 받은 `access token`을 header, payload, signature로 분류한 뒤, 자신의 public key로 signature를 복호화한다. header + payload와 복호화한 signature가 같은지 검증한다.
 
 ## 참고
 - [What Is JWT and Why Should You Use JWT](https://www.youtube.com/watch?v=7Q17ubqLfaM)
