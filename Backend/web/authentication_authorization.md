@@ -35,6 +35,13 @@
 - 클라이언트는 authorization을 하고 싶을 때, 이 `access token`을 public key를 가지고 있는 서버에게 넘겨준다.
 - 서버는 클라이언트에게 받은 `access token`을 header, payload, signature로 분류한 뒤, 자신의 public key로 signature를 복호화한다. header + payload와 복호화한 signature가 같은지 검증한다.
 
+## blacklist
+- 클라이언트가 로그아웃을 해서 더 이상 `refresh token`을 사용하지 않더라도 expiration time까지는 토큰이 유효하다. `refresh token`은 expiration time을 길게 잡기 때문에 위험하다. 중간에 토큰이 탈취돼 악용될 수도 있다.
+- 실제로 별도의 설정을 하지 않고 expiration만 설정해놓으면 expiration time이 지나기 전에는 이전에 발급한 `refresh token`을 재사용할 수 있다.
+- 따라서 expiration과 상관없이 토큰이 더 이상 valid 하지 않도록 하는 방법이 필요하다. 이게 바로 blacklist이다.
+- 로그아웃 혹은 토큰이 탈취돼 invalid 해야할 때 blacklist api에 요청을 해서 invalid 시킨다.
+- 단, `access token`은 expiration이 비교적 짧기 때문에 프레임워크에 따라서 invalid에 포함하지 않는 것 같기도 하다. 일단 drf에서는 안 된다.
+
 ## 참고
 - [What Is JWT and Why Should You Use JWT](https://www.youtube.com/watch?v=7Q17ubqLfaM)
 - https://meetup.toast.com/posts/239
