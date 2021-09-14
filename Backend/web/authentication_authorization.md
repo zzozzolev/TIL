@@ -2,12 +2,16 @@
 - https://jeong-pro.tistory.com/80
 
 # JWT
-- authorization에 쓰이는 거지 authentication에 쓰이는 게 아니다.
 - 이미 존재하는 유저에 대해서 토큰을 발급해주고 이용하는 것이다.
 - session은 서버에 유저 정보를 저장하기 때문에 동일한 클라이언트가 여러 서버에 접근해야할 때 불편하다. 하지만 JWT 같은 경우, 클라이언트가 정보를 갖고 있기 때문에 그렇지 않다.
 
+## authentication vs authorization
+- authorization에 쓰이는 거지 authentication에 쓰이는 게 아니다.
+- authentication은 username과 password가 올바른지 확인하는 것이고 authorization은 request를 보내는 유저가 올바른 유저가 맞는지 확인하는 것이다.
+- [비슷해보이지만 다른 두 친구를 소개합니다.](https://baek.dev/post/24/)
+
 ## session vs jwt
-- [세션은 뭐고 JWT는 무엇일까](https://m.blog.naver.com/shino1025/221568544633)
+- [쉽게 알아보는 서버 인증 1편(세션/쿠키 , JWT)](https://tansfil.tistory.com/58)
 
 ## payload
 - payload의 key, value 페어 하나 하나를 claim이라고 한다.
