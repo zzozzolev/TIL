@@ -27,6 +27,9 @@
 - auth token과의 차이점은 다음과 같다.
   - [Django : DRF Token based Authentication VS JSON Web Token](https://stackoverflow.com/questions/31600497/django-drf-token-based-authentication-vs-json-web-token)
 
+## authentication
+- authentication은 `settings.AUTHENTICATION_BACKENDS`을 이용한다.
+
 ## setting
 - [기본 setting](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html)
 
