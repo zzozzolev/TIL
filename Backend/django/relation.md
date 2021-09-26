@@ -13,3 +13,27 @@
     - A one-to-one relationship.
     - Conceptually, this is similar to a `ForeignKey` with `unique=True`.
     - the “reverse” side of the relation will directly return a single object.
+
+# ManyToManyField와 junction table
+- `Foreignkey`, `OneToOneField`와 달리 `ManyToManyField`는 한 테이블로 나타낼 수 없다.
+- 따라서 junction table이라고 불리는 associative table이 만들어진다.
+- table에는 `(해당 테이블에 대한 id)`, `(ManyToManyField를 선언한 모델의 id)`, `(ManyToManyField가 가리키는 모델의 id)`를 기록한다.
+- [참고](https://brunch.co.kr/@ddangdol/6)
+- 단, 헷갈리지 말아야할 것은 선언한 `ManyToManyField`에 접근하면 `ManyToManyField`가 가리키는 모델과 동일하다. 그래서 해당 테이블 id와 해당 필드의 id는 서로 다르다.
+  - 예를 들어 다음과 같이 모델에 `ManyToManyField`가 선언돼있다.
+    ```
+    class Profile():
+      liked_posts = models.ManyToManyField(
+        "posts.Post", related_name="liked_authors")
+    ```
+  - `liked_posts`에 post를 추가하면 table은 다음과 같이 만들어진다.
+    ```
+    | id | profile_id | post_id |
+    | -- | ---------- | ------- |
+    | 1  |          7 |       1 |
+    | 10 |          7 |       5 |
+    ```
+  - 이때 `profile.liked_posts`에서 쿼리를 얻으면 다음과 같이 `post_id`가 `id`로 나온다. 즉, junction table id가 아니다.
+    ```
+    <QuerySet [{'id': 5, ... }, {'id': 1, ... }] >
+    ```
