@@ -1,5 +1,6 @@
 ## 소개
 - annotation을 통해 코드를 자동으로 완성해주는 라이브러리
+- 자바의 annotation processor라는 기능을 이용해 컴파일 시점에 생성자 코드를 자동으로 생성해준다.
 
 ## @RequiredArgsConstructor
 - `final`이 붙은 멤버 변수들을 파라미터로 받는 생성자를 만들어준다.
