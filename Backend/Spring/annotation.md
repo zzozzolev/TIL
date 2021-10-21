@@ -35,6 +35,9 @@
 - 따라서 annotation을 만들어서 사용하는 게 좋다.
 
 ## @Bean
-- `initMethod`와 `destoryMethod`로 초기화 메서드와 종료 메서드를 지정해줄 수 있다.
-- `destroyMethod`를 지정하지 않으면 `close`, `shutdown`이라는 이름의 메서드를 자동으로 호출해준다. 이건 추론 기능때문이다.
-- 자동으로 호출되는 게 싫다면 `destroyMethod=""`으로 하면 된다.
+### 초기화, 종료
+- 기본적으로 `@ComponentScan`과 잘 어울리는 `@PostConstruct`, `@PreDestroy`를 사용하자.
+- 만약 외부라이브러리를 사용해야한다면 다음을 참고하자.
+    - `initMethod`와 `destoryMethod`로 초기화 메서드와 종료 메서드를 지정해줄 수 있다.
+    - `destroyMethod`를 지정하지 않으면 `close`, `shutdown`이라는 이름의 메서드를 자동으로 호출해준다. 이건 추론 기능때문이다.
+    - 자동으로 호출되는 게 싫다면 `destroyMethod=""`으로 하면 된다.
