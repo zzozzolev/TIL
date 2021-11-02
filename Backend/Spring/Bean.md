@@ -15,3 +15,7 @@
 - 다만 스프링에 의존적이다.
 - java 표준인 javax의 `Provider`를 사용하면 스프링에 의존적이지 않으면서 똑같이 원하는 bean을 얻을 수 있다. 하지만 별도의 라이브러리가 필요하다.
 - 추가적인 기능이 필요없고 다른 컨테이너가 추가될 가능성이 있다면 `Provider`를, 추가적인 기능이 필요하고 외부 라이브러리 추가가 번거롭다면 `ObjectProvider`를 사용하면 된다.
+
+## RequestMappingHandlerMapping
+- 가장 우선 순위가 높은 핸들러 매핑이다.
+- 스프링 빈 중에서 `@RequestMapping` 또는 `@Controller`가 클래스 레벨에 있는 경우 매핑 정보로 인식한다.
