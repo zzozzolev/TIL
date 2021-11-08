@@ -41,3 +41,9 @@
     - `initMethod`와 `destoryMethod`로 초기화 메서드와 종료 메서드를 지정해줄 수 있다.
     - `destroyMethod`를 지정하지 않으면 `close`, `shutdown`이라는 이름의 메서드를 자동으로 호출해준다. 이건 추론 기능때문이다.
     - 자동으로 호출되는 게 싫다면 `destroyMethod=""`으로 하면 된다.
+
+## @Mapping
+### 미디어 타입 조건 매핑
+- `headers`를 써도 되긴 하지만 스프링에서 해당 파라미터로 처리하는 것이 있기 때문에 `consumes`을 권장한다.
+- `consumes`: request `Content-Type`에 해당 조건이 명시돼 있는 경우.
+- `produeces`: request `Accept`와 맞아야한다.
