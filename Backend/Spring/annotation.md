@@ -87,3 +87,19 @@ GET /test?name= -> 200 OK
 
 ### 바인딩 오류
 - 타입에 맞지 않는 값이 파라미터로 들어오면 `BindException`이 발생한다.
+
+## @RequestBody
+### 원리
+- HTTP 메세지 컨버터가 HTTP 메세지 바디의 내용을 우리가 원하는 문자나 객체 등으로 변환해준다.
+  - 조금 더 자세하게 말하면 `MappingJackson2HttpMessageConverter`라는 게 동작한다.
+  - 컨텐트 타입이 `application/json`이면 메세지 바디에서 값을 파싱해 원하는 객체를 만드는 걸 대신 해준다. -> 컨텐트 타입 주의.
+- json -> (HTTP 메세지 컨버터) -> 객체
+
+### 생략
+- `@RequestBody`를 생략하면 `@ModelAttribute`가 적용된다.
+
+## @ResponseBody
+### 원리
+- HTTP 메세지 컨버터가 반환한 객체를 json으로 변환해준다.
+  - `Accept`에 `application/json`이 있어야 한다.
+- 객체 -> (HTTP 메세지 컨버터) -> json
