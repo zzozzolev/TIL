@@ -19,3 +19,6 @@
         this.mem2 = mem2;
     }
     ```
+
+## @Data
+- `@Getter`, `@Setter`, `@ToString`, `@EqualsAndHashCode`, `@RequiredArgsConstructor`를 자동으로 적용해준다.
