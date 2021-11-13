@@ -47,3 +47,12 @@
 - `headers`를 써도 되긴 하지만 스프링에서 해당 파라미터로 처리하는 것이 있기 때문에 `consumes`을 권장한다.
 - `consumes`: request `Content-Type`에 해당 조건이 명시돼 있는 경우.
 - `produeces`: request `Accept`와 맞아야한다.
+
+## @RequestParam
+- 요청 파라미터 이름과 변수 이름이 같으면 `name`을 직접 지정해주지 않아도 된다.
+```java
+// GET /test?name=jam
+
+public String requestParam(@RequestParam String name)
+```
+- 또한 `String`, `int`, `Integer` 등 단순한 타입이면 `@RequestParam`도 생략할 수 있다. 하지만 어노테이션을 붙이면 명확하게 요청 파라미터에서 데이터를 읽는 다는 것을 알 수 있다. (단순한 타입은 자바가 정의한 클래스나 Primitive 타입을 말하는 것 같음)
