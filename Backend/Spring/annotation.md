@@ -57,6 +57,7 @@
 public String requestParam(@RequestParam String name)
 ```
 - 또한 `String`, `int`, `Integer` 등 단순한 타입이면 `@RequestParam`도 생략할 수 있다. 하지만 어노테이션을 붙이면 명확하게 요청 파라미터에서 데이터를 읽는 다는 것을 알 수 있다. (단순한 타입은 자바가 정의한 클래스나 Primitive 타입을 말하는 것 같음)
+- 나머지는 `@ModelAttribute`로 처리한다.
 
 ### null과 ""을 구분하자.
 - `required = true`로 줬을 때는 파라미터를 넘겨주지 않았을 때 400 에러가 난다.
@@ -76,3 +77,13 @@ GET /test?name= -> 200 OK
 - `defaultValue`로 기본값을 설정할 수 있다.
 - `required = true`일지라도 무시되고 기본값이 적용된다.
 - 빈문자의 경우에도 설정한 기본값이 적용된다.
+
+## @ModelAttribute
+- 지정한 객체를 생성한 뒤 알맞은 프로퍼티 setter를 호출해서 파라미터 값을 바인딩한다.
+  - 예를 들어 파라미터가 `name`이면 `setName`을 호출해 `name` 값을 설정해준다.
+
+### 생략
+- `@RequestParam`과 마찬가지로 생략할 수 있다.
+
+### 바인딩 오류
+- 타입에 맞지 않는 값이 파라미터로 들어오면 `BindException`이 발생한다.
