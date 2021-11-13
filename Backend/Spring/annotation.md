@@ -49,6 +49,7 @@
 - `produeces`: request `Accept`와 맞아야한다.
 
 ## @RequestParam
+### 생략
 - 요청 파라미터 이름과 변수 이름이 같으면 `name`을 직접 지정해주지 않아도 된다.
 ```java
 // GET /test?name=jam
@@ -56,3 +57,17 @@
 public String requestParam(@RequestParam String name)
 ```
 - 또한 `String`, `int`, `Integer` 등 단순한 타입이면 `@RequestParam`도 생략할 수 있다. 하지만 어노테이션을 붙이면 명확하게 요청 파라미터에서 데이터를 읽는 다는 것을 알 수 있다. (단순한 타입은 자바가 정의한 클래스나 Primitive 타입을 말하는 것 같음)
+
+### null과 ""을 구분하자.
+- `required = true`로 줬을 때는 파라미터를 넘겨주지 않았을 때 400 에러가 난다.
+- 하지만 파라미터에 빈 값을 넘겨주면 400 에러가 나지 않는다.
+```
+name이 required
+
+GET /test? -> 400 에러
+GET /test?name= -> 200 OK
+```
+
+### 기본형에는 null을 입력할 수 없다.
+- `required = false`인 파라미터의 타입은 기본형으로 선언하면 안 된다.
+- 파라미터가 주어지지 않았을 때 `null`이 들어오는데 기본형은 `null`로 선언할 수 없기 때문이다.
