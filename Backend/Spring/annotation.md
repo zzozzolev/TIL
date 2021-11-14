@@ -103,3 +103,6 @@ GET /test?name= -> 200 OK
 - HTTP 메세지 컨버터가 반환한 객체를 json으로 변환해준다.
   - `Accept`에 `application/json`이 있어야 한다.
 - 객체 -> (HTTP 메세지 컨버터) -> json
+
+## @RestController
+- 안에 `@ResponseBody`가 적용돼있다.
