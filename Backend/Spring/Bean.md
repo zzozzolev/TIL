@@ -40,3 +40,11 @@
   - `return`의 대상 클래스
 2. `@RequestMapping`의 `produces`을 지원하는가.
 3. (2가 없다면) 요청 헤더의 `Accept`의 미디어 타입을 지원하는가.
+
+## ArgumentResolver
+- `RequestMappingHandlerAdapter`에서 호출한다.
+- 컨트롤러가 필요로 하는 다양한 파라미터(객체)를 생성한다.
+
+## ReturnValueHandler
+- `ArgumentResolver`와 비슷하다.
+- 응답 값을 변환하고 처리한다.
