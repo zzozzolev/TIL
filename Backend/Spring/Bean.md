@@ -19,3 +19,24 @@
 ## RequestMappingHandlerMapping
 - 가장 우선 순위가 높은 핸들러 매핑이다.
 - 스프링 빈 중에서 `@RequestMapping` 또는 `@Controller`가 클래스 레벨에 있는 경우 매핑 정보로 인식한다.
+
+## HttpMessageConverter
+- HTTP 요청, HTTP 응답에 모두 사용된다.
+- 요청에 있는 메세지를 읽어서 컨트롤러에 객체로 넘겨주거나 컨트롤러에 있는 리턴값을 응답 메세지에 넣는다.
+- 기본 메세지 컨버터
+  1. `ByteArrayHttpMessageConverter`
+  2. `StringHttpMessageConverter`
+  3. `MappingJackson2HttpMessageConverter`
+    - `@RequestBody`가 바이트도 아니고 스트링도 아니면서 `Content-Type`이 `application/json`일 때
+    - 즉, `application/json`이 아니면 적용이 안 되니 주의해야한다.
+
+### 요청 데이터 읽기
+1. 대상 클래스 타입을 지원하는가.
+  - `@RequestBody`의 대상 클래스
+2. 요청 헤더의 `Content-Type`의 미디어 타입을 지원하는가.
+
+### 응답 데이터 읽기
+1. 대상 클래스 타입을 지원하는가.
+  - `return`의 대상 클래스
+2. `@RequestMapping`의 `produces`을 지원하는가.
+3. (2가 없다면) 요청 헤더의 `Accept`의 미디어 타입을 지원하는가.
