@@ -22,3 +22,4 @@
 
 ## @Data
 - `@Getter`, `@Setter`, `@ToString`, `@EqualsAndHashCode`, `@RequiredArgsConstructor`를 자동으로 적용해준다.
+- 하지만 도메인에 사용하는 걸 권장하지 않는다.
