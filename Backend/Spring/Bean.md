@@ -44,6 +44,7 @@
 ## ArgumentResolver
 - `RequestMappingHandlerAdapter`에서 호출한다.
 - 컨트롤러가 필요로 하는 다양한 파라미터(객체)를 생성한다.
+- `@RequestBody`와 `HttpEntity`를 처리하는 `ArgumentResolver`들이 HTTP 메세지 컨버터를 사용한다.
 
 ## ReturnValueHandler
 - `ArgumentResolver`와 비슷하다.
