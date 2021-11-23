@@ -81,7 +81,10 @@ GET /test?name= -> 200 OK
 ## @ModelAttribute
 - 지정한 객체를 생성한 뒤 알맞은 프로퍼티 setter를 호출해서 파라미터 값을 바인딩한다.
   - 예를 들어 파라미터가 `name`이면 `setName`을 호출해 `name` 값을 설정해준다.
-- 모델에 해당 어트리뷰트로 지정한 객체를 자동으로 넣어준다.
+- 모델에 해당 어트리뷰트로 지정한 객체를 자동으로 넣어준다. 만약 이름을 지정하지 않으면 클래스 맨 앞글자를 소문자로 만든다.
+  ```java
+  @ModelAttribute Some some == @ModelAttribute("some") Some some
+  ```
 
 ### 생략
 - `@RequestParam`과 마찬가지로 생략할 수 있다.
