@@ -49,3 +49,6 @@
 ## ReturnValueHandler
 - `ArgumentResolver`와 비슷하다.
 - 응답 값을 변환하고 처리한다.
+
+## RedirectAttributes
+- 리다이렉트를 할 때 지정한 것에 대해서 인코디을 알아서 해주고 나머지는 쿼리 파라미터로 넘겨준다.
