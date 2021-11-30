@@ -41,3 +41,17 @@
     // after
     persist(order);
     ```
+- 양방향 관계일 때 원자적으로 필드를 셋팅하는 연관 관계 메서드를 지정해주면 좋다.
+  - 예를 들면 `Order`와 `Member`가 있고 `Member`가 one `Order`가 many라고 해보자.
+  - `Order`에 `Member`를 지정할 때 `Member`에 있는 `Order` list에도 추가해주는 것이 좋다. (DB 저장이 아님)
+  - 하지만 별개로 처리한다면 어느 하나만 할 가능성이 있을 것이다.
+  - 이럴 때 핵심적인 컨트롤을 담당하는 객체에 `연관 관계 메서드`를 지정해주면 실수를 줄일 수 있다.
+    ```java
+    class Order {
+        ...
+        public void setMember(Member member) {
+            this.member = member;
+            member.getOrders().add(this);
+        }
+    }
+    ```
