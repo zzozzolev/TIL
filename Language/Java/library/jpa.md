@@ -1,3 +1,6 @@
+## @PersistenceContext
+- 해당 annotation이 있으면 스프링이 JPA 엔티티 매니저를 주입해준다.
+
 ## @Enumerated
 - enum은 기본적으로 ORDINAL이 된다.
 - 하지만 새로운 값이 들어가면 기존 값이 밀리고 DB에 해당 값이 새로운 값으로 덮어씌어질 수 있다.
