@@ -1,5 +1,6 @@
 ## @PersistenceContext
 - 해당 annotation이 있으면 스프링이 JPA 엔티티 매니저를 주입해준다.
+- `EntityManager`를 인젝션하기 위해 필요하다. 단, 스프링 부트가 `@Autowired`로 인젝션되도록 지원을 해준다.
 
 ## @Enumerated
 - enum은 기본적으로 ORDINAL이 된다.
