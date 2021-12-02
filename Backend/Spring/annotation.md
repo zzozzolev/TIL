@@ -110,3 +110,12 @@ GET /test?name= -> 200 OK
 
 ## @RestController
 - 안에 `@ResponseBody`가 적용돼있다.
+
+## @Transactional
+- JPA의 데이터 변경이나 로직은 트랜잭션 내에서 실행돼야한다. (lazy loading 포함)
+- 클래스에 `@Transactional`을 걸어주면 각 `public` 메서드에 적용된다.
+
+### readOnly 옵션
+- 성능 최적화가 가능하다.
+- 영속성 컨텍스트를 flush 하지 않고 dirty 체킹을 하지 않는다.
+- DB driver에 따라 리소스를 적게 할당할 수도 있다.
