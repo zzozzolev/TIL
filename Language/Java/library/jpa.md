@@ -2,6 +2,9 @@
 - 해당 annotation이 있으면 스프링이 JPA 엔티티 매니저를 주입해준다.
 - `EntityManager`를 인젝션하기 위해 필요하다. 단, 스프링 부트가 `@Autowired`로 인젝션되도록 지원을 해준다.
 
+## EntityManager
+- `flush`를 호출하면 영속성 컨텐스트에 있던 쿼리를 DB에 날린다.
+
 ## @Enumerated
 - enum은 기본적으로 ORDINAL이 된다.
 - 하지만 새로운 값이 들어가면 기존 값이 밀리고 DB에 해당 값이 새로운 값으로 덮어씌어질 수 있다.
