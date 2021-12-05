@@ -114,6 +114,7 @@ GET /test?name= -> 200 OK
 ## @Transactional
 - JPA의 데이터 변경이나 로직은 트랜잭션 내에서 실행돼야한다. (lazy loading 포함)
 - 클래스에 `@Transactional`을 걸어주면 각 `public` 메서드에 적용된다.
+- 롤백이 되면 entity manager에서 persist를 해도 insert 쿼리가 나가지 않는다.
 
 ### readOnly 옵션
 - 성능 최적화가 가능하다.
