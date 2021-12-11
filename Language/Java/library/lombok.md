@@ -28,3 +28,11 @@
 - 실무에서 `@Getter`는 모두 사용하는 것이 편리하다.
 - 하지만 `@Setter`는 무분별하게 사용하면 변경지점을 추적하기 힘들다.
 - 따라서 엔티티 변경 시 `@Setter`를 이용하기보다는 별도의 메서드를 제공하는 게 좋다.
+
+## @NoArgsConstructor
+- argument가 없는 기본 생성자를 생성한다.
+- `access`로 액세스 레벨을 설정할 수 있다.
+- 아래는 `protected` 기본 생성자를 만드는 예시이다.
+    ```java
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    ```
