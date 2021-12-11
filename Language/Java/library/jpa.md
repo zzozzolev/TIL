@@ -48,6 +48,7 @@
     // after
     persist(order);
     ```
+  - 단, `CascadeType.ALL` 엔티티들은 persist를 직접하는 엔티티에서만 사용하거나 다른 엔티티에서 참조하지 않을 때만 사용한다. 만약 이렇다면 별도의 repository를 생성해서 관리한다.
 - 양방향 관계일 때 원자적으로 필드를 셋팅하는 연관 관계 메서드를 지정해주면 좋다.
   - 예를 들면 `Order`와 `Member`가 있고 `Member`가 one `Order`가 many라고 해보자.
   - `Order`에 `Member`를 지정할 때 `Member`에 있는 `Order` list에도 추가해주는 것이 좋다. (DB 저장이 아님)
