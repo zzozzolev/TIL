@@ -19,3 +19,20 @@
 
     public <T super Integer> void print(List<T> list)  // Won't compile
     ```
+
+## Varargs
+- 하나의 타입에 대해서 임의의 개수를 가지는 파라미터를 지원하는 메서드를 처리하기 위한 편리한 방법이다.
+- 메서드의 내용은 같은데 단순히 파라미터 개수만 차이가 나는 경우에 유용하게 사용할 수 있다.
+- 예를 들어 다음과 같이 정의하면 임의의 숫자만큼 argument들을 넘겨줄 수 있다.
+  ```java
+  public String function(String... values) {
+    // ...
+  }
+  formatWithVarArgs();
+  formatWithVarArgs("a", "b", "c", "d");
+  ```
+- varargs는 array처럼 다루면 된다.
+- 단 각각의 메서드는 하나의 varargs 파라미터만 가질 수 있고 마지막 파라미터여야한다.
+- varargs를 사용할 때마다 자바 컴파일러는 주어진 파라미터들을 가지고 있는 어레이를 만든다.
+- varargs를 제네릭 타입과 사용할 때는 런타임 예외가 발생할 위험이 있다.
+- [참고](https://www.baeldung.com/java-varargs)
