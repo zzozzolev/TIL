@@ -120,3 +120,17 @@ GET /test?name= -> 200 OK
 - 성능 최적화가 가능하다.
 - 영속성 컨텍스트를 flush 하지 않고 dirty 체킹을 하지 않는다.
 - DB driver에 따라 리소스를 적게 할당할 수도 있다.
+
+## @Valid
+- 스프링에 javax validation을 쓰는 것을 알려주는 역할을 한다.
+```java
+public class Form {
+    @NotEmpty
+    private String name;
+    ...
+}
+
+public String create(@Valid Form form) {
+
+}
+```
