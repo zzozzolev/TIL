@@ -37,3 +37,19 @@
         ]
     }
     ```
+
+## Lazy 강제 초기화
+- Lazy 로딩이 걸려있는 객체의 멤버를 가져오면 Lazy가 강제 초기화된다.
+- 따라서 객체의 멤버들을 가져올 수 있다.
+```java
+public class Member {
+    ...
+    private String name;
+    ...
+}
+```
+```java
+for (Order order : all) {
+    order.getMember().getName(); // Lazy 강제 초기화
+}
+```
