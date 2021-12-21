@@ -134,3 +134,6 @@ public String create(@Valid Form form) {
 
 }
 ```
+
+## @JsonIgnore
+- 양방향 연관 관계에서 json 생성 시 무한루프에 빠지지 않도록 한쪽에 추가해준다.
