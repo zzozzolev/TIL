@@ -8,6 +8,11 @@
 - 제네릭에 대한 이해가 부족한 것 같다. 
 
 ### 배운점
+- java에서 스트링을 정렬하려면 Char[]로 바꾸고 해야한다 ㅠㅠ
+  ```java
+  char[] tmp = str.toCharArray();
+  Arrays.sort(tmp);
+  ```
 - 타입은 추상 타입으로 명시하고 인스턴스 타입은 구체 타입으로 작성한다. 이때 인스턴스 타입은 가장 상위 타입만 작성하면 된다.
   ```java
   List<List<String>> answer = new ArrayList<List<String>>(); (x)
