@@ -66,3 +66,27 @@ for (Order order : all) {
 - N + 1 문제의 해결 방법이다.
 - 엔티티를 fetch join을 사용해서 쿼리 1번에 조회한다.
 - fetch join에서 필요한 객체를 이미 조회했으므로 지연 로딩이 발생하지 않는다.
+
+## fetch join vs DTO
+
+### fetch join
+- 조회하려는 객체를 건드리지 않는 상태로 성능 튜닝 가능하다.
+- 재사용성이 높다.
+- DTO가 아니므로 JPA를 활용할 수 있다.
+- select절이 더 길어진다.
+
+### DTO
+- fetch join보다 성능 최적화가 가능하다. (하지만 생각보다 큰 차이가 안 난다고 한다. 실제 성능은 join에서 먹게 된다. 물론 이것도 컬럼이 많아지면 좀 생각을 해봐야한다.)
+- repository 재사용성이 떨어진다.
+- API 스펙에 맞춘 코드가 repository에 들어간다. 그래서 repository가 화면에 의존하게 된다.
+- 코드가 지저분해진다.
+- 기존의 repository에 같이 넣기보다는 쿼리용 repository를 만들고 거기에 해당 로직을 넣어주는게 좋다.
+  ```java
+  public class OrderQueryRepository {
+      ...
+
+      public List<OrderQueryDto> findOrderDtos() {
+          ...
+      }
+  }
+  ```
