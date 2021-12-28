@@ -1,4 +1,39 @@
 ### 소모 시간
+- 18분 30초
+
+### 통과율
+- 100%
+
+### 문제점
+- 이미 해쉬 테이블 문제인 것을 알고있었지만 제대로 활용을 못했다.
+- 매번 인덱스를 얻기보다는 값을 키로 밸류를 인덱스로 설정했으면 됐다.
+
+### my solution
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        List<Integer> diff = new ArrayList<>();
+        int[] answer = new int[2];
+        for (int i = 0; i <nums.length; ++i) {
+            int index = diff.indexOf(nums[i]);
+            
+            // 페어 존재
+            if (index != -1) {
+                answer[0] = index;
+                answer[1] = i;
+            }
+                
+            diff.add(target - nums[i]);
+        }
+        
+        return answer;
+    }
+}
+```
+
+---
+
+### 소모 시간
 - 13분 39초
 
 ### 통과 여부
