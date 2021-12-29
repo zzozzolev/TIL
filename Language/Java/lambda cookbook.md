@@ -9,5 +9,6 @@ Comparator.comparing(Employee::getAge)
         .thenComparing(Employee::getName);
 ```
 ```java
+// 메서드 체이닝에서는 자바가 타입을 추론하지 못하기 때문에 타입을 명시해준다.
 Arrays.sort(intervals, Comparator.<int[]>comparingInt(e -> e[0]).thenComparingInt(e -> e[1]))
 ```
