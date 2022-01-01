@@ -1,4 +1,65 @@
 ### 소모 시간
+- 27분 3초
+
+### 통과 여부
+- 100%
+
+### 문제점
+- String의 일부만 접근하면 char이다.
+
+### my solution
+```java
+class Solution {
+    public int romanToInt(String s) {
+        int answer = 0;
+        Map<Character, Integer> sym2val = new HashMap<>();
+        sym2val.put('I', 1);
+        sym2val.put('V', 5);
+        sym2val.put('X', 10);
+        sym2val.put('L', 50);
+        sym2val.put('C', 100);
+        sym2val.put('D', 500);
+        sym2val.put('M', 1000);
+        
+        for(int i = 0; i < s.length() - 1; ++i) {
+            char target = s.charAt(i);
+            char targetNext = s.charAt(i + 1);
+            
+            if (target == 'I') {
+                if (targetNext == 'V' || targetNext == 'X') {
+                    answer += -1;
+                    continue;
+                }
+            }
+            
+            if (target == 'X') {
+                if (targetNext == 'L' || targetNext == 'C') {
+                    answer += -10;
+                    continue;
+                }
+            }
+            
+            if (target == 'C') {
+                if (targetNext == 'D' || targetNext == 'M') {
+                    answer += -100;
+                    continue;
+                }
+            }
+            
+            answer += sym2val.get(s.charAt(i));
+        }
+        
+        // 마지막 처리
+        answer += sym2val.get(s.charAt(s.length() - 1));
+        
+        return answer;
+    }
+}
+```
+
+---
+
+### 소모 시간
 - 12분 30초
 
 ### 통과 여부
