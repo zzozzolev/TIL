@@ -143,3 +143,12 @@ void update(Item param) {
 
 ## 엔티티 조회하기
 - ToOne 관계는 fetch join으로 쿼리 수를 줄이고 나머지는 `hibernate.default_batch_fetch_size`로 해결하면 된다.
+
+## 권장 순서
+1. 엔티티 조회 방식으로 우선 접근
+  1. 페치조인으로 쿼리 수를 최적화
+  2. 컬렉션 최적화
+    1. 페이징 필요: `default_batch_fetch_size`, `@BatchSize`로 최적화
+    2. 페이징 필요X -> fetch join 사용
+2. DTO 조회 방식 사용
+3. NativeSQL or 스프링 JDBC Template
