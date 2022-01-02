@@ -1,4 +1,50 @@
 ### 소모 시간
+- 8분 20초
+
+### 통과율
+- 100%
+
+### my solution
+```java
+class Solution {
+    public int maxDepth(TreeNode root) {
+        int depth = 0;
+        
+        if (root == null)
+            return depth;
+        
+        Queue<Pair> queue = new LinkedList<>();
+        queue.offer(new Pair(1, root));
+        
+        while (!queue.isEmpty()) {
+            Pair p = queue.poll();
+            depth = Math.max(depth, p.depth);
+            
+            if (p.node.left != null)
+                queue.offer(new Pair(depth + 1, p.node.left));
+            
+            if (p.node.right != null)
+                queue.offer(new Pair(depth + 1, p.node.right));
+        }
+        
+        return depth;    
+    }
+    
+    static class Pair {
+        public int depth;
+        public TreeNode node;
+        
+        public Pair(int depth, TreeNode node) {
+            this.depth = depth;
+            this.node = node;
+        }
+    }
+}
+```
+
+---
+
+### 소모 시간
 - 5분 28초
 
 ### 통과율
