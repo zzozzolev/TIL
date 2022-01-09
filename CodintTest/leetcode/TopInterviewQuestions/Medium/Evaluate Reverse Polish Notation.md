@@ -1,4 +1,60 @@
 ### 소모 시간
+- 24분 12초
+
+### 통과율
+- 100%
+
+### 문제점
+- switch에서 break를 안해서 값이 이상하게 됐다.
+- stack이므로 피연산자 순서가 반대인데 처음에 이를 고려하지 않았다.
+
+### my solution
+```java
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+        for (String token : tokens) {
+            if (token.equals("+")
+                || token.equals("-")
+                || token.equals("*")
+                || token.equals("/")) {
+                Integer o2 = stack.pop();
+                Integer o1 = stack.pop();
+                
+                Integer result = null;
+                switch (token) {
+                    case "+":
+                        result = o1 + o2;
+                        break;
+                    case "-":
+                        result = o1 - o2;
+                        break;
+                    case "*":
+                        result = o1 * o2;
+                        break;
+                    case "/":
+                        result = (int)(o1 / o2);
+                        break;
+                    default:
+                        break;
+                }
+                stack.push(result);
+            }
+            
+            // Number
+            else {
+                stack.push(Integer.parseInt(token));
+            }
+        }
+        
+        return stack.pop().intValue();
+    }
+}
+```
+
+---
+
+### 소모 시간
 - 17분 29초
 
 ### 통과율
