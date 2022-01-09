@@ -7,3 +7,12 @@
 - 단, 정해진 규칙에 따라서 메서드 이름을 작성해야한다.
   - 자세한 건 [공식 문서](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods) 참고
 - 엔티티 이름을 변경해도 애플리케이션 로딩 시점에 오류가 나서 잘못된 것을 알 수 있다.
+- 하지만 파라미터나 로직이 조금만 들어가도 메서드 이름이 복잡해진다. 따라새 파라미터 2~3개까지만 해당 방법을 사용하도록 한다.
+
+## @Query
+- `JpaRepository` 인터페이스에 `@Query`로 JPQL을 작성해서 이용할 수 있다.
+  ```java
+    @Query("select m from Member m where m.username = :username and m.age = :age")
+    List<Member> findUser(@Param("username") String username, @Param("age") int age);
+  ```
+- 애플리케이션 로딩 시점에 잘못된 쿼리가 있다면 에러가 난다는 장점이 있다.
