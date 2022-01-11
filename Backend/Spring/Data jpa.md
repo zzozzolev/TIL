@@ -16,3 +16,8 @@
     List<Member> findUser(@Param("username") String username, @Param("age") int age);
   ```
 - 애플리케이션 로딩 시점에 잘못된 쿼리가 있다면 에러가 난다는 장점이 있다.
+
+## 조회 사이즈
+- 단건 조회시 조회 결과가 없다면 `null`이 된다. 만약 조회 결과가 2개 이상이면 `IncorrectResultSizeDataAccessException`이 발생한다.
+- 컬렉션 조회시 조회 결과가 없다면 사이즈가 0인 컬렉션이 반환된다.
+- 하지만 `Optional`을 사용하면 클라이언트가 `null`로 처리하지 않아도 된다.
