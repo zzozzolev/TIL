@@ -24,3 +24,12 @@
 
 ## 쿼리 리턴타입
 - [Supported Query Return Types](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-return-types)
+
+## Page vs Slice
+### Page
+- `size`만큼만 `limit`으로 지정한다.
+- `count` 쿼리를 날리기 때문에 전체 페이지, 전체 엘리먼트 개수를 알 수 있다.
+
+### Slice
+- `size + 1`만큼 `limit`으로 지정한다.
+- `count` 쿼리를 날라지 않기 때문에 전체 페이지, 전체 엘리먼트 개수를 알 수 없다. 단, 인터페이스 리턴 타입을 `Page`로 하면 `count` 쿼리가 나가니 조심해야한다.
