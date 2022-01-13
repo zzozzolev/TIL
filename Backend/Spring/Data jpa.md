@@ -21,3 +21,6 @@
 - 단건 조회시 조회 결과가 없다면 `null`이 된다. 만약 조회 결과가 2개 이상이면 `IncorrectResultSizeDataAccessException`이 발생한다.
 - 컬렉션 조회시 조회 결과가 없다면 사이즈가 0인 컬렉션이 반환된다.
 - 하지만 `Optional`을 사용하면 클라이언트가 `null`로 처리하지 않아도 된다.
+
+## 쿼리 리턴타입
+- [Supported Query Return Types](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-return-types)
