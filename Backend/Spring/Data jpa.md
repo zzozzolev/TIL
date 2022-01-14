@@ -46,3 +46,7 @@
 Page<Member> page = memberRepository.findByAge(10, pageRequest);
 Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 ```
+
+## `@Modifying`
+- INSERT, UPDATE, DELETE, DDL statements를 날릴 때 필요한 어노테이션이다.
+- 변경 쿼리에 해당 어노테이션을 추가하지 않으면 hibernate에서 `QueryExecutionRequestException`이, spring에서 `InvalidDataAccessApiUsageException`이 발생한다.
