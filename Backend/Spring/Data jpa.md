@@ -26,9 +26,14 @@
 - [Supported Query Return Types](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-return-types)
 
 ## Page vs Slice
+- 페이지는 0부터 시작인 것을 주의한다.
 ### Page
 - `size`만큼만 `limit`으로 지정한다.
 - `count` 쿼리를 날리기 때문에 전체 페이지, 전체 엘리먼트 개수를 알 수 있다.
+  - 페이징 쿼리가 조인을 사용한다면 기본적으로 카운트 쿼리도 조인을 사용한다. 하지만, 조인은 필요없기 때문에 `@Query`에서 `countQuery`를 설정해주는 게 좋다.
+    ```java
+    @Query(value = "select m from Member m left join m.team t", countQuery = "select count(m) from Member m")
+    ```
 
 ### Slice
 - `size + 1`만큼 `limit`으로 지정한다.
