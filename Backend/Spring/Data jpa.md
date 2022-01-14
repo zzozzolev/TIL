@@ -38,3 +38,11 @@
 ### Slice
 - `size + 1`만큼 `limit`으로 지정한다.
 - `count` 쿼리를 날라지 않기 때문에 전체 페이지, 전체 엘리먼트 개수를 알 수 없다. 단, 인터페이스 리턴 타입을 `Page`로 하면 `count` 쿼리가 나가니 조심해야한다.
+
+## Page to DTO
+- 처음 페이지를 생성하면 엔티티의 페이지이다. 그대로 노출하면 안 된다.
+- 따라서 페이지 인스턴스의 `map` 메서드를 이용해 엔티티 페이지를 DTO 페이지로 변환한다.
+```java
+Page<Member> page = memberRepository.findByAge(10, pageRequest);
+Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
+```
