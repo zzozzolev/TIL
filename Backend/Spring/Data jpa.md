@@ -47,6 +47,30 @@ Page<Member> page = memberRepository.findByAge(10, pageRequest);
 Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 ```
 
+## 벌크성 업데이트
+- 단 건이 아닌 여러 건을 한 번에 업데이트해야하는 경우 벌크 업데이트를 하면 성능이 더 잘 나올 수 있다.
+- 단, 주의해야할 점은 persistent context를 무시하고 바로 DB에 업데이트 요청하는 하기 때문에, 이후에 엔티티를 조회하면 벌크 업데이트 이전의 상태가 조회된다.
+  ```java
+  memberRepository.save(new Member("member5", 40));
+
+  // bulk update
+  // age >= 20 이상의 멤버들의 age를 1씩 증가
+
+  // Member(... , age=40)
+  List<Member> result = memberRepository.findByUsername("member5").get(0); 
+  ```
+- 따라서 persistent context를 꼭 `clear`해야한다. 중간에 JPQL을 실행하면 `flush`를 알아서 호출한다.
+  ```java
+  // bulk update
+  // age >= 20 이상의 멤버들의 age를 1씩 증가
+  
+  em.clear();
+
+  // Member(... , age=40)
+  List<Member> result = memberRepository.findByUsername("member5").get(0);
+  ```
+- bulk 쿼리에 `@Modifying(clearAutomatically = true)`로 하면 위의 과정을 알아서해준다.
+
 ## `@Modifying`
 - INSERT, UPDATE, DELETE, DDL statements를 날릴 때 필요한 어노테이션이다.
 - 변경 쿼리에 해당 어노테이션을 추가하지 않으면 hibernate에서 `QueryExecutionRequestException`이, spring에서 `InvalidDataAccessApiUsageException`이 발생한다.
