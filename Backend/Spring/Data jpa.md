@@ -74,3 +74,17 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 ## `@Modifying`
 - INSERT, UPDATE, DELETE, DDL statements를 날릴 때 필요한 어노테이션이다.
 - 변경 쿼리에 해당 어노테이션을 추가하지 않으면 hibernate에서 `QueryExecutionRequestException`이, spring에서 `InvalidDataAccessApiUsageException`이 발생한다.
+
+## `@EntityGraph`
+- fetch join을 간단하게 적용하고 싶을 때 사용한다.
+- 아래와 같이 fetch join할 attributes를 명시하면 된다.
+  ```java
+  @Override
+  @EntityGraph(attributePaths = {"team"})
+  List<Member> findAll();
+
+  // 다음의 JPQL과 같음.
+  @Query("select m from Member m left join fetch m.team")
+  List<Member> findMemberFetchJoin();
+  ```
+- `@NamedEntityGraph`도 있으나 실무에서는 거의 사용하지 않는다. 간단하게 위에처럼 쓰거나 JPQL을 쓰면 된다.
