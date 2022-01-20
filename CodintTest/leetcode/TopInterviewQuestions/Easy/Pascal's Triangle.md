@@ -1,4 +1,61 @@
 ### 소모 시간
+- 23분 21초
+
+### 통과율
+- 100%
+
+### my solution
+```java
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> answer = new ArrayList<>();
+        answer.add(List.of(1));
+        
+        if (numRows == 1)
+            return answer;
+        
+        answer.add(List.of(1, 1));
+        
+        for (int i = 1; i < numRows - 1; ++i) {
+            List<Integer> prev = answer.get(i);
+            List<Integer> cur = new ArrayList<>(Arrays.asList(1, 1));
+            for (int j = 0; j < prev.size() - 1; ++j) {
+                cur.add(j + 1, prev.get(j) + prev.get(j + 1));
+            }
+            answer.add(cur);
+        }
+        
+        return answer;
+    }
+}
+```
+
+### other solution
+- https://leetcode.com/problems/pascals-triangle/discuss/38141/My-concise-solution-in-Java
+```java
+public class Solution {
+public List<List<Integer>> generate(int numRows)
+{
+	List<List<Integer>> allrows = new ArrayList<List<Integer>>();
+	ArrayList<Integer> row = new ArrayList<Integer>();
+	for(int i=0;i<numRows;i++)
+	{
+		row.add(0, 1);
+		for(int j=1;j<row.size()-1;j++)
+			row.set(j, row.get(j)+row.get(j+1));
+		allrows.add(new ArrayList<Integer>(row));
+	}
+	return allrows;
+	
+}
+```
+- `i`번째 로우에서 엘리먼트 개수는 이터레이션 횟수와 같다.
+- 따라서 이터레이션 횟수로 개수를 맞춰줄 수 있다.
+- 마지막만 카피를 해주면 된다.
+
+---
+
+### 소모 시간
 - 9분 42초
 
 ### 통과율
