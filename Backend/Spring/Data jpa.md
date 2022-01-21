@@ -92,3 +92,24 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 ## `@Lock`
 - row를 잠구기 위한 lock을 제공한다.
 - 쿼리로 `SELECT ~ FOR UPDATE`가 나가서 한 세션의 업데이트가 종료될 때까지 다른 세션은 접근하지 못한다.
+
+## 사용자 정의 리포지토리
+- 인터페이스의 메서드를 직접 구현하고 싶을 때 사용한다.
+- 주로 QueryDSL을 쓰고 싶을 때 쓴다.
+- 단, 구현 클래스는 `JpaRepository`를 확장한 인터페이스 이름에 `Impl`을 붙여야한다.
+  ```java
+  public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
+    ...
+  }
+
+  public interface MemberRepositoryCustom {
+    List<Member> findMemberCustom();
+
+  }
+
+  public class MemberRepositoryImpl implements MemberRepositoryCustom {
+     List<Member> findMemberCustom() {
+
+     }
+  }
+  ```
