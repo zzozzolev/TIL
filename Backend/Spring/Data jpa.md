@@ -88,3 +88,7 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
   List<Member> findMemberFetchJoin();
   ```
 - `@NamedEntityGraph`도 있으나 실무에서는 거의 사용하지 않는다. 간단하게 위에처럼 쓰거나 JPQL을 쓰면 된다.
+
+## `@Lock`
+- row를 잠구기 위한 lock을 제공한다.
+- 쿼리로 `SELECT ~ FOR UPDATE`가 나가서 한 세션의 업데이트가 종료될 때까지 다른 세션은 접근하지 못한다.
