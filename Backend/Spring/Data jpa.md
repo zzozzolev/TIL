@@ -113,3 +113,4 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
      }
   }
   ```
+- 모든 곳에 사용자 정의 리포지토리를 써야하는 건 아니다. 복잡한 쿼리는 별도의 클래스로 분리하는 게 낫다.
