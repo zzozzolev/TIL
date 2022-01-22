@@ -59,3 +59,9 @@
 
 ### @Target
 - 어노테이션을 적용할 위치
+
+## List.add가 안 되는 이유
+- [참고](https://donnaknew.tistory.com/22)
+
+> 모든 List 는 add() 메서드를 구현, 지원하지 않으며 가장 일반적인 예로 Arrays.asList(); 같은 경우 고정된 사이즈의 Array 를 리턴한다.
+그렇기에 사이즈를 수정할 수 없다.
