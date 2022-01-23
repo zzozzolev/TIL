@@ -120,3 +120,6 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 - 공통 매핑 정보가 있는 부모 클래스에 해당 애노테이션을 달아주면 된다.
 - 실무에서는 생성자, 생성 시간, 수정자, 수정 시간을 공통적으로 써야할 때 사용하면된다.
 - 애노테이션을 달지 않으면 자식 엔티티에 대한 테이블을 만들 때 부모의 정보가 들어가지 않는다.
+
+## @CreatedBy, @LastModifiedDate
+- JPA 이벤트 어노테이션(`@PrePersist`, `@PreUpdate`)를 사용하지 않고도 생성일, 수정일을 등록할 수 있도록 해준다.
