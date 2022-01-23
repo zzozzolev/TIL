@@ -121,19 +121,5 @@ GET /test?name= -> 200 OK
 - 영속성 컨텍스트를 flush 하지 않고 dirty 체킹을 하지 않는다.
 - DB driver에 따라 리소스를 적게 할당할 수도 있다.
 
-## @Valid
-- 스프링에 javax validation을 쓰는 것을 알려주는 역할을 한다.
-```java
-public class Form {
-    @NotEmpty
-    private String name;
-    ...
-}
-
-public String create(@Valid Form form) {
-
-}
-```
-
 ## @JsonIgnore
 - 양방향 연관 관계에서 json 생성 시 무한루프에 빠지지 않도록 한쪽에 추가해준다.
