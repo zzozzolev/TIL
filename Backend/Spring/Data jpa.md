@@ -123,3 +123,29 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 
 ## @CreatedBy, @LastModifiedDate
 - JPA 이벤트 어노테이션(`@PrePersist`, `@PreUpdate`)를 사용하지 않고도 생성일, 수정일을 등록할 수 있도록 해준다.
+
+## 등록, 수정 관련 정보 저장하기
+- 보통 등록일, 수정일은 모든 엔티티에 필요한 정보이다.
+- 하지만 등록자, 수정자는 엔티티에 따라 필요하지 않을 수도 있다.
+- 그래서 베이스 엔티티에 등록자, 수정자를 모두 집어넣는 것 보다는 등록일, 수정일은 별도의 엔티티로 따로 빼는 게 좋다.
+- 등록일, 수정일은 `BaseTimeEntity`로 등록자, 수정자는 `BaseEntity`로 만들고 `BaseTimeEntity`를 상속받게 하면 된다.
+  ```java
+  public class BaseTimeEntity {
+      @CreatedDate
+      @Column(updatable = false)
+      private LocalDateTime createdDate;
+
+      @LastModifiedDate
+      private LocalDateTime lastModifiedDate;
+  }
+
+  public class BaseEntity extends BaseTimeEntity {
+
+    @CreatedBy
+    @Column(updatable = false)
+    private String createdBy;
+
+    @LastModifiedBy
+    private String lastModifiedBy;
+  }
+  ```
