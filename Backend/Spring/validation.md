@@ -20,3 +20,6 @@ public String create(@Valid Form form) {
 
 ## @NotNull, @NotEmpty, @NotBlank 차이
 - [참고](https://sanghye.tistory.com/36)
+
+## test 코드 작성
+- [참고](https://www.baeldung.com/javax-validation)
