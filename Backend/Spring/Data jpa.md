@@ -115,6 +115,11 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
   ```
 - 모든 곳에 사용자 정의 리포지토리를 써야하는 건 아니다. 복잡한 쿼리는 별도의 클래스로 분리하는 게 낫다.
 
+## Auditing
+- [공식 문서](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#auditing)
+- data JPA는엔티티를 누가 변경했는지 언제 변경했는지에 대해 트랙킹할 수 있도록 도와준다. 이걸 `auditing`이라고 한다.
+- 이 기능을 활용하기 위해서는 엔티티에 애노테이션을 붙이거나 인터페이스를 구현해야한다.
+
 ## @MappedSuperclass
 - 엔티티에서 공통 매핑 정보가 필요할 때 사용한다.
 - 공통 매핑 정보가 있는 부모 클래스에 해당 애노테이션을 달아주면 된다.
