@@ -47,6 +47,14 @@ Page<Member> page = memberRepository.findByAge(10, pageRequest);
 Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 ```
 
+## Pageable 파라미터
+- page
+- size
+- sort: 정렬 조건 ex) `sort=id,desc`
+- `application.yml`에 `data.web.pageable.default-page-size`와 `data.web.pageable.max-page-size`를 설정할 수 있다.
+- 혹은 `@PageableDefault`를 통해 설정할 수도 있다.
+- `@Qualifier`를 통해 여러 페이징 정보를 받을 수도 있다. ex) `merber_page=0&order_page=1`
+
 ## 벌크성 업데이트
 - 단 건이 아닌 여러 건을 한 번에 업데이트해야하는 경우 벌크 업데이트를 하면 성능이 더 잘 나올 수 있다.
 - 단, 주의해야할 점은 persistent context를 무시하고 바로 DB에 업데이트 요청하는 하기 때문에, 이후에 엔티티를 조회하면 벌크 업데이트 이전의 상태가 조회된다.
