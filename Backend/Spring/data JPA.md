@@ -162,3 +162,17 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
     private String lastModifiedBy;
   }
   ```
+
+## SimpleJpaRepository
+- data JPA의 구현체이다.
+- 클래스에 `@Repository`, `@Transactional` 어노테이션이 붙어있다.
+1. `@Repository`
+  - 컴포넌트 스캔의 대상
+  - 영속성 계층의 예외들을(JDBC, JPA) 스프링 예외로 바꿔준다.
+  - 그래서 하부 기술을 바꿔도 예외 처리 매커니즘이 동일하다.
+2. `@Transactional(readOnly = true)`
+  - data JPA의 모든 기능은 트랜잭션을 걸고 시작한다.
+  - 서비스 계층에서 트랜잭션을 걸고 들어오면, 별다른 옵션이 없으면 해당 트랜잭션을 이어서 동작한다.
+  - 트랜잭션이 없어도 data JPA에서는 repository에서 기본적으로 걸고 시작한다.
+  - `save` 이런 메서드들은 메서드에 `@Transactional` 어노테이션이 있다.
+  - 단, 해당 메서드가 끝나면 트랜잭셩이 끝나므로 영속성 컨텍스트가 없어진다. 
