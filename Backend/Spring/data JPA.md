@@ -176,3 +176,8 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
   - 트랜잭션이 없어도 data JPA에서는 repository에서 기본적으로 걸고 시작한다.
   - `save` 이런 메서드들은 메서드에 `@Transactional` 어노테이션이 있다.
   - 단, 해당 메서드가 끝나면 트랜잭셩이 끝나므로 영속성 컨텍스트가 없어진다. 
+  - `readOnly = true`이면 트랜잭션이 끝나도 플러시를 생략한다.
+3. `save()` 메서드
+  - 새로운 엔티티면 저장 (`persist`)
+  - 새로운 엔티티가 아니면 병합 (`merge`)
+    - DB에 select 쿼리가 나간다.
