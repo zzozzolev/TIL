@@ -177,7 +177,27 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
   - `save` 이런 메서드들은 메서드에 `@Transactional` 어노테이션이 있다.
   - 단, 해당 메서드가 끝나면 트랜잭셩이 끝나므로 영속성 컨텍스트가 없어진다. 
   - `readOnly = true`이면 트랜잭션이 끝나도 플러시를 생략한다.
-3. `save()` 메서드
+
+## 새로운 엔티티를 구별하는 방법
+-  `save()` 메서드
   - 새로운 엔티티면 저장 (`persist`)
   - 새로운 엔티티가 아니면 병합 (`merge`)
     - DB에 select 쿼리가 나간다.
+- 새로운 엔티티 판단 전략
+  - 식별자가 객체일 때 `null`로 판단
+    - 식별자가 `GeneratedValue`가 아닐 때, 식별자를 넣어서 객체를 만들면 새로운 엔티티로 판단하지 않는다.
+    - 그래서 `merge`가 호출되는데, 불필요한 select 쿼리가 나가게 된다.
+  - 식별자가 자바 기본 타입일 때 `0`으로 판단
+  - `Persistable` 인터페이스를 구현해서 판단 로직 변경 가능
+    - 만약 `GeneratedValue`를 쓰지 못한다면 이 인터페이스를 사용하면 된다.
+    - `isNew`에 새로운 인스턴스인지 아닌지를 판단하는 로직을 넣는다.
+    - 판단 로직은 `@CreatedDate`를 이용하면 된다. `@CreatedDate`가 `null`이라면 JPA를 통해 값이 들어가지 않은 것이기 때문이다.
+      ```java
+      @CreatedDate
+      private LocalDateTime createdDate;
+
+      @Override
+      public boolean isNew() {
+          return createdDate == null;
+      }
+      ```
