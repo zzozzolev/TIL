@@ -12,3 +12,9 @@ Comparator.comparing(Employee::getAge)
 // 메서드 체이닝에서는 자바가 타입을 추론하지 못하기 때문에 타입을 명시해준다.
 Arrays.sort(intervals, Comparator.<int[]>comparingInt(e -> e[0]).thenComparingInt(e -> e[1]))
 ```
+
+## 빈도수 세기
+- `groupingBy`와 다운스트림 수집기로 `counting`을 사용한다.
+```java
+Map<String, Long> freq = words.collect(groupingBy(String::toLowerCase, counting()))
+```
