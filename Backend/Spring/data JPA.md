@@ -201,3 +201,31 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
           return createdDate == null;
       }
       ```
+
+## Projections
+- 엔티티 대신에 DTO를 편리하게 조회할 때 사용한다.
+- 전체 필드가 아닌 일부 필드만 조회화고 싶을 때 사용한다.
+- 프로젝션 종류
+  - open projection
+    - DB에서 모든 필드를 가져온 후, 애플리케이션에서 필요한 필드만 지정
+    ```java
+    @Value("#{target.username + ' ' + target.age}")
+    String getUsername();
+    ```
+  - close projection
+    - DB에서 지정한 필드만 가져옴
+    ```java
+    String getUsername();
+    ```
+- 인터페이스가 아닌 DTO 클래스를 이용하는 방법도 있다. 이때 생성자에 넘겨지는 파라미터 이름을 보고 가져올 필드를 판단한다.
+  ```java
+  private final String username;
+
+    public UsernaemOnlyDto(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+  ```
