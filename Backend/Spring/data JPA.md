@@ -229,3 +229,6 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
         return username;
     }
   ```
+- 프로젝션 대상이 root 엔티티이면 JPQL SELECT 절 최적화가 가능하다.
+- 하지만, 프로젝션 대상이 root 엔티티가 아니라면 left outer join 처리가 되고 모든 필드를 SELECT해서 엔티티로 조회한 다음에 계산한다.
+- 따라서 간단하게 root 엔티티 정도만 조회할 때는 쓸만하지만, 추가로 엔티티를 조회해야하면 그렇지 않다.
