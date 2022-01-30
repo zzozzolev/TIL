@@ -232,3 +232,26 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 - 프로젝션 대상이 root 엔티티이면 JPQL SELECT 절 최적화가 가능하다.
 - 하지만, 프로젝션 대상이 root 엔티티가 아니라면 left outer join 처리가 되고 모든 필드를 SELECT해서 엔티티로 조회한 다음에 계산한다.
 - 따라서 간단하게 root 엔티티 정도만 조회할 때는 쓸만하지만, 추가로 엔티티를 조회해야하면 그렇지 않다.
+
+## 네이티브 쿼리
+- 웬만하면 안 쓰는 게 좋다.
+- 정적인 쿼리에 사용할 수 있다.
+- projection과 섞어서 쓰면 된다.
+  ```java
+  public interface MemberProjection {
+
+    Long getId();
+    String getUsername();
+    String getTeamName();
+  }
+
+  // repository
+  @Query(value = "select m.member_id as id, m.username, t.name as teamName " +
+        "from member m left join team t",
+        countQuery = "select count(*) from member",
+        nativeQuery = true)
+  Page<MemberProjection> findByNativeProjection(Pageable pageable);
+
+  // call
+  Page<MemberProjection> result = memberRepository.findByNativeProjection(PageRequest.of(0, 10));
+  ```
