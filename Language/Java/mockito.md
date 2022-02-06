@@ -71,3 +71,7 @@ class SimpleRepository {
 ### 용도
 - `@Mock`: 단순 mocking이 필요할 때
 - `@MockBean`: 스프링 부트 컨테이너를 사용하는 테스트에서 DI 되는 Bean을 대체하고 싶을 때. ex) 레스트 컨트롤러 테스트
+
+### 참고
+- https://www.baeldung.com/java-spring-mockito-mock-mockbean
+- https://blusky10.tistory.com/330
