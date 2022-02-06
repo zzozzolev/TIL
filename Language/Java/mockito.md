@@ -59,3 +59,15 @@ class SimpleRepository {
     }
 }
 ```
+
+## @Mock vs @MockBean
+### @Mock
+- `Mockito.mock()`의 shorthand
+
+### @MockBean
+- 스프링 애플리케이션 컨텍스트에 mock 객체를 추가한다.
+- mock은 애플리케이션 컨텍스트에서 같은 타입의 빈을 대체한다.
+
+### 용도
+- `@Mock`: 단순 mocking이 필요할 때
+- `@MockBean`: 스프링 부트 컨테이너를 사용하는 테스트에서 DI 되는 Bean을 대체하고 싶을 때. ex) 레스트 컨트롤러 테스트
