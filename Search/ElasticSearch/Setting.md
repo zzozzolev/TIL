@@ -5,3 +5,13 @@
 
 ## single node 구성
 - 어떤 클러스터와도 조인시키지 않게 하기 위해서는 `discovery.type: single-node` 설정을 해줘야한다.
+
+## cluster 구성
+- 필요한 설정
+  - cluster.name
+  - node.name
+  - discovery.seed_hosts
+  - cluster.initial_master_nodes
+  - node.roles
+- 명시적 선언을 꼭 하는 게 좋다.
+  - ex) 포트 설정
