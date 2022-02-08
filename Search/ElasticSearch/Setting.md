@@ -9,7 +9,11 @@
 ## cluster 구성
 - 필요한 설정
   - cluster.name
+    - 클러스터 이름을 공유해서 연결이 가능하다.
+    - 따라서 같은 클러스터 이름을 사용하지 않도록 주의해야한다.
   - node.name
+    - 노드의 용도와 목적을 이해하기 위해 읽을 수 있는 식별자로 작성하는 게 좋다.
+    - ex) master-node, data-node 등등
   - discovery.seed_hosts
   - cluster.initial_master_nodes
   - node.roles
