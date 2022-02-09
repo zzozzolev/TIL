@@ -16,5 +16,6 @@ Arrays.sort(intervals, Comparator.<int[]>comparingInt(e -> e[0]).thenComparingIn
 ## 빈도수 세기
 - `groupingBy`와 다운스트림 수집기로 `counting`을 사용한다.
 ```java
-Map<String, Long> freq = words.collect(groupingBy(String::toLowerCase, counting()))
+// list가 List<String>으로 가정
+Map<String, Long> freq = list.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 ```
