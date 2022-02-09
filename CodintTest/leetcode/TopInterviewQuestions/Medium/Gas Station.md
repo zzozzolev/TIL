@@ -2,6 +2,88 @@
 - 40분
 
 ### 통과율
+- 100%
+
+### my solution
+```java
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        // (gas, index)에서 gas 내림차순으로 정렬
+        List<List<Integer>> gasIndexPairs = new ArrayList<>();
+        for (int i = 0; i < gas.length; ++i)
+            gasIndexPairs.add(new ArrayList<>(Arrays.asList(gas[i], i)));
+        
+        gasIndexPairs.sort((a, b) -> b.get(0).compareTo(a.get(0)));
+        
+        // 리스트 순화하면서 조건에 맞는 곳 발견
+        for (List<Integer> list : gasIndexPairs) {
+            int index = list.get(1);
+            
+            // 시작 지점으로 초기화
+            int tank = gas[index] - cost[index];
+            
+            // 다음 지점으로 갈 수 없음
+            if (tank < 0)
+                continue;
+            
+            int cur = index + 1;
+            // 마지막 인덱스인 경우
+            if (index == gas.length - 1)
+                cur = 0;
+            boolean fail = false;
+            while (cur != index) {
+                tank += gas[cur] - cost[cur];
+                if (tank < 0) {
+                    fail = true;
+                    break;
+                }
+                if (cur == gas.length - 1)
+                    cur = 0;
+                else
+                    cur += 1;
+            }
+            
+            if (!fail) {
+                return index;
+            }
+            
+        }
+        
+        return -1;
+    }
+}
+```
+
+### other solution
+- https://leetcode.com/problems/gas-station/discuss/1706142/JavaC%2B%2BPython-An-explanation-that-ever-EXISTS-till-now!!!!
+```java
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int n = gas.length;
+        int total_surplus = 0;
+        int surplus = 0;
+        int start = 0;
+        
+        for(int i = 0; i < n; i++){
+            total_surplus += gas[i] - cost[i];
+            surplus += gas[i] - cost[i];
+            if(surplus < 0){
+                surplus = 0;
+                start = i + 1;
+            }
+        }
+        return (total_surplus < 0) ? -1 : start;
+    }
+}
+```
+- 어디서 시작하든 어차피 한 번 다 순회해야한다. 따라서 전체 값을 더하고 뺀 게 0보다 작다면 어디든 없는 거다.
+- 정답은 유일하다. 현재 위치에서 시작했을 때 전체 값이 0보다 크다면 무조건 정답니다.
+
+---
+### 소모 시간
+- 40분
+
+### 통과율
 - 97%
 
 ### 접근법
