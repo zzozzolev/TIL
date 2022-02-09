@@ -11,3 +11,4 @@
 - 주의할 점은 data tier를 다르게 정의한다고 엘라스틱 서치에서 특별하게 해주는 것은 없다.
 - 각 tier마다 하드웨어 스펙을 동일하게 맞춰야한다는 의미이다.
 - shard allocation awareness에서 사용된다.
+- 아무런 설정을 하지 않은 경우 master, data, ingest, transform, remote_cluster_client의 역할을 가진다.
