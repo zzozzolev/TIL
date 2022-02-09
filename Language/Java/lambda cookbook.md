@@ -2,6 +2,9 @@
 - arrays sort와 기본형 박싱 클래스의 `compare` 메서드를 이용한다,
 ```java
 Arrays.sort(intervals, (i1, i2) -> Integer.compare(i1[0], i2[0]));
+// 내림차순 정렬
+List<List<Integer>> gasIndexPairs = new ArrayList<>();
+gasIndexPairs.sort((a, b) -> b.get(0).compareTo(a.get(0)));
 ```
 - 만약 다중 정렬이 필요하다면 `Comparator`의 `thenComparing`을 이용한다. 기본형은 기본형을 위한 메서드를 이용한다.
 ```java
