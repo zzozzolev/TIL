@@ -234,6 +234,7 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 - 따라서 간단하게 root 엔티티 정도만 조회할 때는 쓸만하지만, 추가로 엔티티를 조회해야하면 그렇지 않다.
 
 ## 네이티브 쿼리
+- SQL에 바로 날릴 수 있는 쿼리이다.
 - 웬만하면 안 쓰는 게 좋다.
 - 정적인 쿼리에 사용할 수 있다.
 - projection과 섞어서 쓰면 된다.
