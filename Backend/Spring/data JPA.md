@@ -256,3 +256,14 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
   // call
   Page<MemberProjection> result = memberRepository.findByNativeProjection(PageRequest.of(0, 10));
   ```
+
+## deleteBy
+- `deleteBy`를 사용하면 `select` 쿼리를 먼저 날린 후, 그 다음 `delete` 쿼리를 날린다.
+- `delete where`를 사용하면 한 번에 해결이 가능한데 왜 굳이 두 번을 나눠서 하는 걸까?
+- 왜냐하면 select와 delete는 테이블에 걸리는 lock이 다르기 때문이다.
+- `select`는 IS, S(shared lock) lock이 걸리고 `delete`는 IX, X(exclusive lock) lock이 걸린다.
+- 따라서 해당 row가 존재하지 않는 경우 테이블에 불필요한 IX 락이 걸리지 않는다.
+
+### 참고
+- [Do DELETE queries take the same amount of time as SELECT](https://stackoverflow.com/questions/68767313/do-delete-queries-take-the-same-amount-of-time-as-select)
+- [InoDB-잠금-1-S락-X락-IS락-IX락](https://rosebud90.tistory.com/entry/InoDB-%EC%9E%A0%EA%B8%88-1-S%EB%9D%BD-X%EB%9D%BD-IS%EB%9D%BD-IX%EB%9D%BD)
