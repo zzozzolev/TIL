@@ -52,3 +52,36 @@
     ```java
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     ```
+
+## @Builder
+- 클래스에 builder 패턴을 적용할 수 있도록 해준다.
+- 아래는 delombok으로 파악한 코드이다.
+- `builder`라는 스태틱 메서드를 추가하고 호출하면 `<Class>Builder` 인스턴스를 생성한다.
+  ```java
+    public static ArticleBuilder builder() {
+        return new ArticleBuilder();
+    }
+    ```
+- `<Class>Builder`는 원래 클래스의 멤버를 그대로 가진다. 그리고 멤버 이름의 체이닝 메서드를 생성한다.
+    ```java
+    public static class ArticleBuilder {
+        private Profile author;
+
+        public ArticleBuilder author(Profile author) {
+            this.author = author;
+            return this;
+        }
+        ...
+    ```
+- `build` 메서드는 다시 원래 클래스의 생성자를 호출한다. 이때 원래 클래스의 생성자에서 인자로 받는 걸 체이닝 메서드에서 지정한 값 그대로 넘겨준다.
+    ```java
+    public class Article {
+        public Article(Profile author, String title, String body, String description, Slugify slugify, int size, int maxSize) {
+    }
+
+    public static class ArticleBuilder {
+        public Article build() {
+            return new Article(author, title, body, description, slugify, size, maxSize);
+        }
+    }
+    ```
