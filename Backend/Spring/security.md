@@ -44,3 +44,34 @@ server:
 - `(보관한 데이터 용량) * (사용자 수)`로 메모리 사용량이 급격하게 늘어나서 장애로 이어질 수 있다.
 - 세션 시간을 너무 길게 가져가면 메모리 사용이 계속 누적될 수 있으므로 적당한 시간을 선택하는 것이 필요하다.
 - 기본이 30분이라는 것을 기준으로 고민하면 된다.
+
+## Filter
+- 인증은 여러 로직에서 공통으로 관심이 있는 공통 관심사이다.
+- 이런 공통 관심사는 필터나 인터셉터를 이용해 처리하는 것이 좋다.
+- 필터는 요청이 서블릿과 컨트롤러로 넘어가기 전에 적용된다.
+- 따라서 필터에 걸리는 경우 서블릿까지 넘어가지 않는다.
+
+### Filter 구현
+- `Filter` 인터페이스의 `doFilter`를 구현하면 된다.
+- 이때 중요한 것은 필터내에서 반드시 `chanin.doFilter()`를 호출해야 나머지 필터가 실행된다.
+- `@Configuration`으로 `WebMvcConfigurer` 구현한 클래스를 컨피그로 만들고 `FilterRegistrationBean`을 통해 등록하면 된다.
+  ```java
+  @Configuration
+  public class WebConfig implements WebMvcConfigurer {
+  
+  ...
+
+  @Bean
+  public FilterRegistrationBean loginCheckFilter() {
+    FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+    filterRegistrationBean.setFilter(new LoginCheckFilter());
+    filterRegistrationBean.setOrder(2);
+    filterRegistrationBean.addUrlPatterns("/*");
+
+    return filterRegistrationBean;
+  }
+  
+  ```
+- 이때 `addUrlPatterns`에서 특정 패턴만 등록해도 된다. 하지만 이럴 경우 미래에 추가될 패스에 적용할 수 없으므로 필터내에서 화이트 리스트 처리를 해주는 것이 좋다.
+- 필터는 재귀적으로 수행되므로 순서가 A -> B 라면 B가 끝났을 때 A의 `chain.doFilter()` 이후 부분이 수행된다.
+- 미인증된 사용자는 `chain.doFilter()`로 진행하지 않고 로그인 필터 내에서 리턴해서 끝내버리면 된다.
