@@ -132,3 +132,11 @@ server:
       resolvers.add(new LoginMemberArgumentResolver());
   }
   ```
+
+## spring security 참고
+- https://www.marcobehler.com/guides/spring-security#_authorization_with_spring_security
+- https://programmer93.tistory.com/68
+- https://mangkyu.tistory.com/77
+- https://jungeunlee95.github.io/java/2019/07/17/2-Spring-Security/
+- https://cusonar.tistory.com/8?category=607756
+- https://johnmarc.tistory.com/74
