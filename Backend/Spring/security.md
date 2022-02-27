@@ -109,3 +109,26 @@ server:
 
 ### path pattern
 - https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/util/pattern/PathPattern.html
+
+## Argument Resolver
+- 컨트롤러에서 argument에 애노테이션을 붙여 간단하게 처리할 수 있다.
+  - before
+    ```java
+    public String homeLoginV3Spring(
+            @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, Model model) {
+    ```
+  - after
+    ```java
+    @GetMapping("/")
+    public String homeLoginV3ArgumentResolver(@Login Member loginMember, Model model) {
+    ```
+- `@Login` 애노테이션을 구현한다.
+- `HandlerMethodArgumentResolver`를 구현한 클래스를 구현한다.
+- `supportsParameter`가 true를 반환하면 `resolveArgument`가 수행된다.
+- `Webconfig`에서 argument resolver를 추가하면 된다.
+  ```java
+  @Override
+  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+      resolvers.add(new LoginMemberArgumentResolver());
+  }
+  ```
