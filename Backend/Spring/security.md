@@ -140,3 +140,7 @@ server:
 - https://jungeunlee95.github.io/java/2019/07/17/2-Spring-Security/
 - https://cusonar.tistory.com/8?category=607756
 - https://johnmarc.tistory.com/74
+
+## spring security login JSON으로 하기
+- https://ckinan.com/blog/spring-security-credentials-from-json-request/
+- https://johnmarc.tistory.com/74
