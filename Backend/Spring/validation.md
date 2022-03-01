@@ -31,3 +31,14 @@ public String create(@Valid Form form) {
 
 ## test 코드 작성
 - [참고](https://www.baeldung.com/javax-validation)
+
+## groups
+- 특정 group에만 bean validation을 적용하고 싶을 때 사용한다.
+- 각각의 인터페이스를 만들고 애노테이션의 `groups`에 추가한다.
+  ```java
+  @NotNull(groups = {SaveCheck.class})
+  ```
+- `@Validated`에 value로 해당 인터페이스의 클래스를 넘겨준다.
+  ```java
+  @Validated(value = SaveCheck.class)
+  ```
