@@ -2,7 +2,9 @@
 ### `@Validated` and `@Valid`
 - validator object를 만들지 않고도 밸리데이션을 할 수 있다.
 - `@Validated`와 `@Valid` 어노테이션을 사용하면 특정 객체에 대해 밸리데이션이 필요한지 스프링에게 알려줄 수 있다.
-- `@Validated`는 클래스 레벨 어노테이션이고 `@Valid`는 메서드 파라미터와 필드 레벨 어노테이션이다.
+- `@Validated`는 스프링의 어노테이션이고 `@Valid`는 표준 기술의 어노테이션이다.
+- 둘 중 어느 것을 사용해도 동작은 비슷하다.
+- `groups`를 사용할 것이라면 `@Validated`를 써야한다.
 
 # Validating Input to a Spring MVC Controller
 - 스프링 레스트 컨트롤러를 구현했고 클라이언트에 의해 전달되는 인풋을 밸리데이션하고 싶다고 해보자.
