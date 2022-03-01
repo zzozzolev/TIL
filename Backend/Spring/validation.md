@@ -7,6 +7,7 @@
 - 이 밸리데이터는 검증 애노테이션을 보고 검즘을 수행한다.
 - 검증을 원하는 파라미터에 `@Valid`, `@Validated`만 적용하면 된다.
 - 검증 오류가 발생하면 `FieldError`, `ObjectError`를 생성해서 `BindingResult`에 담아준다.
+- 바인딩에 실패한 필드는 Bean Validation을 적용하지 않는다.
 
 ## 패키지
 - `implementation 'org.springframework.boot:spring-boot-starter-validation'`를 추가한다.
