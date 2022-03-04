@@ -42,3 +42,7 @@ public String create(@Valid Form form) {
   ```java
   @Validated(value = SaveCheck.class)
   ```
+
+## @ModelAttribute vs @RequestBody
+- HTTP 요청 파미를 처리하는 `@ModelAttribute`는 각각의 필드 단위로 적용된다. 그래서 필드 하나의 타입이 맞지 않더라도 나머지 필드는 정상적으로 처리할 수 있다.
+- `HttpMessageConverter`는 각각의 필드 단위로 적용되는 게 아니라, 전체 객체 단위로 적용된다. 그래서 메시지 컨버터의 동작이 성공해서 객체를 만들어야 `@Valid`, `@Validated`가 적용된다.
