@@ -18,5 +18,6 @@
 - https://we1cometomeanings.tistory.com/65
 
 ## MockMvcResult
-- `MockMvcResult`에서는 응답에서 쿠키를 받을 수 없다.
-- [참고](https://stackoverflow.com/a/26281932)
+- `MockMvcResult`에서는 응답에서 쿠키를 받을 수 없다. [참고](https://stackoverflow.com/questions/26142631/why-does-spring-mockmvc-result-not-contain-a-cookie)
+- 따라서 로그아웃을 제대로 테스트할 수 없다.
+- 리퀘스트 세션에 스프링 시큐리티 컨텍스트가 들어가나 응답 세션에 넣어도 잘 동작하지 않는다.
