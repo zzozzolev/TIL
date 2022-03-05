@@ -1,19 +1,32 @@
-# session, cookie 설명 및 차이점
+## Authentication vs Authorization vs Access Control
+### Authentication
+- 유저의 identity를 확인하는 과정이다.
+- 즉, 이 유저가 올바른 유저인지 확인한다.
+
+### Authorization
+- 인증된 유저가 리소스에 접근할 권한이 있는지 확인한다.
+- 예를 들면, 유저가 admin인지, 일반 유저인지 확인해 접근할 수 있는 리소스에 제한을 둔다.
+
+### Access Control
+- 특정 리소스에 부과되는 것이다.
+- 예를 들면, A 유저가 만든 리소스를 B 유저가 삭제하도록 하면 안 된다.
+
+## session, cookie 설명 및 차이점
 - https://jeong-pro.tistory.com/80
 
-# JWT
+## JWT
 - 이미 존재하는 유저에 대해서 토큰을 발급해주고 이용하는 것이다.
 - session은 서버에 유저 정보를 저장하기 때문에 동일한 클라이언트가 여러 서버에 접근해야할 때 불편하다. 하지만 JWT 같은 경우, 클라이언트가 정보를 갖고 있기 때문에 그렇지 않다.
 
-## authentication vs authorization
+### authentication vs authorization
 - authorization에 쓰이는 거지 authentication에 쓰이는 게 아니다.
 - authentication은 username과 password가 올바른지 확인하는 것이고 authorization은 request를 보내는 유저가 올바른 유저가 맞는지 확인하는 것이다.
 - [비슷해보이지만 다른 두 친구를 소개합니다.](https://baek.dev/post/24/)
 
-## session vs jwt
+### session vs jwt
 - [쉽게 알아보는 서버 인증 1편(세션/쿠키 , JWT)](https://tansfil.tistory.com/58)
 
-## payload
+### payload
 - payload의 key, value 페어 하나 하나를 claim이라고 한다.
 - claim은 다음과 같이 세 가지 종류가 있다.
   1. Registered claims
@@ -21,7 +34,7 @@
   3. Private claims
   - 위의 1,2번은 정의한 대로 써야하고 그 외에 나머지는 자유롭게 정의해도 된다.
 
-## 인증 과정
+### 인증 과정
 - [jwt-security-nobody-talks-about](https://www.pingidentity.com/en/company/blog/posts/2019/jwt-security-nobody-talks-about.html)
 
 ### 대칭키
@@ -39,14 +52,14 @@
 - 클라이언트는 authorization을 하고 싶을 때, 이 `access token`을 public key를 가지고 있는 서버에게 넘겨준다.
 - 서버는 클라이언트에게 받은 `access token`을 header, payload, signature로 분류한 뒤, 자신의 public key로 signature를 복호화한다. header + payload와 복호화한 signature가 같은지 검증한다.
 
-## blacklist
+### blacklist
 - 클라이언트가 로그아웃을 해서 더 이상 `refresh token`을 사용하지 않더라도 expiration time까지는 토큰이 유효하다. `refresh token`은 expiration time을 길게 잡기 때문에 위험하다. 중간에 토큰이 탈취돼 악용될 수도 있다.
 - 실제로 별도의 설정을 하지 않고 expiration만 설정해놓으면 expiration time이 지나기 전에는 이전에 발급한 `refresh token`을 재사용할 수 있다.
 - 따라서 expiration과 상관없이 토큰이 더 이상 valid 하지 않도록 하는 방법이 필요하다. 이게 바로 blacklist이다.
 - 로그아웃 혹은 토큰이 탈취돼 invalid 해야할 때 blacklist api에 요청을 해서 invalid 시킨다.
 - 단, `access token`은 expiration이 비교적 짧기 때문에 프레임워크에 따라서 invalid에 포함하지 않는 것 같기도 하다. 일단 drf에서는 안 된다.
 
-## 참고
+### 참고
 - [What Is JWT and Why Should You Use JWT](https://www.youtube.com/watch?v=7Q17ubqLfaM)
 - https://meetup.toast.com/posts/239
 - [JWT 구조 & JWT 인증 과정](https://velog.io/@zz3n/HTTP-%EC%9D%B8%EC%A6%9D-JWT)
