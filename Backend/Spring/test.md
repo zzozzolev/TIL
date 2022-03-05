@@ -16,3 +16,7 @@
 
 ### 참고
 - https://we1cometomeanings.tistory.com/65
+
+## MockMvcResult
+- `MockMvcResult`에서는 응답에서 쿠키를 받을 수 없다.
+- [참고](https://stackoverflow.com/a/26281932)
