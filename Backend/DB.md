@@ -1,5 +1,3 @@
-# 헷갈리는 것들
-
 ## 트랜잭션의 Isolation Level이 READ COMMITED일 때, 왜 커밋되지 않은 업데이트를 읽을 수 있을까?
 ### 상황
 - Spring 테스트 클래스에 `@Transactional`을 추가해주면 변경 사항을 커밋하지 않고 롤백해줬다.
@@ -19,3 +17,11 @@
 ### 참고
 - https://stackoverflow.com/questions/58201324/h2-transactions-always-automatically-commit-why
 - https://nesoy.github.io/articles/2019-05/Database-Transaction-isolation
+
+## index
+- https://sddev.tistory.com/157
+- https://jojoldu.tistory.com/243
+
+### 카티널리티와 인덱스
+- 중복도가 낮은, 즉 카디널리티가 높은 것에 인덱스를 걸어야한다.
+- 왜냐하면 인덱스를 통해 많은 부분을 거를 수 있어야하기 때문이다.
