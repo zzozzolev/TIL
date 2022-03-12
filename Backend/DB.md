@@ -62,3 +62,16 @@
 ### Serializable
 - 트랜잭션이 순차적으로 수행됨.
 - 가장 느림.
+
+## Implementaion of Isolation
+- DBMS는 isolation level을 다르게 구현했음.
+- pessimistic
+  - ex: row level locks, table locks, page locks
+  - 바꿀거니까 건드리지 마라 ㅇㅇ
+  - 락 관리 비용이 비쌈. 특히 row level lock.
+- optimistic
+  - 락을 사용하지 않음.
+  - 단지 변화가 있다면 트랜잭션이 실패함.
+  - 유저가 재시도해야함.
+- repeatable read는 row를 잠금. 하지만 row를 많이 읽는다면 비용이 비쌈.
+- postgres는 이걸 snapshot으로 구현했음. 그래서 repeatable read에서 phantom read 현상이 나타나지 않음.
