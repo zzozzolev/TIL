@@ -75,3 +75,14 @@
   - 유저가 재시도해야함.
 - repeatable read는 row를 잠금. 하지만 row를 많이 읽는다면 비용이 비쌈.
 - postgres는 이걸 snapshot으로 구현했음. 그래서 repeatable read에서 phantom read 현상이 나타나지 않음.
+
+## Consistency
+### Consistency in data
+- enforced by the referential integrity
+- 예를 들면, fk의 count를 바탕으로 한 컬럼 값이 맞지 않거나 존재하지 않는 fk를 가리킬 때.
+- eventual consistency 없음.
+
+### Consistency in reads
+- 트랜잭션이 커밋됐다고 다른 트랜잭션에 바로 해당 변화를 볼 수 있는 건 아님.
+- 예를 들면, 마스터에 변경 사항을 커밋했다고 해서 레플리카에서 바로 업데이트된 값을 볼 수 있지 않음.
+- inconsistent 하지만 언젠간 consistent 해질거라는 eventual consistency가 있음.
