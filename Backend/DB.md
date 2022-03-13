@@ -75,6 +75,7 @@
   - 유저가 재시도해야함.
 - repeatable read는 row를 잠금. 하지만 row를 많이 읽는다면 비용이 비쌈.
 - postgres는 이걸 snapshot으로 구현했음. 그래서 repeatable read에서 phantom read 현상이 나타나지 않음.
+- isolation은 다른 트랜잭션에만 적용됨. 따라서 같은 트랜잭션 내에서는 적용이 안 됨.
 
 ## Consistency
 ### Consistency in data
