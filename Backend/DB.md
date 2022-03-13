@@ -156,3 +156,15 @@
 - OLAP(Online Analytical Processing)
 - aggregation에 효과적
 - 여러 컬럼에 걸친 쿼리에 효과적이지 않음.
+
+## PK vs Secondary Key
+### PK
+- 클러스터링은 해당 키를 중심으로 테이블을 구성하는 것임.
+- clustered index를 구성하려면 pk 기준으로 순서가 유지돼야함.
+- 예를 들어 pk가 id이고 id 1인 row가 들어오고 id 8인 row가 들어왔다면, 둘은 같은 페이지에 있지 않음. id 2 ~ 7의 자리를 비워둠.
+- index에서 찾으면 바로 데이터가 있음.
+
+### Secondary Key
+- secondary key를 key를 중심으로 순서가 유지돼있지 않음.
+- index에서 찾으면 바로 데이터가 있지 않고 데이터에 대한 포인터가 있음.
+- 그래서 index에서 찾고 heap에서 다시 한 번 더 찾아야됨.
