@@ -86,6 +86,7 @@
 - 트랜잭션이 커밋됐다고 다른 트랜잭션에 바로 해당 변화를 볼 수 있는 건 아님.
 - 예를 들면, 마스터에 변경 사항을 커밋했다고 해서 레플리카에서 바로 업데이트된 값을 볼 수 있지 않음.
 - inconsistent 하지만 언젠간 consistent 해질거라는 eventual consistency가 있음.
+- eventual consistency는 NoSQL용이 아님.
 
 ## Durability
 - 커밋된 트랜잭션들에 의해 만들어진 변화들은 non-volatile 스토리지에서 durable하게 유지돼야함.
