@@ -131,3 +131,28 @@
 - index가 작을 수록 메모리에 더 많이 올릴 수 있고 검색이 더 빨라짐.
 - MySQL InnoDB는 항상 pk(clustered index)를 가지고 다른 index들은 pk의 값을 가리킴.
 - Postgres는 secondary index들만 가지고 모든 index들은 heap내에 있는 row_id를 가리킴.
+
+## Row-Oriented vs Column-Oriented Database
+### Row-Oriented Database
+- 테이블들이 디스크에 row로 저장돼있음.
+- 한 번의 block IO로 여러 개의 row들과 row의 모든 컬럼들을 읽음.
+- block에 row의 모든 컬럼이 있기 때문에 모든 컬럼을 얻는 비용이 비싸지 않음.
+- 컬럼 하나가 필요해도 row의 모든 컬럼을 읽어야 됨.
+- r/w에 최적화.
+- OLTP(Online Transaction Processing)
+- aggregation이 효과적이지 않음.
+- 여러 컬럼에 걸친 쿼리에 효과적.
+
+### Column-Oriented Database
+- 테이블들이 디스크에 column으로 저장돼있음.
+- 한 번의 block IO로 여러 개의 row들과 여러 개의 컬럼들을 읽음.
+- 블록 하나에 더 많은 컬럼들을 저장함.
+- 주어진 컬럼을 얻기 위해서 적은 IO를 사용하지만, 여러 컬럼들을 얻기 위해 더 많은 IO를 사용해야함.
+- 각 컬럼이 row_id를 저장하고 있음.
+- 단, row를 업데이트 하거나 삭제하면 row의 컬럼을 저장하고 있는 모든 블록의 내용을 지워야함.
+- 일부 컬럼에 aggregate할 때 특히 좋음.
+- 단, row의 모든 컬럼에 접근할 때 굉장히 좋지 않음.
+- 쓰기가 느림.
+- OLAP(Online Analytical Processing)
+- aggregation에 효과적
+- 여러 컬럼에 걸친 쿼리에 효과적이지 않음.
