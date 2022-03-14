@@ -174,3 +174,13 @@
 - secondary key를 key를 중심으로 순서가 유지돼있지 않음.
 - index에서 찾으면 바로 데이터가 있지 않고 데이터에 대한 포인터가 있음.
 - 그래서 index에서 찾고 heap에서 다시 한 번 더 찾아야됨.
+
+## index scan vs index only scan
+- postgres term인 듯.
+### index scan
+- index를 타서 빠르게 찾았지만 table을 다시 한 번 뒤져서 원하는 컬럼을 가져와야함.
+
+### index only scan
+- index를 타서 빠르게 찾았고 index에 필요한 컬럼이 있어서 table을 다시 뒤질 필요가 없음.
+- key 컬럼은 검색에 이용되는 것이고 non-key 컬럼은 fetch에 이용되는 것임.
+- non-key 컬럼은 검색에 이용되지 않음.
