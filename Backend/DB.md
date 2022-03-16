@@ -213,3 +213,10 @@
 
 ### 기타
 - 데이터 베이스를 신뢰하지 않는다면 hint로 특정 index를 사용하도록 만들 수 있음.
+
+## Bitmap Index Scan
+- index에서 row를 찾고 바로 table로 가지 않음.
+- 모든 index에서 검색하는 동안 검색한 값을 bitmap에 기록해둠.
+  - ex) `[0, 0, 0, 0]` 이런 bitmap이 있을 때 첫번째 row를 찾아다면 `[0, 1, 0, 0]`으로 표시
+- table에서 row를 꺼낼 때 해당 page에 조건을 만족하지 않는 row도 있음. 그래서 recheck해서 해당 row들을 제거함.
+- and 조건일 경우 BitmapAnd 수행해서 모두 1인 것만 결과로 나오게 함.
