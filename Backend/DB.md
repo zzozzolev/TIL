@@ -247,3 +247,8 @@
 - 노드 하나는 하나의 DBMS 페이지에 맞음.
 - 빠른 탐색을 위해 인터널 노드를 메모리에 쉽게 올릴 수 있음.
 - 리프 노들들은 힙의 데이터 파일에 있을 수 있음.
+
+## Storage Cost in Postgres vs MySQL
+- B+Tree secondary index 값은 바로 튜플(포인터)을 가리킬 수도 있고 (Postgres) 혹은 pk를 가리킬 수도 있음 (MySQL)
+- pk를 UUID로 하면 clustered index에서 randomness 때문에 insert 비용이 비쌈. 또한 모든 secondary index에서 가리키니 비용이 더 비쌈. (MySQL)
+- MySQL은 clustered index이기 때문에 리프 노드들은 모든 로우를 포함한다.
