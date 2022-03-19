@@ -252,3 +252,13 @@
 - B+Tree secondary index 값은 바로 튜플(포인터)을 가리킬 수도 있고 (Postgres) 혹은 pk를 가리킬 수도 있음 (MySQL)
 - pk를 UUID로 하면 clustered index에서 randomness 때문에 insert 비용이 비쌈. 또한 모든 secondary index에서 가리키니 비용이 더 비쌈. (MySQL)
 - MySQL은 clustered index이기 때문에 리프 노드들은 모든 로우를 포함한다.
+
+## Exclusive Lock vs Shared Lock
+- Lock은 시스탬에서 consistency를 보장하기 위해 도입됐음.
+- 아래 Lock 중 하나라도 걸려있으면 다른 Lock은 걸릴 수 없음.
+- 뱅킹 시스템과 configuration 시스템에서 유용함.
+### Exclusive Lock
+- lock을 건 트랜잭션 외에 어떤 트랜잭션도 읽거나 수정할 수 없음.
+
+### Shared Lock
+- lock을 건 트랜잭션 외에 다른 트랜잭션은 수정할 수 없음. 단, 읽기는 가능함.
