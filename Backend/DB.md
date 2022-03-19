@@ -257,6 +257,9 @@
 - Lock은 시스탬에서 consistency를 보장하기 위해 도입됐음.
 - 아래 Lock 중 하나라도 걸려있으면 다른 Lock은 걸릴 수 없음.
 - 뱅킹 시스템과 configuration 시스템에서 유용함.
+- lock을 implicit 하게 얻는 것과 explicit 하게 얻는 것은 다름.
+  - implicit: `update`
+  - explicit: `select for update`
 ### Exclusive Lock
 - lock을 건 트랜잭션 외에 어떤 트랜잭션도 읽거나 수정할 수 없음.
 
@@ -284,3 +287,40 @@
   - B: insert into test values(20)
   - A: commit
   - B: duplicate key value -> fail (PK일 때)
+
+## Two-phase Locking
+- 락을 얻는 것과 릴리즈 하는 것을 단계로 구분하는 것임.
+- 첫번째 페이스는 락을 얻는 것이고 두번째는 릴리즈하는 것임.
+- 일단 릴리즈하면 얻을 수 없음.
+- 좋은 예시가 더블 북킹임.
+  - 같은 로우에 대해 동시에 시작한 트랜잭션이 자신이 성공적으로 커밋했다고 생각함.
+  - 동일한 자석을 두 사람이 예약해버리게 됨;;
+  - A: select * from seats where id = 13 -> is_booked: 0
+  - B: select * from seats where id = 13 -> is_booked: 0
+  - A: update seats set is_booked = 1, name = 'A' where id = 13 -> UPDATE 1
+  - B: update seats set is_booked = 1, name = 'B' where id = 13 -> wait A
+  - A: commit
+  - B: UPDATE 1
+  - A: select * from seats where id = 13 -> is_booked: 0, name: 'A'
+  - B: commit
+  - A: select * from seats where id = 13 -> is_booked: 0, name: 'B'
+
+### select for update
+- 투 페이스 락킹을 쓴다면
+  - A: select * from seats where id = 14 **for update** // phase one: 해당 로우에 exclusive 락 획득.
+  - B: select * from seats where id = 14 **for update** -> wait A
+  - A: update seats set is_booked = 1, name = 'A' where id = 14 -> UPDATE 1
+  - A: commit // phase two: exclusive 락 릴리즈.
+  - B: select * from seats where id = 14 **for update** -> is_booked: 1, name: 'A'
+- 단, DB 종류에 따라 select for update 했을 때 DB 타임아웃을 지정할 수 없음.
+
+### select for update를 쓰지 않는 방법
+- **DB에 따라 될 수도 있고 안 될 수도 있음.**
+- where를 이용해 업데이트 조건이 되는 컬럼에 대해 조건을 추가함.
+  - update seats set is_booked = 1, name = 'A' where id = 1 and is_booked = 0;
+- 트랜잭션이 시작될 때, 해당 row가 잠겨있으면 스스로를 블록함.
+- 로우가 릴리즈되면, DB는 힙에 있는 값을 리프레쉬함. 즉, 쿼리를 다시 수행함.
+- 단점
+  - isolation level이 read commited 여야함.
+  - 개발자에게 컨트롤 권한이 별로 없음. 특정 업데이트에 의존함.
+- 강의하는 사람은 select for update를 선호한다고 함.
