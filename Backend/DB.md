@@ -262,3 +262,25 @@
 
 ### Shared Lock
 - lock을 건 트랜잭션 외에 다른 트랜잭션은 수정할 수 없음. 단, 읽기는 가능함.
+
+## Dead Locks
+- 두 개의 프로세스들이 하나 이상의 리소스를 위해 경쟁할 때 발생함.
+- A는 R1을 잡고 R2를 기다리고, B는 R2를 잡고 R1을 기다림.
+- 대부분의 DB들은 실제로 데드락을 알아차리고 트랜잭션을 실패시킴.
+- 데드락에 나중에 들어온 트랜잭션이 실패함.
+  - A: insert into test values(20)
+  - B: insert into test values(21)
+  - B: insert into test values(20)
+  - A: insert into test values(21) -> dead lock detected -> fail
+- 락을 먼저 잡은 트랜잭션이 롤백되면 락을 기다리고 있던 트랜잭션은 실패하지 않음.
+  - A: insert into test values(20)
+  - B: insert into test values(30)
+  - B: insert into test values(20)
+  - A: rollback
+  - B: get lock
+- 미리 락을 잡은 트랜잭션이 커밋되면 이후 락을 잡으려고 했던 트랜잭션이 실패함.
+  - A: insert into test values(20)
+  - B: insert into test values(30)
+  - B: insert into test values(20)
+  - A: commit
+  - B: duplicate key value -> fail (PK일 때)
