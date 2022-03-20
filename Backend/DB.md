@@ -430,3 +430,28 @@
 - 쓰기 트랜잭션이 마스터에만 써지면 성공으로 생각함.
 - 그 다음 비동기적으로 쓰기가 백업 노드들에 적용됨.
 - throughput이 상승하지만 백그라운드로 쓰기를 해야하기 때문에 cpu를 소모하고 로드가 있음.
+
+## Database Engine
+- DBMS 소프트 웨어가 사용하는 엔진
+- 디스크에 로우 레벨 데이터를 저장하거나 CRUD를 수행하기 위해 필요함.
+- 몇몇 DBMS는 (MySQL, Maria DB) 엔진을 바꿀 수 있지만 몇몇 DMBS는 빌트인 엔진을 사용해 그럴 수 없음. (Postgres)
+
+### MyISAM
+- Indexed sequential access method
+- B-Tree 인덱스들은 로우를 바로 가리킴.
+- 트랜잭션 지원 없음.
+- 오픈 소스이고 오라클에서 소유함.
+- 인서트가 빠르지만 업데이트와 딜리트가 문제가 됨. 인덱스가 로우를 가리키므로 인덱스를 업데이트 해줘야 됨.
+- DB 크래쉬가 테이블을 망칠 수 있음. repair 될 때까지 접근 못하고 직접 repair 해야 됨.
+- table level locking만 있고 row level locking은 없음.
+- 예전에 MySQL 기본 엔진어었음.
+
+### InnoDB
+- B+Tree
+- 인덱스들은 PK를 가리키고 PK는 row를 가리킴.
+- MySQL과 MariaDB의 디폴트.
+- ACID를 지켜야하는 트랜잭션을 지원함.
+- FK 지원
+- DB에서 데이터 파일들의 논리적 그룹인 tablespace 컨셉을 가지고 있음.
+- row level locking 지원.
+- spatial operation (geometry)
