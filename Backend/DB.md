@@ -395,6 +395,14 @@
 - atomic 방식으로 일련의 쿼리들을 수행하고 싶을 때는 풀에게 클라이언트에 락을 걸도록 요구할 수 있음.
 
 ## Replication
+- 장점
+  - horizontal scaling
+  - DB를 리전마다 둘 수 있음.
+- 단점
+  - eventual consistency
+  - 느린 쓰기 (synchronous)
+  - 멀티 마스터의 구현 복잡성
+
 ### Master/Backup Replication
 - 마스터/리더 노드 하나가 쓰기와 DDL을 담당함.
 - 하나 이상의 백업/스탠드 바이(레플리카) 노드들은 마스터로부터 쓰기를 받음.
