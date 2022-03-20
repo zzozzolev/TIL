@@ -228,4 +228,200 @@
 - 특정 원소가 데이터에 존재하는지 검사하는데 사용할 수 있는 자료 구조.
 - 원소를 hash해서 저장함.
 - 따라서 다른 원소가 같은 해쉬 값을 가지는 collision에 의해 없는 원소를 있다고 할 수 있지만, 있는 원소를 없다고는 하지 않음.
+<<<<<<< HEAD
 - inmemory representation
+=======
+
+## B-Tree vs B+Tree
+### B-Tree
+- 모든 노드에서 키와 밸류를 저장 -> 더 많은 공간 차지 -> 더 많은 IO 필요 -> 탐색이 느려짐
+- 랜덤 액세스때문에 레인지 쿼리가 느림. 해당하는 값을 찾기 위해 불필요한 탐색도 이루어짐.
+- 노드를 메모리에 올리는 게 어려워짐. 특히 pk가 UUID, string이면 더욱 어려움.
+
+### B+Tree
+- B-Tree랑 같지만 인터널 노드에 키만 저장함 -> 더 적은 공간 차지 -> 더 적은 IO 필요
+- 밸류는 리프 노드에 저장함. 대신, 키가 중복될 수 있음.
+- 인터널 노드가 차지하는 용량이 적다보니 페이지 하나에 더 많은 엘리먼트가 들어감.
+- 리프 노드가 서로 연결돼있기 때문에 키를 찾으면 해당 키의 전후 값을 찾을 수 있음.
+- 한 페이지에 여러 개의 리프 노드가 저장됨.
+
+## B+Tree & DBMS Considerations
+- 리프 포인터 비용은 쌈.
+- 노드 하나는 하나의 DBMS 페이지에 맞음.
+- 빠른 탐색을 위해 인터널 노드를 메모리에 쉽게 올릴 수 있음.
+- 리프 노들들은 힙의 데이터 파일에 있을 수 있음.
+
+## Storage Cost in Postgres vs MySQL
+- B+Tree secondary index 값은 바로 튜플(포인터)을 가리킬 수도 있고 (Postgres) 혹은 pk를 가리킬 수도 있음 (MySQL)
+- pk를 UUID로 하면 clustered index에서 randomness 때문에 insert 비용이 비쌈. 또한 모든 secondary index에서 가리키니 비용이 더 비쌈. (MySQL)
+- MySQL은 clustered index이기 때문에 리프 노드들은 모든 로우를 포함한다.
+
+## Exclusive Lock vs Shared Lock
+- Lock은 시스탬에서 consistency를 보장하기 위해 도입됐음.
+- 아래 Lock 중 하나라도 걸려있으면 다른 Lock은 걸릴 수 없음.
+- 뱅킹 시스템과 configuration 시스템에서 유용함.
+- lock을 implicit 하게 얻는 것과 explicit 하게 얻는 것은 다름.
+  - implicit: `update`
+  - explicit: `select for update`
+### Exclusive Lock
+- lock을 건 트랜잭션 외에 어떤 트랜잭션도 읽거나 수정할 수 없음.
+
+### Shared Lock
+- lock을 건 트랜잭션 외에 다른 트랜잭션은 수정할 수 없음. 단, 읽기는 가능함.
+
+## Dead Locks
+- 두 개의 프로세스들이 하나 이상의 리소스를 위해 경쟁할 때 발생함.
+- A는 R1을 잡고 R2를 기다리고, B는 R2를 잡고 R1을 기다림.
+- 대부분의 DB들은 실제로 데드락을 알아차리고 트랜잭션을 실패시킴.
+- 데드락에 나중에 들어온 트랜잭션이 실패함.
+  - A: insert into test values(20)
+  - B: insert into test values(21)
+  - B: insert into test values(20)
+  - A: insert into test values(21) -> dead lock detected -> fail
+- 락을 먼저 잡은 트랜잭션이 롤백되면 락을 기다리고 있던 트랜잭션은 실패하지 않음.
+  - A: insert into test values(20)
+  - B: insert into test values(30)
+  - B: insert into test values(20)
+  - A: rollback
+  - B: get lock
+- 미리 락을 잡은 트랜잭션이 커밋되면 이후 락을 잡으려고 했던 트랜잭션이 실패함.
+  - A: insert into test values(20)
+  - B: insert into test values(30)
+  - B: insert into test values(20)
+  - A: commit
+  - B: duplicate key value -> fail (PK일 때)
+
+## Two-phase Locking
+- 락을 얻는 것과 릴리즈 하는 것을 단계로 구분하는 것임.
+- 첫번째 페이스는 락을 얻는 것이고 두번째는 릴리즈하는 것임.
+- 일단 릴리즈하면 얻을 수 없음.
+- 좋은 예시가 더블 북킹임.
+  - 같은 로우에 대해 동시에 시작한 트랜잭션이 자신이 성공적으로 커밋했다고 생각함.
+  - 동일한 자석을 두 사람이 예약해버리게 됨;;
+  - A: select * from seats where id = 13 -> is_booked: 0
+  - B: select * from seats where id = 13 -> is_booked: 0
+  - A: update seats set is_booked = 1, name = 'A' where id = 13 -> UPDATE 1
+  - B: update seats set is_booked = 1, name = 'B' where id = 13 -> wait A
+  - A: commit
+  - B: UPDATE 1
+  - A: select * from seats where id = 13 -> is_booked: 0, name: 'A'
+  - B: commit
+  - A: select * from seats where id = 13 -> is_booked: 0, name: 'B'
+
+### select for update
+- 투 페이스 락킹을 쓴다면
+  - A: select * from seats where id = 14 **for update** // phase one: 해당 로우에 exclusive 락 획득.
+  - B: select * from seats where id = 14 **for update** -> wait A
+  - A: update seats set is_booked = 1, name = 'A' where id = 14 -> UPDATE 1
+  - A: commit // phase two: exclusive 락 릴리즈.
+  - B: select * from seats where id = 14 **for update** -> is_booked: 1, name: 'A'
+- 단, DB 종류에 따라 select for update 했을 때 DB 타임아웃을 지정할 수 없음.
+
+### select for update를 쓰지 않는 방법
+- **DB에 따라 될 수도 있고 안 될 수도 있음.**
+- where를 이용해 업데이트 조건이 되는 컬럼에 대해 조건을 추가함.
+  - update seats set is_booked = 1, name = 'A' where id = 1 and is_booked = 0;
+- 트랜잭션이 시작될 때, 해당 row가 잠겨있으면 스스로를 블록함.
+- 로우가 릴리즈되면, DB는 힙에 있는 값을 리프레쉬함. 즉, 쿼리를 다시 수행함.
+- 단점
+  - isolation level이 read commited 여야함.
+  - 개발자에게 컨트롤 권한이 별로 없음. 특정 업데이트에 의존함.
+- 강의하는 사람은 select for update를 선호한다고 함.
+
+## SQL Pagination with Offset
+- 첫번째 X개의 로우들을 페치하고 드롭하는 것이다.
+  - offset 100 limit 10 -> 110개의 로우을 페치하고 앞에 100개의 로우들을 드롭함.
+  - 드롭되지 않은 10개의 로우들이 유저가 얻는 값.
+- offset 증가 -> DB 연산 비용 증가
+- 이전 결과로 나갔던 로우를 다시 읽을 수도 있음.
+  - 새로운 로우가 맨 처음 삽입됨.
+  - offset 110 limit 10 -> 111번째 로우는 이전 결과로 나갔지만 다시 포함됨.
+- where를 이용하는 게 더 빠름.
+  - select id from news where id < 100999993 order by id desc limit 10;
+- pagination 구현 (id가 연속적이지 않을 경우)
+  ```
+  Table t with Id field which has an index
+
+  Id
+  1
+  9
+  99
+  240
+  320
+  450
+  600
+  650
+  740
+  800
+  900
+  999
+
+  Get first 5 results
+  select * from t where id > 0 order by id limit 5
+
+  1
+  9
+  99
+  240
+  320
+
+  user keeps scrolling, fetch the next 5 results
+
+  select * from t where id > 320 order by id limit 5
+
+  450
+  600
+  650
+  740
+  800
+
+  user keeps scrolling, fetch the next 5 results , we only have 2
+
+  select * from t where id > 800 order by id limit 5
+
+  900
+  999
+
+
+  Again this idea is great for paging, but won’t allow you to “jump to a specific page”
+  ```
+
+## Database Connection Pooling
+- 커넥션 풀링은 이용가능한 커넥션의 풀을 만드는 패턴임. (TCP)
+- 여러 클라이언트들이 해당 풀을 공유함.
+- 커넥션을 맺고 끊고 하는 비용이 비쌀 때 유용함.
+- 서버가 매우 제한된 DB 커넥션 개수를 가지고 있고 서버 클라이언트가 많을 때도 유용함.
+- 최대 커넥션 개수, 풀이 커넥션을 줄 때까지 기다릴 시간, 커넥션을 맺은 후 사용하지 않을 때 언제까지 유지할지 등등을 명시할 수 있음.
+- 풀은 사용하면 쿼리를 날릴 때 매번 커넥션을 맺을 필요가 없음.
+- 싱글 쓰레드를 가지는 애플리케이션이라도 블록킹 없이 모든 커넥션들을 관리할 것임.
+- atomic 방식으로 일련의 쿼리들을 수행하고 싶을 때는 풀에게 클라이언트에 락을 걸도록 요구할 수 있음.
+
+## Replication
+### Master/Backup Replication
+- 마스터/리더 노드 하나가 쓰기와 DDL을 담당함.
+- 하나 이상의 백업/스탠드 바이(레플리카) 노드들은 마스터로부터 쓰기를 받음.
+
+#### 장점
+- 구현하기 쉽고 컨플릭트가 없음.
+- DB 인스턴스를 다른 region에 만들 수 있음.
+- horizontal 스케일림이 가능함.
+
+#### 단점
+- 마스터에 업데이트된 데이터를 레플리카에서 읽을 때 지연이 있음. (eventual consistency)
+
+### Multi-Master Replication
+- 여러 개의 마스터/리더 노드 하나가 쓰기와 DDL을 담당함.
+- 하나 이상의 백업/팔로워 노드들은 여러 개의 마스터들로부터 쓰기를 받음.
+- 컨플릭트를 해결할 필요가 있음.
+
+## Synchronous vs Asynchronous Replication
+### Synchronous
+- 쓰기 트랜잭션이 백업/스탠드바이 노드들에 쓰일 때까지 블록됨.
+- 모든 레플리카를 다 기다리면 지연시 심하므로 몇 개의 레플리카를 기다릴지 지정할 수 있음.
+
+### Asynchronous
+- 디폴트
+- 쓰기 트랜잭션이 마스터에만 써지면 성공으로 생각함.
+- 그 다음 비동기적으로 쓰기가 백업 노드들에 적용됨.
+- throughput이 상승하지만 백그라운드로 쓰기를 해야하기 때문에 cpu를 소모하고 로드가 있음.
+>>>>>>> 7261d11fdf3f3713712e55ae5e6bf035a7caf07f
