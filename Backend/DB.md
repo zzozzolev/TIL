@@ -324,3 +324,61 @@
   - isolation level이 read commited 여야함.
   - 개발자에게 컨트롤 권한이 별로 없음. 특정 업데이트에 의존함.
 - 강의하는 사람은 select for update를 선호한다고 함.
+
+## SQL Pagination with Offset
+- 첫번째 X개의 로우들을 페치하고 드롭하는 것이다.
+  - offset 100 limit 10 -> 110개의 로우을 페치하고 앞에 100개의 로우들을 드롭함.
+  - 드롭되지 않은 10개의 로우들이 유저가 얻는 값.
+- offset 증가 -> DB 연산 비용 증가
+- 이전 결과로 나갔던 로우를 다시 읽을 수도 있음.
+  - 새로운 로우가 맨 처음 삽입됨.
+  - offset 110 limit 10 -> 111번째 로우는 이전 결과로 나갔지만 다시 포함됨.
+- where를 이용하는 게 더 빠름.
+  - select id from news where id < 100999993 order by id desc limit 10;
+- pagination 구현 (id가 연속적이지 않을 경우)
+  ```
+  Table t with Id field which has an index
+
+  Id
+  1
+  9
+  99
+  240
+  320
+  450
+  600
+  650
+  740
+  800
+  900
+  999
+
+  Get first 5 results
+  select * from t where id > 0 order by id limit 5
+
+  1
+  9
+  99
+  240
+  320
+
+  user keeps scrolling, fetch the next 5 results
+
+  select * from t where id > 320 order by id limit 5
+
+  450
+  600
+  650
+  740
+  800
+
+  user keeps scrolling, fetch the next 5 results , we only have 2
+
+  select * from t where id > 800 order by id limit 5
+
+  900
+  999
+
+
+  Again this idea is great for paging, but won’t allow you to “jump to a specific page”
+  ```
