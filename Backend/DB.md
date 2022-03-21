@@ -144,8 +144,24 @@
 - heap에 있는 모든 페이지를 스캔하기보다는 heap에서 어떤 페이지를 fetch 해야하는지 정확히 알려줌.
 - index도 pages에 저장되고 index 엔트리를 가져오기 위해 IO가 필요함.
 - index가 작을 수록 메모리에 더 많이 올릴 수 있고 검색이 더 빨라짐.
-- MySQL InnoDB는 항상 pk(clustered index)를 가지고 다른 index들은 pk의 값을 가리킴.
-- Postgres는 secondary index들만 가지고 모든 index들은 heap내에 있는 row_id를 가리킴.
+
+## Postgres Index vs MySQL Index
+### Postgres Index
+- index -> table
+- secondary index들만 가짐.
+- 모든 index들은 heap내에 있는 row_id를 가리킴.
+- row가 삭제되면 모든 index들을 업데이트 해야됨.
+- index가 바로 테이블을 가리키기 때문에 읽기가 빠름.
+
+### MySQL Index
+- secondary index -> primary key index -> table
+- InnoDB 전제
+- 항상 pk(clustered index)를 가짐.
+- pk index는 테이블을 가리킴. 
+- 다른 index들은 pk의 값을 가리킴.
+- row가 삭제되면 pk만 업데이트 하면 됨.
+- 단, 특정 컬럼에 해당하는 row가 업데이트 되면 해당 index도 알아야 됨.
+- 또한 pk가 업데이트 되면 많은 index들을 수정해야됨.
 
 ## Row-Oriented vs Column-Oriented Database
 ### Row-Oriented Database
