@@ -455,3 +455,19 @@
 - DB에서 데이터 파일들의 논리적 그룹인 tablespace 컨셉을 가지고 있음.
 - row level locking 지원.
 - spatial operation (geometry)
+
+## select count(*) Impact
+### select count(`<column>`)
+- 특정 컬럼을 지정하면 인덱스에 해당 컬럼이 없을 때, 테이블에 가서 카운트를 함.
+- null 값은 count하지 않음.
+
+### `select count(*)`
+- 모든 필드를 fetch해서 카운트하지 않음. 엔트리가 있다면 카운트됨.
+- 그래서 null이 있는 컬럼을 포함할 수도 있음.
+- index only scan 사용
+- 단, 값을 업데이트 했다면 heap fetch가 발생해 속도가 느려질 수 있음.
+- 포스트 그레스에서는 동시성 컨트롤 때문에 delete 되거나 update 되기 전의 로우들도 가지고 있음.
+- 카운트해야할 값이 많아질수록 성능이 나빠짐.
+
+### 대안
+- `explain (format json) select count(*)`를 하면 대략적인 카운트를 알 수 있음.
