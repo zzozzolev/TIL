@@ -152,6 +152,7 @@
 - 모든 index들은 heap내에 있는 row_id를 가리킴.
 - row가 삭제되면 모든 index들을 업데이트 해야됨.
 - index가 바로 테이블을 가리키기 때문에 읽기가 빠름.
+- 많은 row들을 업데이트하거나 삭제하면 많은 인덱스가 업데이트되니 조심해야됨.
 
 ### MySQL Index
 - secondary index -> primary key index -> table
