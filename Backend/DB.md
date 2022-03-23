@@ -488,3 +488,14 @@
 
 ### 대안
 - `explain (format json) select count(*)`를 하면 대략적인 카운트를 알 수 있음.
+
+## NULL이 DB 쿼리 퍼포먼스를 향상시킬까?
+- Postgres는 null bitmap으로 각 컬럼에 대한 null을 표현함.
+- null 값 대신 다른 걸 쓰는 것보다 그냥 null을 쓰는 게 나음. 실제 값보다 차지하는 공간이 더 적을 것임.
+- `select count(*)`는 null도 포함하지만 특정 필드를 지정하면 null을 포함하지 않음.
+- `T is null`은 되지만 `T in [null]` 이런 건 안 되니 주의. naughty 하다고 함.
+- DB가 인덱스에 null을 쓰는 걸 지원하는지도 확인해봐야됨.
+  - Orcle은 지원하지 않지만 MySQL(MyISAM, InnoDB)에서는 지원한다고 함. [관련 글](https://hwannny.tistory.com/102)
+- null을 저장할 수 있는 컬럼은 null을 저장하는 게 좋음. 이렇게 하면 페이지 하나에 저장할 수 있는 로우 개수가 증가할 수 있음.
+- DB는 null을 저장하는 데 매우 효율적임. 인티저 필드에 null을 저장한다고 해서 4 bytes를 요구하지는 않음.
+- 인덱스 생성 시 null을 포함 안 할 수도 있음. (잘못 이해한 거 일 수도;)
