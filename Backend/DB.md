@@ -518,3 +518,25 @@
 ## Partitioning
 - 테이블을 더 작은 부분으로 나누는 것.
 - 굉장히 많은 로우가 있을 때 연산이 느려지기 때문임.
+- DB는 파티셔닝한 것들을 메인 테이블에 attach함.
+- 파티션의 메타 데이터를 통해 특정 로우가 어느 파티션에 있는지 알아냄.
+
+### Vertical vs Horizontal Partitioning
+- Horizontal: 로우들을 파티션으로 나눔.
+  - 타입: range(1 ~ 100, 100 ~ 200,..), zipcode(0, 1, ...)
+- Vertical: 컬럼들을 파티션으로 나눔.
+  - blob처럼 크기가 큰 컬럼을 또 다른 table 공간에 넣는 것임.
+  - 접근을 빨리 할 수 있는 컬럼들은 마스터 테이블에 놔둠.
+
+### Partitioning Types
+- By Range: dates, ids
+- By List: discrete values or zip codes
+- By Hash: 해쉬 함수들
+
+### Horizontal Partitioning vs Sharding
+- Horizontal Partitioning
+  - 같은 DB 내에서 하나의 큰 테이블을 여러 개의 테이블을 나누는 것임. 클라이언트는 어떤 파티션에 접근하는지 알 수 없음.
+  - 테이블 이름이 바뀜.
+- Sharding
+  - 샤딩은 여러 DB 서버들에 걸쳐 하나의 큰 테이블을 여러 테이블들로 나누는 것임.
+  - 테이블 이름은 바뀌지 않지만 서버가 바뀜.
