@@ -65,5 +65,9 @@
 ### The Read Path
 - 어느 서버라도 쿼리될 수 있다. coordinator로서 동작한다.
 - 요청된 키와 함께 노드에 접근한다.
-- 각각의 노드에서 데이터는 SSTable에서 꺼내지고 머지된다.
+- 각각의 노드에서 데이터는 SSTable에서 메모리로 꺼내지고 타임 스탬프를 이용해 머지된다.
+  - latest timestamp always win
 - Consistency가 ALL보다 적다면 백그라운드로 read repair을 수행한다.
+  - eventually consistency
+  - 어떤 노드는 아직 최신 데이터가 아닐 수도 있다.
+  - 이때 read를 통해 모든 레플리카가 최신 데이터를 유지할 수 있도록 한다.
