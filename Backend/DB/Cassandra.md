@@ -67,3 +67,21 @@
 - 요청된 키와 함께 노드에 접근한다.
 - 각각의 노드에서 데이터는 SSTable에서 꺼내지고 머지된다.
 - Consistency가 ALL보다 적다면 백그라운드로 read repair을 수행한다.
+
+## CQL
+### Keyspaces
+- top level namespace/container
+- RDB 스키마와 비슷함.
+
+### Use
+- keyspace 사이를 바꿈.
+
+### Tables
+- keyspace들은 table들을 포함함.
+- table들은 데이터를 포함함.
+
+### UUID and TIMEUUID
+- TIMEUUID: 타임스탬프 값을 내장함.
+- 인티져 ID 대신 사용함.
+- 카산드라는 분산 데이터 베이스이기 때문임.
+- UUID는 내부 통신 없이 고유한 값을 만들어 낼 수 있음.
