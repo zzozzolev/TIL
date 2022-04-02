@@ -91,3 +91,42 @@
 - 파티션은 consistent 해싱 알고리즘을 씀.
 - 데이터를 쿼리할 때마다 데이터는 같은 곳에 있음.
 - 파티션을 찾는 데 O(1) 밖에 걸리지 않음.
+
+## Clustering Columns
+- 프라이머리 키를 통해 파티션을 정하고 정렬 방식을 정할 수 있음.
+- 데이터 모델이 만들어지고 데이터가 삽입 됐다면 프라이머리 키를 바꿀 수 없음.
+- 클러스터링 컬럼은 파티션 키 다음에 있는 컬럼임. 1개가 넘어가도 됨.
+  ```
+  PRIMARY KEY((state), city, name)
+  ```
+  - 파티션 키: state
+  - 클러스터링 컬럼: city, name
+  - 먼저 city로 정렬 후 name으로 정렬
+- 하지만 이렇게만 프라이머리 키를 만들면 충돌이 발생할 수 있음.
+- int ID를 이용하면 되는데, 카산드라에는 RDB 같은 sqeuntial이 없음.
+- 프라이머리 키는 두 가지 문제를 해결함.
+  - unique record
+  - controlling the order
+
+### Querying Clustering Columns
+- select query일 때도 runtime에 order를 바꿀 수 있음.
+- 모든 쿼리는 파티션 키를 포함해야함.
+- 프라이머리 키에 명시한 클러스터링 컬럼 순서에 맞춰서 비교를 해야함.
+  - 만약 `PRIMARY KEY((state), city, name)` 이렇게 프라이머리키를 지정했는데
+  - `state == texas and name == a` 이런 식으로 하면 동작하지 않음.
+
+### Changing Default Ordering
+- 클러스터링 컬럼들은 기본적으로 asc 순서임.
+- `WITH CLUSTRING ORDERY BY`로 순서를 바꿀 수 있음.
+- desc로 하고 싶은 컬럼들까지 모든 컬럼을 포함해야함.
+  - 예를들어 id를 제외하고 asc로 가정함.
+  ```
+  PRIMARY KEY((state), city, name, id))
+  WITH CLUSTERING ORDER BY(city DESC, name ASC);
+  ```
+
+### Allow Filtering
+- `ALLOW FILTERING`은 쿼리의 파티션 키 제약을 풀어줌.
+- 클러스터링 컬럼에 쿼리를 할 수 있음.
+- 테이블 내에 있는 모든 파티션들을 스캔하게 만듦.
+- 진짜 필요한 게 아니면 쓰지말 것! 진짜 필요해 쓰지마라;
