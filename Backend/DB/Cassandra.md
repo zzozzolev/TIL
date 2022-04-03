@@ -229,3 +229,45 @@
 - 네트워크 트래픽이 일정함.
 - 데이터 스트리밍과 비교하면 더 적음.
 - 네트워크 스파이크를 야기하지 않음.
+
+## Snitch
+- 각각 노드의 rack과 DC를 결정하는 것.
+- 클러스터의 topology. 어떤 노드가 어디에 속하는지.
+- 여러 가지 타입의 snitch가 있음.
+- `cassandra.yaml`에서 설정할 수 있음.
+
+### Simple Snitch
+- 디폴트
+- 모든 노드들을 같은 DC와 rack에 위치시킴.
+
+### Property File Snitch
+- 파일로부터 모든 노드들에 대한 DC와 rack 정보를 읽음.
+- 운영자가 클러스터내의 모든 노드들에 대해 싱크를 맞춰야함.
+- `cassandra-topology.properties` 파일에서 설정 가능함.
+
+### Gossiping Property File Snitch
+- property file snitch의 고통으로 부터 완화시킴.
+- 파일에서 현재 노드의 DC/rack 정보를 선언함.
+- 각각의 개별 노드의 셋팅들을 설정해야함.
+- 하지만 property file snitch를 카피할 필요는 없음.
+- 가십은 클러스터를 통해 셋팅을 퍼뜨림.
+- `cassandra-rackdc.properties` 파일에서 설정 가능함.
+
+### Rack Inferring Snitch
+- rack과 DC를 IP 주소로부터 추론함.
+  - 110.100(DC octet).200(rack octet).105(node octet)
+
+### Dynamic Snitch
+- 실제 snitch 위에 쌓임.
+- 각 노드의 퍼포먼스에 대한 pulse를 유지함.
+- 노드 상태에 따라 복제본을 쿼리할 노드를 결정함.
+- 모든 snitch들에 대해 디폴트로 켜져있음.
+- https://www.datastax.com/blog/dynamic-snitching-cassandra-past-present-and-future
+
+### Cloud-Based Snitches
+- AWS, Google Cloud, Cloudstack이 있음.
+
+### Configuring Snitches
+- 클러스터 내의 모든 노드들은 같은 snitch를 사용해야함.
+- 클러스터 네트워크 토폴로지를 바꾸는 것은 모든 노드들을 재시작하는 것을 필요로 함.
+- 순차적인 repair를 실행하고 각각의 노드에 대해 cleanup을 해야함.
