@@ -333,3 +333,19 @@
 - consistency가 높을 수록, stale data를 얻을 확률이 적어짐.
   - 대신 latency를 지불해야함.
   - 상황에 따라 다름.
+
+## Hinted Handoff
+- 코디네이터가 레플리카에 쓰기 데이터를 보내던 중 노드가 다운되면 데이터를 자신이 저장했다가 노드가 온라인 상태가 되면 다시 보냄.
+- 힌트를 파일에 저장함.
+
+### settings
+- `cassandra.yaml`
+- hinted handoff를 끌 수도 있음.
+- hints 파일을 저장할 디렉토리를 고를 수 있음.
+- 노드가 힌트를 저장할 시간을 지정할 수 있음.
+- 디폴트는 세 시간임.
+
+### Consistency Level ANY
+- ANY는 hint만 저장하는 거임.
+- ONE 이상은 적어도 하나의 레플리카가 쓰기를 성공해야함.
+- hint만으로는 충분하지 않음.
