@@ -296,3 +296,40 @@
   ```
 - 특정 DC에 데이터 쓰기 요청을 받았을 때, 코디네이터는 자신의 DC 뿐만 아니라 다른 DC에도 비동기적으로 데이터를 전달함.
 - 다른 DC에서 해당 데이터를 받으면 로컬 데이터 센터에 복제함.
+
+## Consistency
+- 카산드라는 CAP 이론에서 Availability, Partition Tolerance를 선택하고 Consistency는 좀 포기함.
+- 데이터를 쓸 때 CL(Consistency Level)을 지정할 수 있음.
+
+### CL=ONE
+- 노드 하나에서만 ACK해도 코디네이터가 클라이언트에 ACK를 보냄.
+- 가장 빠른 consistency level.
+- 단, 헷갈리지 말아야할 게 데이터를 노드 하나에 쓴다는 게 아니라 ACK를 하나에서만 받으면 바로 OK 하겠다는 거임.
+
+### CL=QUORUM
+- 51% 이상의 노드가 write를 ACK 하거나 read를 동의해야함.
+- RF=3이라면 최소 2개의 노드가 ACK를 해야함.
+
+### CL=ALL
+- 모든 노드가 ACK 하거나 동의해야함.
+- 이렇게 하면 Availability, Partition Tolerance를 희생해야하므로 추천하지 않음.
+- 느림.
+
+### Qurum
+- WRITE_CL=QUORUM & READ_CL=QUORUM 로 하면 됨.
+- WRITE_CL=ALL & READ_CL=ONE 보다 좋음.
+- availability를 희생하지 않고 string consistency를 얻는 법임.
+
+### One
+- WRITE_CL=ONE & READ_CL=ONE
+- 로그, TS 데이터 같이 강한 consistency가 요구되지 않을 때 유용하게 쓰일 수 있음.
+- consistency 보다 strong availability가 더 좋을 때.
+
+### Consistency Across Data Centers
+- LOCAL_QUORUM 이면 노드가 위치한 DC의 쿼럼만 검사함.
+- QUORUM은 전체 DC의 쿼럼을 검사함.
+
+### Consistency Settings
+- consistency가 높을 수록, stale data를 얻을 확률이 적어짐.
+  - 대신 latency를 지불해야함.
+  - 상황에 따라 다름.
