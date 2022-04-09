@@ -503,3 +503,57 @@ CREATE TABLE myTable (...) WITH nodesync = {'enabled': 'true'};
 - 요청한 파티션 키에 대해 있거나 알 수 없다면 파티션 써머리와 인덱스를 보고 없다면 보지 않음.
 - 블륨 필터는 종종 false positive가 발생할 수 있음.
 - 하지만 메모리를 좀 더 쓰면 이 확률을 줄일 수 있음.
+
+## Compaction
+- 기존에 존재하는 `SSTable`에 있는 오래된 데이터를 제거하는 과정
+- 여러 개의 `SSTable`을 하나로 만듦.
+
+### Compaction Partitions
+- 위쪽 SSTable이 아래쪽 SSTable 보다 먼저 만들어짐. 괄호는 타임 스탬프.
+```
+1   Johnny (92)
+2   Betsy (49)
+3   Nicholi (85)
+4   Sue (41)
+5   Sam (96)
+
+---
+
+1   Johnny (181)
+2   X (176) # tombstone greater than `gc_grace_seconds`
+3   Norman(148)
+5   (X) (184) # tombstone less than `gc_grace_seconds`
+6   Henrie (134)
+```
+- 컴팩션할 때, 타임 스탬프가 더 큰걸 씀.
+- tombstone이 `gc_grace_seconds`보다 오래됐다면 tombstone은 추방됨. 그렇지 않다면 데이터 복구를 위해 남겨둠.
+- 업데이트되지 않은 레코드는 그대로 추가함.
+- 컴팩션 결과는 아래와 같음.
+```
+1   Johnny (181)
+3   Norman(148)
+4   Sue (41)
+5   (X) (184)
+6   Henrie (134)
+```
+- 컴팩션에 사용한 오래된 SSTable은 제거함.
+
+### Compacting SSTables
+- SSTable 내에 파티션을 파티션 키 기준으로 정렬해놓음.
+- 컴팩션을 하는 두 테이블에 stale 데이터(stale tombstone)가 많으면 컴팩션 이후 크기가 줄어듦.
+```
+| 7 | 13      | 18   | 21      | 58   |
+| 3   | 7     | 18      | 36 | 58    | 84   |
+
+
+| 3   | 7 | 13 | ...
+```
+
+### Compacting Strategies
+- 모든 SSTable을 합칠 수 없으므로, 어떤 테이블끼리 합칠 건지 결정 해야됨.
+- 컴팩션 전략은 configurable 함.
+- 아래와 같은 걸 포함함.
+  - `SizeTieredComapction`: 디폴트. 작은 사이즈의 여러 개의 SSTable들이 있을 때 트리커. write heavy workload에 적절함.
+  - `LeveledCompaction`: SSTable들을 레벨로 그룹핑함. 각각의 레벨은 고정된 크기를 가지고 있음. read heavy workload에 적절함.
+  - `TimeWindowCompaction`: SSTable의 time windowed 버켓들을 만듦. `SizeTieredComapction`를 이용해서 서로 컴팩션함. TS data에 적절함.
+- `ALTER TABLE` 커맨드를 이용해서 전략을 바꿀 수 있음.
