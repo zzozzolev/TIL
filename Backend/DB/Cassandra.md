@@ -557,3 +557,19 @@ CREATE TABLE myTable (...) WITH nodesync = {'enabled': 'true'};
   - `LeveledCompaction`: SSTable들을 레벨로 그룹핑함. 각각의 레벨은 고정된 크기를 가지고 있음. read heavy workload에 적절함.
   - `TimeWindowCompaction`: SSTable의 time windowed 버켓들을 만듦. `SizeTieredComapction`를 이용해서 서로 컴팩션함. TS data에 적절함.
 - `ALTER TABLE` 커맨드를 이용해서 전략을 바꿀 수 있음.
+
+## Data Modeling
+### What is Data Modeling?
+- 도메인의 요구사항을 분석함.
+- 엔티티들과 relationship들을 식별함 - Conceptual Data Model
+- 쿼리를 식별함 - Workflow and Access Patterns
+- 스키마를 구체화함 - Logical Data Model
+- CQL로 작업을 함 - Physical Data Model
+- 최적화하고 튜닝함
+
+### Model for Queries
+- 쿼리가 짱짱맨임.
+- 가능하다면
+  - 어플리케이션의 워크플로우를 이해해야함.
+  - 어플리케이션이 지원해야하는 쿼리의 타입을 이해해야함.
+  - 쿼리를 기반으로 해서 테이블을 빌드함.
