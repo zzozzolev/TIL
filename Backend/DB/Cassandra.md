@@ -457,3 +457,49 @@ CREATE TABLE myTable (...) WITH nodesync = {'enabled': 'true'};
 - 중요한 점은 이 자료구조는 immutable함.
 - 커밋 로그와 SSTable은 다른 하드 디스크에 저장하는 게 좋음.
 - 하드 디스크에 여러 가지 작업으로 부하가 가기 때문에 분리하는게 성능상 좋음. 특히 HDD를 쓴다면 더욱...
+
+## Read Path
+- 데이터는 메모리인 MemTable과 디스크인 여러 개의 SSTable에 나눠져있음.
+- 그래서 여기 있는 데이터들을 합체시켜야됨.
+
+### Reading a MemTable
+- 메모리에서 파티션 토큰에 대해 바이너리 서치를 통해 데이터를 가져감.
+- MemTable에서 읽는 건 굉장히 빠름.
+
+### Reading an SSTable
+- 각 파티션 별로 SSTable에 같은 길이를 가지지 않음. 어떤 건 적고, 어떤 건 더 많음.
+  ```
+  0   1,120 ...
+  | 7 | 13  |
+  ```
+- partition index에 token에 대한 Byte Offset을 인덱싱함. 디스크에 저장함.
+  ```
+  | Token | Byte Offset |
+  | ----- | ----------- |
+  | 7     | 0           |
+  | 13    | 1,120       |
+  ```
+- partition index가 커지는 것을 대비해 메모리에 별도의 자료구조를 저장함.
+- `partition summary`라고 함. 각 토큰 범위가 몇 번째 바이트에 속하는지 나타냄. 해당 바이트부터 토큰을 찾음.
+  ```
+  | Token | Byte Offset |
+  | ----- | ----------- |
+  | 0-20  | 0           |
+  | 21-55 | 32          |
+
+  7 ~ 18: 0 byte ~ 32 bytes 전까지
+  21 ~ 36: 32 bytes 부터 48 bytes 전까지
+  ```
+- 같은 토큰에 대해 다시 찾을 수 있기 때문에 메모리에 방금 읽었던 token과 byte offset을 `key cache`에 저장시켜놓음.
+  ```
+  | Token | Byte Offset |
+  | ----- | ----------- |
+  | 13    | 6,224       |
+  ```
+
+### Bloom Filter
+- 데이터 존재 유무에 대해서 알려주는 필터.
+- 메모리에 저장함.
+- 요청한 파티션 키에 대해 있거나 알 수 없다면 파티션 써머리와 인덱스를 보고 없다면 보지 않음.
+- 블륨 필터는 종종 false positive가 발생할 수 있음.
+- 하지만 메모리를 좀 더 쓰면 이 확률을 줄일 수 있음.
