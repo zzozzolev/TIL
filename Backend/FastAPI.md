@@ -55,3 +55,12 @@ async def read_user(user_id: str):
   @app.get("/models/{model_name}")
   async def get_model(model_name: ModelName):
   ```
+
+## Optional vs Required Parameters
+
+|    | Optional | Required |
+| --- | --- | --- |
+| default | None | 없음 |
+| 값이 없는 경우 | default 사용 | 오류 발생 |
+
+- 물론 디폴트가 `None`이 아니고 값이 있는 경우도 있음.
