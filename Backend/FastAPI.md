@@ -63,4 +63,15 @@ async def read_user(user_id: str):
 | default | None | 없음 |
 | 값이 없는 경우 | default 사용 | 오류 발생 |
 
-- 물론 디폴트가 `None`이 아니고 값이 있는 경우도 있음.
+- 물론 디폴트가 `None`이 아니고 값이 있는 경우도 있다.
+
+## Request body + path + query parameters
+- 바디, 패스 파라미터, 쿼리 파라미터를 동시에 정의할 수 있다.
+  ```python
+  @app.put("/items/{item_id}")
+  async def create_item(item_id: int, item: Item, q: Optional[str] = None):
+  ```
+- 함수 파라미터들을 다음과 같은 순서로 인식된다.
+  - 만약 파라미터가 패스에 선언돼있다면 패스 파라미터로 쓰인다.
+  - 만약 파라미터가 singular 타입이라면 (`int`, `float`, `str` 등등) 쿼리 파라미터로 해석된다.
+  - 만약 파라미터가 Pydantic 모델로 정의됐다면, 리퀘스트 바디로 해석된다.
