@@ -25,3 +25,19 @@ async def read_item(item_id: int):
     ]
 }
 ```
+
+## Order matters
+- path operations는 순서대로 처리된다.
+- 그래서 더 먼저 처리되길 원하는 path를 상위에 써야한다.
+- 예를 들어, 아래는 서로 다르게 처리해야하지만 패스가 겹치는 경우이다. `/users/me`가 별도로 처리되길 원한다면 더 상위에 정의한다.
+```python
+@app.get("/users/me")
+async def read_user_me():
+    return {"user_id": "the current user"}
+
+
+@app.get("/users/{user_id}")
+async def read_user(user_id: str):
+    return {"user_id": user_id}
+
+```
