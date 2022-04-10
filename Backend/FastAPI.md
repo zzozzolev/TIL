@@ -64,6 +64,7 @@ async def read_user(user_id: str):
 | 값이 없는 경우 | default 사용 | 오류 발생 |
 
 - 물론 디폴트가 `None`이 아니고 값이 있는 경우도 있다.
+- `Optional`은 에디터의 서포트를 받을 수 있지만 FastAPI에 해당 파라미터가 요구되지 않는다고 알려주는 건 아니다.
 
 ## Request body + path + query parameters
 - 바디, 패스 파라미터, 쿼리 파라미터를 동시에 정의할 수 있다.
