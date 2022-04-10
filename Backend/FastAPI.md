@@ -76,3 +76,15 @@ async def read_user(user_id: str):
   - 만약 파라미터가 패스에 선언돼있다면 패스 파라미터로 쓰인다.
   - 만약 파라미터가 singular 타입이라면 (`int`, `float`, `str` 등등) 쿼리 파라미터로 해석된다.
   - 만약 파라미터가 Pydantic 모델로 정의됐다면, 리퀘스트 바디로 해석된다.
+
+## Query Parameters and String Validations
+- required 이므로 디폴트가 없지만 밸리데이션은 하고 싶다면 `...`인 `ellipsis`를 이용할 수 있다.
+  ```python
+  async def read_items(q: str = Query(..., min_length=3)):
+  ```
+- `Query`에 `title`, `description`을 선언해 OpenAPI에 포함되게 할 수 있다.
+- `alias`를 이용하면 쿼리 파라미터와 파라미터 이름을 다르게 설정할 수 있다.
+  ```python
+  # ?item-query=foobaritems
+  async def read_items(q: Optional[str] = Query(None, alias="item-query")):
+  ```
