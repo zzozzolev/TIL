@@ -573,3 +573,51 @@ CREATE TABLE myTable (...) WITH nodesync = {'enabled': 'true'};
   - 어플리케이션의 워크플로우를 이해해야함.
   - 어플리케이션이 지원해야하는 쿼리의 타입을 이해해야함.
   - 쿼리를 기반으로 해서 테이블을 빌드함.
+
+## Relational vs Cassandra
+### Relational
+- data - model - application
+- entity가 짱짱맨
+- pk는 고유함을 위해 존재
+- single point of failure를 가짐.
+- ACID compliant
+- 조인과 인덱스들
+- referential integrity가 강요됨.
+
+### Cassandra
+- application - model - data
+- 쿼리가 짱짱맨
+- pk는 고유함 이상을 위헤 존재
+  - 읽기와 쓰기 성능을 결정함.
+- 분산 아키텍처
+- CAP 이론
+- Denormalization
+- RI가 강요되지 않음.
+
+### Transactions in Cassandra
+- 카산드라는 ACID 트랜잭션을 지원하지 않음.
+- ACID는 상당한 퍼포먼스 패널티를 일으킴.
+- 여러 유즈 케이스들에서 필요하지 않음.
+- 하지만, 싱글 카산드라 쓰기 연산은 ACID 프로퍼티를 증명함.
+  - INSERT, UPDATE, DELETE들은 atomic, isolated, durable 함.
+  - 데이터 레플리케이션에 대한 tunable consistency, 하지만 어플리케이션 인티그리티 제약을 다루지는 않음.
+  - AP DB이기는 하지만 원한다면 availability를 희생하고 좀 더 높은 consistency를 가져갈 수도 있음.
+
+### Denormalization
+- 조인을 분산 시스템에서 구현할 때의 주요 문제 중 하나는 다른 테이블에서 레퍼런스하는 데이터가 또 다른 노드에 존재해야한다는 것임.
+- 이로인해 레이턴시에 예측 불가능한 영향을 줄 수 있음.
+- 그래서 카산드라는 조인을 지원하지 않음.
+- 조인할만한 테이블을 위해 각각의 테이블을 생성하는 것을 추천함.
+  - 예를 들어, 비디오, 댓글, 유저가 있다고 해보자.
+  - 비디오에 대한 댓글과 유저가 남긴 댓글을 얻고 싶다면 `comments_by_video`와 `comments_by_user` 테이블을 별도로 생성한다.
+    ```
+    comments_by_video: video_title, comment_id, user_id, video_id, comment # PK ((video_title), comment_id)
+    comments_by_user: user_login, comment_id, user_id, video_id, comment # PK ((user_login), comment_id)
+    ```
+- 테이블 이름에 `by`로 어떤 쿼리를 서포트하기 위해 만들어진 테이블인지 나타냄.
+
+### Referential Integrity
+- 카산드라는 referential integrity를 강요하지 않음.
+- 퍼포먼스 때문에. 쓰기 전에 읽기를 요구함.
+- 애플리케이션 레벨에서 강요할 수 있음.
+- 아파치 스파크로 DSE 분석을 돌려서 검증할 수도 있음.
