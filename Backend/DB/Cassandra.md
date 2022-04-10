@@ -621,3 +621,35 @@ CREATE TABLE myTable (...) WITH nodesync = {'enabled': 'true'};
 - 퍼포먼스 때문에. 쓰기 전에 읽기를 요구함.
 - 애플리케이션 레벨에서 강요할 수 있음.
 - 아파치 스파크로 DSE 분석을 돌려서 검증할 수도 있음.
+
+## Getting Started CQL
+### Keyspaces
+- top-level namespace/container
+- RDB 스키마랑 유사함.
+  ```
+  CREATE KEYSPACE killrvideo
+    WITH REPLICATION = {
+      'class': 'SimpleStrategy',
+      'replication_factor': 1
+  };
+  ```
+- 레플리케이션 파라미터들이 요구됨.
+
+### Tables
+- keyspaces는 테이블을 저장하고 테이블은 데이터를 저장함.
+- 모든 테이블은 PK를 포함함.
+
+### TRUNCATE
+- 즉시 그리고 돌이킬 수 없게 테이블의 모든 데이터를 제거함.
+- 노드 중 하나라도 다운돼있다면 커맨드는 실패함.
+
+### ALTER TABLE
+- 컬럼의 데이터 타입을 바꾸거나, 컬럼을 추가하거나, 컬럼을 없애거나, 컬럼을 리네임하거나, 테이블 프로퍼티를 바꿀 수 있음.
+- 하지만, PRIMARY KEY 컬럼들을 바꿀 수 없음.
+
+### SOURCE
+- CQL statements를 포함하는 파일을 실햄함.
+- 각각의 staement에 대한 아웃풋이 차례로 보림.
+```
+SOURCE './myscript.cql';
+```
