@@ -41,3 +41,17 @@ async def read_user(user_id: str):
     return {"user_id": user_id}
 
 ```
+
+## Predefined values
+- 미리 정의된 path 파라미터만 받고 싶은 경우 `Enum` class를 만든다.
+  ```python
+  from enum import Enum
+  
+  class ModelName(str, Enum):
+    alexnet = "alexnet"
+    resnet = "resnet"
+    lenet = "lenet"
+
+  @app.get("/models/{model_name}")
+  async def get_model(model_name: ModelName):
+  ```
