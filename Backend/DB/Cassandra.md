@@ -653,3 +653,36 @@ CREATE TABLE myTable (...) WITH nodesync = {'enabled': 'true'};
 ```
 SOURCE './myscript.cql';
 ```
+
+## Fundamentals of cassandra table
+### Terminology
+- data model
+  - 데이터를 조직화하기 위한 추상적인 모델
+  - 쿼리의 기반이 됨.
+- Keyspace
+  - relational schema와 비슷함.
+  - 모든 테이블들은 keyspace 내에 있음.
+  - keyspace는 복제를 위한 컨테이너
+- Table
+  - keyspace에 그룹핑됨.
+  - 컬럼들을 포함함.
+- Partition
+  - 파티셔닝 전략에 따라 특정한 노드에 저장된 로우들.
+
+### Table Terminology
+- Row
+- Column
+  - RDB에 있는 컬럼과 비슷함.
+  - PK
+    - 테이블 내에 있는 데이터에 접근하는데 사용되고 고유성을 보장함.
+- Partition Key
+  - 데이터가 저장될 노드를 결정함.
+- Clustering column
+  - 파티션 내에서 로우의 순서를 결정함.
+
+### Data Types
+- UUID vs TimeUUID
+  - https://microeducate.tech/cassandra-uuid-vs-timeuuid-benefits-and-disadvantages/
+  - sorting의 차이
+- Blob: 어떤 건지 모를 때 걍 이걸로 하면 됨.
+- Counter: 카운트 증가와 감소에 사용함.
