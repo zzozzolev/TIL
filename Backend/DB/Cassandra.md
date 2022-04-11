@@ -727,3 +727,25 @@ SOURCE './myscript.cql';
 - Primary key
   - 파티션 키와 모든 클러스터링 컬럼들을 포함함.
   - everything inside of this primary key designation
+
+## Clustering Columns
+- 카산드라가 각각의 파티션 내에서 데이터를 정렬하는 방법
+- `PRIMARY KEY` 구문 내에서 파티션 키 이후에 오는 부분
+- optional 값
+
+### Cluster Column Ordering
+- ordering은 클러스터링 컬럼에서 제일 중요한 것임.
+- 기본은 ascending, 하지만 descending으로도 할 수 있음.
+  ```
+  CREATE TABLE videos (
+    ...
+    PRIMARY KEY ((year), name)
+  ) WITH CLUSTERING ORDER BY (name DESC);
+  ```
+- clustering column을 잘 지정해놓으면 런타임이 아닌 미리 정렬된 상태로 결과를 가져올 수 있음.
+
+### Querying Clustering Columns
+- lookup이 빠르기 때문에 클러스터링 컬럼들에 쿼리를 할 수 있음.
+- 매우 효율적인 operation임.
+- 파티션 키로 해당하는 파티션을 가고, 클러스터링 컬럼으로 해당 데이터가 파티션 내에 어디 있는지 찾음.
+- 하나 이상의 SSTable일 수 있음.
