@@ -686,3 +686,44 @@ SOURCE './myscript.cql';
   - sorting의 차이
 - Blob: 어떤 건지 모를 때 걍 이걸로 하면 됨.
 - Counter: 카운트 증가와 감소에 사용함.
+
+## Partitioning & Storage Structure
+### Storage Structure
+- 컬럼은 `key`와 `value`를 묶어 `cell`이라고 불림.
+- 파티션 키는 PK의 첫번째 값임.
+- Non PK 컬럼에 where
+  - 카산드라는 여러 노드에 걸쳐 파티션을 분산시킴.
+  - 파티션 키를 제외한 아무 필드에 `WHERE`를 하는 것은 모든 노드의 모든 파티션을 스캔하는 것을 필요로 함.
+  - 비효율적인 액세스 패턴.
+  - 데이터를 찾기 원한다면 파티션 키를 제공해야됨.
+- 파티션 키 값에 where
+  - 클러스터링 컬럼들 뿐만 아니라 파티션 키 값에 WHERE를 할 수 있음.
+  - 카산드라는 어떤 노드가 원하는 파티션을 포함하는지 빠르게 결정하기 위해 해싱 알고리즘을 사용함.
+- 클러스터링 컬럼들과 함께 파티션 키를 적절하게 사용하면 리드 속도가 빨라짐.
+
+### Primary Key
+- Simple Primary Key
+  - 파티션 키만 포함함.
+  - 어떤 노드가 데이터를 저장하는지 결정함.
+
+### Composite Partition Keys
+- Multi-value primary key
+  - multi value를 항상 알 수 있다면 스피드에 매우 좋음.
+- 예시
+  ```
+  CREATE TABLE videos (
+      name text,
+      runtime int,
+      year int,
+      PRIMARY KEY ((name, year))
+  );
+  ```
+- 단, 명심할 것은 where에 항상 여러 개의 파티션 키를 모두 적어줘야됨.
+
+### Primary Key vs. Partition Key
+- Partition key
+  - 파티션이 어느 노드에 저장될지 결정하는 PK의 일부분.
+  - placement where in the cluster is my data.
+- Primary key
+  - 파티션 키와 모든 클러스터링 컬럼들을 포함함.
+  - everything inside of this primary key designation
