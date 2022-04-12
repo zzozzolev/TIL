@@ -732,6 +732,8 @@ SOURCE './myscript.cql';
 - 카산드라가 각각의 파티션 내에서 데이터를 정렬하는 방법
 - `PRIMARY KEY` 구문 내에서 파티션 키 이후에 오는 부분
 - optional 값
+- `PRIMARY KEY`에 클러스터링 컬럼을 추가한다면, where에 추가하는 게 좋음.
+- `PRIMARY KEY`가 아닌 컬럼만 사용하는 건 좋지 않음.
 
 ### Cluster Column Ordering
 - ordering은 클러스터링 컬럼에서 제일 중요한 것임.
@@ -749,3 +751,4 @@ SOURCE './myscript.cql';
 - 매우 효율적인 operation임.
 - 파티션 키로 해당하는 파티션을 가고, 클러스터링 컬럼으로 해당 데이터가 파티션 내에 어디 있는지 찾음.
 - 하나 이상의 SSTable일 수 있음.
+- 클러스터링 컬럼들에 range query도 할 수 있음.
