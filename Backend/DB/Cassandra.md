@@ -752,3 +752,14 @@ SOURCE './myscript.cql';
 - 파티션 키로 해당하는 파티션을 가고, 클러스터링 컬럼으로 해당 데이터가 파티션 내에 어디 있는지 찾음.
 - 하나 이상의 SSTable일 수 있음.
 - 클러스터링 컬럼들에 range query도 할 수 있음.
+
+## Denormalization
+- 비정규화를 하면 중복된 데이터를 가질 것임.
+- 필요할 때 데이터를 얻는 것이므로 괜찮음.
+
+### Denormalizing For Query Performance
+- 카산드라는 조인 없이 동작함.
+- 단, 각각의 테이블에 대해 PK를 다르게 구성함.
+  - comments_by_video: ((title), comment_id)
+  - comments_by_user: ((user_login), comment_id)
+- 효율적이고 예측 가능한 쿼리 퍼포먼스를 줌.
