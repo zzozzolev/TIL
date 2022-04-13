@@ -812,4 +812,35 @@ SOURCE './myscript.cql';
 - 만약 nest 데이터 타입을 원한다면, `FROZEN`을 사용해야함.
 - 컬렉션에서 `FROZEN`을 사용하는 것은 여러 컴포넌트들을 하나의 값으로 시리얼라이즈함.
 - `FROZEN` 컬렉션에 있는 값들은 blobs처럼 여겨짐.
-- Non-frozen 타입들이 개별 필드들을 업데이트하는 게 허용됨.
+- Non-frozen 타입들은 개별 필드들을 업데이트하는 게 허용됨. 하지만 `FROZEN`은 허용되지 않음.
+- 카산드라에서는 비정규화를 해야하기 때문에, 하나의 테이블로 만들어질 수 있는 자료를 `TYPE`으로 만들어서 특정 테이블의 컬럼 하나로 내장할 수 있음.
+
+## UDTs
+- collection으로도 해결 안 되는 복잡한 자료를 저장해야할 때 사용함.
+- 관련된 필드들의 정보를 그룹핑함.
+- 여러 데이터 필드들을 하나의 컬럼으로 attach 할 수 있음.
+- 컬렉션과 다른 UDTs를 포함해 어떤 데이터 타입이든 될 수 있음.
+- 더 복잡한 구조를 하나의 컬럼내에서 포함하는 게 가능해짐.
+
+### Example
+- 타입 생성
+```
+CREATE TYPE address (
+  street text,
+  city text,
+  zip_code int,
+  phones set<text>
+);
+```
+
+### Using Created UDTs
+- 테이블 정의에서 새로 생성된 타입을 사용함
+```
+CREATR TABLE users (
+  id uuid,
+  name frozen <full_name>,
+  direct_reports set<frozen <full_name>>,
+  address map<text, frozen <address>>,
+  PRIMARY KEY ((id))
+);
+```
