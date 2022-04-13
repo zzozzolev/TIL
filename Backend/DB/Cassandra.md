@@ -844,3 +844,26 @@ CREATR TABLE users (
   PRIMARY KEY ((id))
 );
 ```
+
+## Counters
+### Counter Datatype
+- 64-bit signed int를 저장하는데 사용되는 컬럼.
+- 증가하거나 감소하는 방식으로 변경됨.
+- 값들이 `UPDATE`를 사용해서 변경됨.
+- pk와 카운터 컬럼만 가지는 특별하게 할당된 테이블이 필요함.
+  - 하나 이상의 카운터 컬럼을 가질 수 있음.
+ 
+### Counter Example
+(해당 부분 안 들음)
+- 태그당 있는 비디오 개수에 대한 쿼리를 허용함.
+```
+CREATE TABLE moo_counts (
+  cow_name text,
+  moo_count counter,
+  PRIMARY KEY ((cow_name))
+);
+
+UPDATE moo_counts
+SET moo_count = moo_count + 8
+WHERE cow_name = 'Betsy';
+```
