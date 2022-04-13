@@ -763,3 +763,53 @@ SOURCE './myscript.cql';
   - comments_by_video: ((title), comment_id)
   - comments_by_user: ((user_login), comment_id)
 - 효율적이고 예측 가능한 쿼리 퍼포먼스를 줌.
+
+## Collections
+- 컬럼에 데이터를 같이 그룹핑하고 하고 저장함.
+- 컬렉션 컬럼들은 multi-valued 컬럼들임.
+- 작은 양의 데이터를 저장하도록 디자인돼있음.
+- 전체를 얻음.
+- 컬렉션 내에 다른 컬렉션을 내장할 수 없음.
+  - `FROZEN`을 사용하면 가능함.
+
+### SET Collection Type
+- 고유한 값들의 컬렉션
+- 정렬되지 않은 채 저장되지만, 정렬된 상태로 얻음.
+- 예제
+  ```
+  CREATR TABLE users (
+    ...
+    emails set<text>
+  );
+
+  INSERT INTO ... VALUES (... , {'abc@email.com', '123@email.com'});
+  ```
+
+### LIST Collection Type
+- SET과 비슷함. 같은 셀에 밸류들의 컬렉션이 있음.
+- 고유할 필요가 없고 중복될 수 있음.
+- 특정 순서로 저장됨.
+- 예제
+  ```
+  ALTER TABLE users ADD freq_dest list<text>;
+
+  UPDATE users SET freq_dest = ['Berlin', 'London', 'Paris']
+    WHERE id = 'cass123';
+  ```
+
+### MAP Collection Type
+- 키-밸류 페어의 typed collection.
+- 고유한 키들로 정렬됨.
+- 예제
+  ```
+  ALTER TABLE users ADD todo map<timestamp, text>;
+
+  UPDATE users SET todo = {'2018-1-1': 'abc', '2018-1-2': 'fdf'}
+    WHERE id = 'cass123';
+  ```
+
+### Using Frozen in a Collection
+- 만약 nest 데이터 타입을 원한다면, `FROZEN`을 사용해야함.
+- 컬렉션에서 `FROZEN`을 사용하는 것은 여러 컴포넌트들을 하나의 값으로 시리얼라이즈함.
+- `FROZEN` 컬렉션에 있는 값들은 blobs처럼 여겨짐.
+- Non-frozen 타입들이 개별 필드들을 업데이트하는 게 허용됨.
