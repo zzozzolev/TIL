@@ -867,3 +867,11 @@ UPDATE moo_counts
 SET moo_count = moo_count + 8
 WHERE cow_name = 'Betsy';
 ```
+
+### Counter Considerations
+- 분산 시스템은 consistency 이슈를 발생시킬 수 있음.
+- 밸류를 INSERT 하거나 할당할 수 없음. -> 디폴트가 0임.
+- non PK 컬럼에 대해서만 가능함.
+- 멱등성이 성립하지 않음.
+- `UPDATE` 커맨드를 사용해야함.
+- 카운터 컬럼은 인덱스 되거나 삭제될 수 없음.
