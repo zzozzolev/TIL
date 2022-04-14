@@ -878,3 +878,12 @@ WHERE cow_name = 'Betsy';
 
 ## UDFs And UDAs
 - Skip
+
+## Conceptual Data Modeling
+- 도메인을 모델링함.
+- 도메인의 추상적인 뷰.
+- 기술적으로 독립적임.
+- 특정 DB 시스템에 종속되지 않음.
+- Attribute Types: 엔티티 대해 데이터를 저장할 필드나 관계.
+- Composite Attributes: 관련된 에트리뷰트들을 함께 그룹핑함.
+- Multi-values Attributes: 엔티티당 여러 값들을 저장하는 에트리뷰트.
