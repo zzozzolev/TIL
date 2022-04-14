@@ -875,3 +875,6 @@ WHERE cow_name = 'Betsy';
 - 멱등성이 성립하지 않음.
 - `UPDATE` 커맨드를 사용해야함.
 - 카운터 컬럼은 인덱스 되거나 삭제될 수 없음.
+
+## UDFs And UDAs
+- Skip
