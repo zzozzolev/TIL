@@ -901,3 +901,29 @@ WHERE cow_name = 'Betsy';
 ### Application Workflow
 - 각각의 어플리케이션 워크 플로우를 가짐.
 - 액세스 패턴들은 어떻게 데이터가 접근되는지 결정하는데 도움을 줌.
+
+## Mapping Conceptual To Logical Model
+### Query-Driven Data Modeling
+- Conceptual Data Model(ERD) + Access Patterns(Queries) -> Mapping Rules & Patterns - Chebotko Diagram -> Logical Data Model
+- 파티션 키와 클러스터링 컬럼이 중요함.
+
+### Data Modeling Principles
+#### 데이터
+- conceptual 데이터 모델에 의해 알게된 데이터
+- DB에 무엇이 저장돼있는지 정의
+- 데이터가 올바르게 정리되기 위해 프로퍼티들을 보존
+- 엔티티와 관계 키는 테이블의 pk에 영향을 끼침
+- pk는 고유하게 로우, 엔티티, 관계를 식별함
+
+#### 쿼리
+- 쿼리는 애플리케이션 워크플로우 모델을 통해 알 수 있음.
+- 테이블 스키마 디자인은 쿼리가 바뀐다면 바뀜.
+- 쿼리당 하나의 파티션이 가장 효율적인 접근 패턴
+  - 쿼리는 결과를 얻기 위해 오직 하나의 파티션만 접근함.
+  - 파티션은 하나의 로우나 여러 개의 로우가 될 수 있음.
+- 쿼리가 여러 개의 파티션에 접근하는 것도 나쁘지는 않음.
+- 안티 패턴은 쿼리가 모든 파티션들에 접근해야하는 것임.
+
+### 데이터 내포(Nest)
+
+### 데이터 중복
