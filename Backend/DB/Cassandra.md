@@ -894,3 +894,10 @@ WHERE cow_name = 'Betsy';
 
 ### Weak Entity Types
 - 스트롱 엔티티 타입에 대한 식별 관계 없이 존재하지 못함.
+
+## Application Workflow & Access Patterns
+- 카산드라는 query driven 임. 데이터 모델을 알기 전에 쿼리를 어떻게 사용할지를 먼저 알아야 됨.
+
+### Application Workflow
+- 각각의 어플리케이션 워크 플로우를 가짐.
+- 액세스 패턴들은 어떻게 데이터가 접근되는지 결정하는데 도움을 줌.
