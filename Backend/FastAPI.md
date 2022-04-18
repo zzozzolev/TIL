@@ -88,3 +88,13 @@ async def read_user(user_id: str):
   # ?item-query=foobaritems
   async def read_items(q: Optional[str] = Query(None, alias="item-query")):
   ```
+
+## Path Parameter
+- 패스 파라미터는 패스의 일부분이어야하기 때문에 항상 필요하다.
+- 그래서 `...`으로 선언해야한다.
+- 그럼에도 `None`으로 선언하거나 기본 값을 설정할 수 있지만 아무런 영향이 없다. 여전히 required 값이다.
+```python
+@app.get("/items/{item_id}")
+async def read_items(
+    item_id: int = Path(..., title="The ID of the item to get"),
+```
