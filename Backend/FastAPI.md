@@ -98,3 +98,47 @@ async def read_user(user_id: str):
 async def read_items(
     item_id: int = Path(..., title="The ID of the item to get"),
 ```
+
+## Body
+- body를 하나만 받을 때, json에 key도 포함되게 하고 싶다면 `embed=True`로 설정해주면 된다.
+  ```python
+  async def update_item(item_id: int, item: Item = Body(..., embed=True)):
+
+  '''
+  [embed=True]
+
+  {
+    "item": {
+        "name": "Foo",
+        "description": "The pretender",
+        "price": 42.0,
+        "tax": 3.2
+    }
+  }
+
+  [embed=False]
+
+  {
+    "name": "Foo",
+    "description": "The pretender",
+    "price": 42.0,
+    "tax": 3.2
+  }
+  '''
+  ```
+- Model 내에 다른 Model을 nested 시킬 수 있다. 입력시 모델을 json 형태로 입력하면 된다.
+  ```json
+  {
+    "name": "string",
+    "image": {
+      "url": "string",
+      "name": "string"
+    }
+  }
+  ```
+- 미리 알지 못하는 키를 받는 자료형을 선언하고 싶을 때, `dict`를 이용하면 유용하다.
+  ```python
+  @app.post("/index-weights/")
+  async def create_index_weights(weights: Dict[int, float]):
+  ```
+- json은 키로 str만 지원한다. 하지만 `Pydantic`은 자동적인 데이터 변환을 한다. 즉, API 클라이언트는 스트링으로만 키를 사용할 수 있지만, 스트링이 순수한 인티저라면 Pydantic은 그것들을 변환하고 검증한다.
