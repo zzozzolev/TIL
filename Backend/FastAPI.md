@@ -142,3 +142,18 @@ async def read_items(
   async def create_index_weights(weights: Dict[int, float]):
   ```
 - json은 키로 str만 지원한다. 하지만 `Pydantic`은 자동적인 데이터 변환을 한다. 즉, API 클라이언트는 스트링으로만 키를 사용할 수 있지만, 스트링이 순수한 인티저라면 Pydantic은 그것들을 변환하고 검증한다.
+
+## Response
+- `response_model`의 중요한 점은 아웃풋 데이터를 모델로 제한한다.
+- `response_model_exclude_unset`은 모델에 디폴트 값이 설정돼있어도 인풋으로 들어오지 않았다면 아웃풋으로 나가지 않게 한다. 하지만, OpenAPI에는 표시되니 여러 클래스들을 이용하는 걸 권장한다.
+  ```python
+  class Item(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    tax: float = 10.5
+    tags: List[str] = []
+  
+  
+  # {"name": "Foo", "price": 50.2} -> {"name": "Foo", "price": 50.2}
+  ```
