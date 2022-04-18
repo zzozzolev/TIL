@@ -887,3 +887,10 @@ WHERE cow_name = 'Betsy';
 - Attribute Types: 엔티티 대해 데이터를 저장할 필드나 관계.
 - Composite Attributes: 관련된 에트리뷰트들을 함께 그룹핑함.
 - Multi-values Attributes: 엔티티당 여러 값들을 저장하는 에트리뷰트.
+
+### Cardinality
+- 엔티티들 간의 관계들.
+- 엔티티가 관계에 참여해야하는 횟수.
+
+### Weak Entity Types
+- 스트롱 엔티티 타입에 대한 식별 관계 없이 존재하지 못함.
