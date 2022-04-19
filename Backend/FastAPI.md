@@ -207,3 +207,43 @@ async def read_items(
   async def http_exception_handler(request, exc):
       return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
   ```
+
+## Dependencies
+- `Depends`는 `Body`, `Query`와 비슷하게 사용되지만 약간 다르게 동작한다.
+- 새로운 리퀘스트가 도착할 때마다, FastAPI는 다음과 같이 처리한다.
+  - 올바른 파라미터들과 함께 dependency 함수를 호출한다.
+  - 함수로부터 결과를 얻는다.
+  - 해당 결과를 path operation 함수의 파라미터에 할당한다.
+- 이렇게 하면 여러 함수들이 하나의 코드를 공유할 수 있다.
+- OpenAPI에는 파라미터가 제대로 표시된다.
+- FastAPI의 dependency는 callable이면 되기 때문에, 클래스도 넘겨줄 수 있다.
+- FastAPI는 type annotation이 아니라 `Depends`를 통해 디펜던시를 알 수 있다.
+- 코드가 반복될 수 있는데 `Depends`에 파라미터를 넘겨주지 않아도 FastAPI가 처리할 수 있다.
+  ```python
+  commons: CommonQueryParams = Depends()
+  ```
+- `Depends`에 또 다른 `Depends`가 있을 수 있다.
+  ```python
+  def query_extractor(q: Optional[str] = None):
+    return q
+
+
+  def query_or_cookie_extractor(
+      q: str = Depends(query_extractor), last_query: Optional[str] = Cookie(None)
+  ):
+
+  @app.get("/items/")
+  async def read_query(query_or_default: str = Depends(query_or_cookie_extractor)):
+  ```
+- 같은 path operation에 대해 같은 디펜던시를 여러번 사용한다면, FastAPI는 캐쉬를 사용해 리퀘스트당 한 번 만 호출되도록 한다.
+- 만약 캐쉬된 결과를 사용하는 게 싫다면, `Depends`에 `use_cache=False`를 넘겨주면 된다.
+- 몇몇 케이스에서는 리턴된 값이 필요 없고 단지 실행만 필요할 수도 있다. 이때 데코레이터에 `dependencies`를 지정해주면 된다.
+  ```python
+  @app.get("/items/", dependencies=[Depends(verify_token), Depends(verify_key)])
+  async def read_items():
+    return [{"item": "Foo"}, {"item": "Bar"}]
+  ```
+- 애플리케이션 전체에 디펜던시를 추가하고 싶다면 `FastAPI` 인스턴스를 만들 때 `dependencies`를 넘겨주면 된다.
+  ```python
+  app = FastAPI(dependencies=[Depends(verify_token), Depends(verify_key)])
+  ```
