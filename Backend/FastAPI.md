@@ -157,3 +157,37 @@ async def read_items(
   
   # {"name": "Foo", "price": 50.2} -> {"name": "Foo", "price": 50.2}
   ```
+
+## Handling Errors
+- `HTTPException`은 일반적인 파이썬 예외이다. 그래서 `return`하면 안되고 `raise`를 해야한다.
+- 레이즈되면 바로 리퀘스트를 멈추고 HTTP 에러를 클라이언트에게 보낸다.
+- 커스텀 예외를 클래스로 만들고 `exeception_handler` 데코레이터를 이용하면 전역적으로 해당 에러를 처리할 수 있다.
+  ```python
+  class UnicornException(Exception):
+    def __init__(self, name: str):
+        self.name = name
+  
+  @app.exception_handler(UnicornException)
+  async def unicorn_exception_handler(request: Request, exc: UnicornException):
+      return JSONResponse(
+          status_code=418,
+          content={"message": f"Oops! {exc.name} did something. There goes a rainbow..."},
+      )
+
+  @app.get("/unicorns/{name}")
+  async def read_unicorn(name: str):
+      if name == "yolo":
+          raise UnicornException(name=name)
+  ```
+- FastAPI의 `HTTPException`은 Starlette의 `HTTPException`을 상속했다. 유일한 차이점은 FastAPI의 예외가 헤더 추가를 허용한다는 것이다.
+- 하지만 예외 핸들러를 등록할 때는 Starlette의 `HTTPException`을 등록해야한다. 이렇게 해야 내부 코드에서 Starlette의 `HTTPException`을 발생시켰을 때 잡을 수 있다.
+  ```python
+  from starlette.exceptions import HTTPException as StarletteHTTPException
+
+  app = FastAPI()
+
+
+  @app.exception_handler(StarletteHTTPException)
+  async def http_exception_handler(request, exc):
+      return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
+  ```
