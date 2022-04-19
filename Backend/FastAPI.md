@@ -142,6 +142,22 @@ async def read_items(
   async def create_index_weights(weights: Dict[int, float]):
   ```
 - json은 키로 str만 지원한다. 하지만 `Pydantic`은 자동적인 데이터 변환을 한다. 즉, API 클라이언트는 스트링으로만 키를 사용할 수 있지만, 스트링이 순수한 인티저라면 Pydantic은 그것들을 변환하고 검증한다.
+- Pydantic의 `.dict()`에서 `exclude_unset`을 `True`로 지정하면, 모델을 생성할 때 지정하지 않은 값들은 `dict` 결과에 나오지 않는다.
+  ```python
+  class Item(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+    tax: float = 10.5
+    tags: List[str] = []
+  
+  # patch body: {"name": "test"}
+  
+  @app.patch("/items/{item_id}", response_model=Item)
+  async def update_item(item_id: str, item: Item):
+      item.dict(exclude_unset=True) # {'name': 'test'}
+      item.dict() # {'name': 'test', 'description': None, 'price': None, 'tax': 10.5, 'tags': []}
+  ```
 
 ## Response
 - `response_model`의 중요한 점은 아웃풋 데이터를 모델로 제한한다.
