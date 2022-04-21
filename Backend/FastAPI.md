@@ -217,6 +217,8 @@ async def read_items(
 - 이렇게 하면 여러 함수들이 하나의 코드를 공유할 수 있다.
 - OpenAPI에는 파라미터가 제대로 표시된다.
 - FastAPI의 dependency는 callable이면 되기 때문에, 클래스도 넘겨줄 수 있다.
+
+### Depends
 - FastAPI는 type annotation이 아니라 `Depends`를 통해 디펜던시를 알 수 있다.
 - 코드가 반복될 수 있는데 `Depends`에 파라미터를 넘겨주지 않아도 FastAPI가 처리할 수 있다.
   ```python
@@ -237,6 +239,8 @@ async def read_items(
   ```
 - 같은 path operation에 대해 같은 디펜던시를 여러번 사용한다면, FastAPI는 캐쉬를 사용해 리퀘스트당 한 번 만 호출되도록 한다.
 - 만약 캐쉬된 결과를 사용하는 게 싫다면, `Depends`에 `use_cache=False`를 넘겨주면 된다.
+
+### decorator
 - 몇몇 케이스에서는 리턴된 값이 필요 없고 단지 실행만 필요할 수도 있다. 이때 데코레이터에 `dependencies`를 지정해주면 된다.
   ```python
   @app.get("/items/", dependencies=[Depends(verify_token), Depends(verify_key)])
@@ -247,3 +251,10 @@ async def read_items(
   ```python
   app = FastAPI(dependencies=[Depends(verify_token), Depends(verify_key)])
   ```
+
+### yield
+- 응답을 전달한 후에 특정한 스텝들을 취하기 위해 `yield`를 이용할 수 있다. 대신, 한 번만 사용해야한다.
+- 어떤 예외가 발생할 지 모르겠다면, `finally`로 exit 스텝을 정의할 수도 있다.
+- `yield` 이후의 코드들은 응답이 전달된 뒤에 실행되는 것이다.
+- 따라서, `yield` 이후에 `HTTPException`을 발생시켜도 소용이 없다.
+- 대신, DB 롤백이라든지 응답과 상관없는 작업은 수행할 수 있다.
