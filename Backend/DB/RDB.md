@@ -611,3 +611,11 @@
 - 단점
   - 네트워크 bandwidth를 많이 사용함.
   - 클라이언트 메모리를 많이 소모함.
+
+## Session vs Connection
+### session
+- 커넥션의 로지컬한 표현
+- 특정한 상태
+
+### connection
+- 물리적인 커뮤니케이션 채널
