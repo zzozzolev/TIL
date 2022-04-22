@@ -258,3 +258,29 @@ async def read_items(
 - `yield` 이후의 코드들은 응답이 전달된 뒤에 실행되는 것이다.
 - 따라서, `yield` 이후에 `HTTPException`을 발생시켜도 소용이 없다.
 - 대신, DB 롤백이라든지 응답과 상관없는 작업은 수행할 수 있다.
+
+## Middleware
+- FastAPI에 미들웨어를 추가할 수 있다.
+- 미들웨어는 특정에 패스 operation에 의해 처리되기 전에 모든 리퀘스트마다 동작하는 함수이다. 리스폰스가 나가기 전에도 마찬가지이다.
+- 단, 디펜던시에 `yield`를 썼다면, exit 코드는 미들웨어 이후에 수행될 것이다.
+- `CORS` 미들웨어를 추가할 수도 있다.
+  ```python
+  from fastapi.middleware.cors import CORSMiddleware
+
+  app = FastAPI()
+
+  origins = [
+      "http://localhost.tiangolo.com",
+      "https://localhost.tiangolo.com",
+      "http://localhost",
+      "http://localhost:8080",
+  ]
+
+  app.add_middleware(
+      CORSMiddleware,
+      allow_origins=origins,
+      allow_credentials=True,
+      allow_methods=["*"],
+      allow_headers=["*"],
+  )
+  ```
