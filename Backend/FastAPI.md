@@ -284,3 +284,9 @@ async def read_items(
       allow_headers=["*"],
   )
   ```
+
+  ## Router
+  - 공통의 `prefix`를 설정할 수 있다. 대신, `prefix`는 마지막에 `/`을 포함할 수 없다.
+  - 해당 path operation 들에 공통적으로 적용되는 dependency를 선언할 수 있다.
+  - 라우터 -> 데코레이터 -> 파라미터 순으로 디펜던시가 수행된다.
+  
