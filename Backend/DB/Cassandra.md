@@ -1044,10 +1044,54 @@ WHERE cow_name = 'Betsy';
 
 ### When Secondary Indexes Are Used
 - 사용해야할 때
-  - 카디널리티가 낮은 컬럼들
+  - 카디널리티가 낮은 컬럼들: 쿼리 한 번으로 많은 로우 리턴 가능함.
   - 프로토타입핑이나 작은 데이터 셋
   - 큰 파티션에 대해 파티션 키와 인덱스된 컬럼 모두를 검색
 - 사용하지 말아야할 때
   - 카디널리티가 높은 컬럼들
   - 카운터 컬럼을 사용하는 테이블
   - 자주 업데이트 되거나 삭제되는 컬럼들
+
+### Materialized Views
+- 쿼리 결과들을 저장하는 DB 오브젝트
+- 카산드라는 또 다른 테이블의 데이터로부터 테이블을 빌드함.
+  - 새로운 PK와 새로운 프로퍼티들을 가짐.
+- 세컨더리 인덱스들은 낮은 카디널리티 데이터에 적절함.
+- materialized 뷰들은 높은 카디널리티 데이터에 적절함.
+- 소스 테이블의 pk 컬럼들은 materialized 뷰의 pk의 일부분이여야함.
+- materialized 뷰의 pk에 딱 하나의 새로운 컬럼만 추가 가능함.
+  - 스태틱 컬럼들은 허용되지 않음.
+
+### Creating Materialized Views
+- `users` 테이블에서 `user_by_email`을 만든다고 가정함.
+```
+CREATE MATERIALIZED VIEW user_by_email
+AS SELECT first_name, last_name, email
+FROM users
+WHERE email IS NOT NULL AND user_id IS NOT NULL
+PRIMARY KEY (email, user_id);
+```
+- `AS SELECT`: 베이스 테이블에서 materialized 뷰로 카피될 컬럼들.
+- `FROM`: 데이터가 카피될 소스 테이블.
+- `WHERE`: 모든 PK 컬럼들을 `IS NOT NULL`로 명시해야함.
+- PK 컬럼들을 명시하는 것은 중요함.
+  - 소스 테이블 `users`는 `id`를 pk로 쓰므로 `id`는 materialized 뷰의 PK에 있어야함.
+
+### Materialized Views Example
+- 일반적인 테이블처럼 다루면 됨.
+```
+SELECT first_name, last_name, email
+FROM user_by_email
+WHERE email = 'test&email.com';
+```
+
+### Materialized Views Caveats
+- 데이터는 소스 테이블에만 쓰일 수 있고 materialized 뷰에는 쓰일 수 없음.
+- materialized 뷰는 소스 테이블에 데이터를 삽입한 후 비동기적으로 업데이트 되기 때문에, 업데이트에 딜레이가 있음.
+- 카산드라는 소스 테이블이 업데이트 된 후에만 리드 리페어를 수행함.
+
+### How To Do Data Aggregation
+- 카산드라로 직접 하기
+- 클라이언트에서 구현
+- 아파치 스파크 사용
+- 아파치 솔라 사용
