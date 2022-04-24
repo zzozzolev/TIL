@@ -1095,3 +1095,51 @@ WHERE email = 'test&email.com';
 - 클라이언트에서 구현
 - 아파치 스파크 사용
 - 아파치 솔라 사용
+
+## Table/Key Optimizations
+### Apache Cassandra Key
+- 카산드라의 PK는 uniqueness 외에 다른 목적도 있음.
+- PK는 파티션 키와 클러스터링 컬럼으로 이루어짐.
+
+### Natural Keys
+- 이미 존재함.
+- 직관적으로 얻을 수 있음.
+- 의미가 있음.
+- 쿼리하기 쉬움.
+- 예시: 주민등록번호, 이메일 주소
+
+### Surrogate Keys
+- 인공적.
+- 생성되는 것.
+- 외부 세계에서 의미가 없음.
+- 랜덤처럼 보임.
+- 예시: auto incremented int, 시퀀스, UUID
+- 특성
+  - conflict-free 고유성
+  - immutable: 시간이 지나도 바뀌지 않음.
+  - uniformity
+  - compactness
+  - performance
+
+### Table Optimizations
+- 파티션 분리 -> size manageability
+- 버티컬 파티셔닝 -> 스피드
+- 파티션과 테이블 머지 -> 스피드와 중복 제거
+- 컬럼 추가 -> 스피드
+
+### 파티셔 분리
+- 파티션이 너무 커질 수 있음.
+- 예를 들어, 하루에 매우 액티브한 유저가 여러가지 동영상 인터렉션을 하는 것은 추천되는 파티션 값 리밋을 넘을 수 있음.
+- 파티션 키에 또 다른 컬럼을 더하면 됨.
+  - 존재하는 컬럼: user_id -> (user_id, video_id)
+  - 인위적인 컬럼
+    - user_id -> (user_id, event_date)
+    - user_id -> (user_id, bucket): 각 버켓마다 개수를 조절함.
+- 이론적 해석 (rationale)
+  - 파티션 당 더 적은 로우 개수
+
+### 버티컬 파티셔닝
+- 테이블 나누기.
+- 몇몇 쿼리들은 빠르게 수행 가능함.
+- 테이블 파티션들은 더 작아짐.
+- 얻기가 쉬워지고 대부분이 캐쉬 가능해짐.
