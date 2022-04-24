@@ -289,4 +289,12 @@ async def read_items(
   - 공통의 `prefix`를 설정할 수 있다. 대신, `prefix`는 마지막에 `/`을 포함할 수 없다.
   - 해당 path operation 들에 공통적으로 적용되는 dependency를 선언할 수 있다.
   - 라우터 -> 데코레이터 -> 파라미터 순으로 디펜던시가 수행된다.
+
+  ## Background Tasks
+  - 리퀘스트 처리 이후에 수행돼야하지만 클라이언트가 기다릴 필요가 없는 작업에 적절하다.
+  - 예를 들면 이메일 보내기, 데이터 처리 등등.
+  - `BackgroundTasks` 인스턴스에 함수와 인자를 넘기면 된다.
+  - `BackgroundTasks`를 함수 파라미터에 선언하면 FastAPI가 알아서 처리한다.
+  - 만약, starlette의 `BackgroundTask`를 사용한다면 별도로 객체를 만들어서 처리해야한다.
+  - 시간이 오래 걸리지 않는 간단한 작업이나 FastAPI와 컨텍스트를 공유해야한다면 `BackgroundTasks`를 사용하는게 좋고, 그렇지 않다면 Celery를 사용하는 게 좋다.
   
