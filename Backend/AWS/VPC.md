@@ -29,3 +29,22 @@
 - 라우트 테이블들이 수정돼야한다.
 - IGW를 서브넷에 어테치하고 이를 위한 별도의 라우트 테이블을 설정해야한다.
 - 라우트 테이블에 VPC 범위에 들어오지 않는 IP는 IGW로 보내야한다.
+
+## NAT Gateway
+- AWS-managed NAT
+- 특징
+  - 더 높은 bandwidth
+  - 고가용성
+  - 관리 필요없음
+- 사용량과 bandwidth에 대해 시간당 지불해야한다.
+- NATGW는 특정한 AZ에 생성되고 엘라스틱 IP를 사용한다.
+- 같은 서브넷에 있는 EC2 인스턴스에 의해 사용될 수 없다. (다른 서브넷에 있는 것만)
+- IGW를 필요로 한다. (private subnet -> NATGW -> IGW)
+- 5 Gbps의 bandwidth를 가지고 45 Gbps까지 오토 스케일링이 가능하다.
+- 관리할 SG를 필요로 하지 않는다.
+
+### NAT Gateway with High Availability
+- NAT 게이트웨이는 하나의 AZ 내에서는 회복탄력성이 있다. (resilient)
+- fault-tolerance를 위해서는 여러 개의 AZ들에 여러 개의 NAT 게이트웨이들을 만들어야한다.
+- 단 cross-AZ failover는 필요하지 않다.
+- 왜냐하면 AZ가 내려갔다면 NAT가 필요하지 않기 때문이다.
