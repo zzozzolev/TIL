@@ -619,3 +619,8 @@
 
 ### connection
 - 물리적인 커뮤니케이션 채널
+
+## 트러블 슈팅
+### Mac에 brew로 MySQL 설치
+- 만약 재설치 했는데도 `Access denied for user 'root'@'localhost'`가 뜨면서 안된다면 아래를 참고한다.
+https://stackoverflow.com/a/49970533
