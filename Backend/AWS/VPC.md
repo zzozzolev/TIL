@@ -103,3 +103,9 @@
 - VPC내의 두 앤드포인트 사이의 네트워크 연결성을 트러블 슈팅하는 네트워크 진단 툴
 - 네트워크 설정에 대한 모델을 만들고 설정에 기반해 reachability를 체크한다.
 - 패킷을 보내지 않는다.
+
+## VPC Endpoints
+- AWS 서비스에 IGW를 거쳐서 퍼블릭하게 접근하지 않고 프라이빗 서브넷으로 접근할 수 있는 방법을 제공해준다.
+- redundant하고 수평적으로 확장할 수 있다.
+- 앤드포인트 타입에는 Interface Endpoints와 Gateway Endpoints가 있다.
+- 단, S3와 DynamoDB는 제외하고는 모두 Interface Endpoints를 사용해야한다.
