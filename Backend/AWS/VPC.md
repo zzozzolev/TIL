@@ -109,3 +109,9 @@
 - redundant하고 수평적으로 확장할 수 있다.
 - 앤드포인트 타입에는 Interface Endpoints와 Gateway Endpoints가 있다.
 - 단, S3와 DynamoDB는 제외하고는 모두 Interface Endpoints를 사용해야한다.
+
+## VPC Flow Logs
+- 인터페이스로 가는 IP 트래픽에 대한 정보를 잡을 수 있다.
+- 연결 문제가 있을 때 모니터하고 트러블 슈팅할 때 도움을 준다.
+- VPC 플로우 로그를 쿼리하는 건 아테나를 이용하거나 클라우드 왓치를 이용하면 된다.
+- `ACTION` 필드에서 한쪽 방향만 ACCEPT 되고 다른 방향은 REJECT 됐으면 NACL 문제이다.
