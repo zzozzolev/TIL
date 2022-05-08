@@ -76,3 +76,8 @@
 - `airflow dags list`: dag들을 볼 수 있다.
 - `airflow tasks list {dag name}`: dag와 관련된 태스크들을 볼 수 있다. 만약 태스크가 뜨지 않았다면 파싱 에러가 발생한 것이다.
 - `airflow dags trigger`: 데이터 파이프라인을 실행할 수 있게 해준다.
+
+## DAG가 뭘까?
+- 데이터 파이프라인
+- Directed Acyclic Graph
+- 루프가 없고 노드가 태스크이고 엣지가 디펜던시인 그래프
