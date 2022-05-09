@@ -90,3 +90,10 @@
   - Action Operator: 액션을 수행한다.
   - Transfer Operator: 출발지에서 도착지까지 데이터를 트랜스퍼한다.
   - Sensors: 컨티션이 만족되길 기다린다.
+
+## DAG scheduling
+- 두 가지 argument들은 항상 정의해야한다.
+  - start_date: 언제 DAG가 스케줄 되기 시작할 건지
+  - schedule_interval: 데이터 파이프라인이 트리거되는 빈도를 정의함.
+- **start_date + schedule_interval이 지나야 실제로 트리거된다.**
+  - 예를 들어, start_date가 2020/01/01 10AM 이고 schedule_interval이 10mins이면 2020/01/01 10:10AM에 트리거된다.
