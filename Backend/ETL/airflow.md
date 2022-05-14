@@ -97,3 +97,19 @@
   - schedule_interval: 데이터 파이프라인이 트리거되는 빈도를 정의함.
 - **start_date + schedule_interval이 지나야 실제로 트리거된다.**
   - 예를 들어, start_date가 2020/01/01 10AM 이고 schedule_interval이 10mins이면 2020/01/01 10:10AM에 트리거된다.
+- 문제
+  ```
+  Let's assume a DAG start_date to the 28/10/2021:10:00:00 PM UTC and the DAG is turned on at 10:30:00 PM UTC with a schedule_interval of */10 * * * * (After every 10 minutes). How many DagRuns are going to be executed?
+  
+  2.
+  You right! The first one is executed at 10:10 for the execution_date 10:00, then 10:20 for the execution_date 10:20. DAG Run 3 is not yet executed since a DAG Run runs once the schedule_interval (10 minutes here) is passed.
+  ```
+
+## Backfilling and catchup
+- start date 이후 특정 시점에 DAG 실행을 멈췄다가 다시 수행하면 이전에 트리거 되지 않았던 DAG들도 모두 수행된다. 이걸 `catchup`이라고 한다.
+  - 예를 들면 01/01, 02/01, 03/01, 04/01 DAG 들이 있었고 02/01 멈췄다가 05/01에 다시 트리거한다고 해보자.
+  - 그러면, 02/01, 03/01, 04/01 DAG들도 다시 수행된다.
+- airflow는 기본적으로 catchup을 한다. `catchup=True` 파라미터에 의해 이렇게 동작한다.
+- `catchup`을 `True`로 설정하면 트리거 되지 않았던 DAG run들은 최신 실행 시간부터 자동적으로 트리거 된다. start data부터 시작되지 않는다.
+- 단, DAG를 한 번도 수행하지 않았다면 start date부터 시작된다.
+- 모든 date는 UTC이다.
