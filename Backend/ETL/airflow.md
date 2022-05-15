@@ -113,3 +113,14 @@
 - `catchup`을 `True`로 설정하면 트리거 되지 않았던 DAG run들은 최신 실행 시간부터 자동적으로 트리거 된다. start data부터 시작되지 않는다.
 - 단, DAG를 한 번도 수행하지 않았다면 start date부터 시작된다.
 - 모든 date는 UTC이다.
+
+## Start scaling with the Local Executor
+- 기본적으로는 태스크가 하나하나 수행되도록 설정돼있다.
+- 기본적으로 두 개의 파라미터가 익스큐터를 설정하기 위해 사용된다.
+  - (sqlite 사용) `sql_alchemy_conn` `airflow config get-value core sql_alchemy_conn`
+  - `executor`: `SequentialExecutor` `airflow config get-value core executor`
+- 따라서 이 두 가지를 바꿔야 parallel 하게 수행된다.
+  - sqlite가 아닌 다른 DB 사용.
+  - `LocalExecutor` 사용: 같은 머신내에서 여러 개의 태스크들을 병렬적으로 수행할 수 있게 해준다.
+- LocalExecutor
+  - 태스크를 가질 때마다, 태스크는 서브 프로세스가 된다. 해당 서브 프로세스에서 태스크가 수행된다.
