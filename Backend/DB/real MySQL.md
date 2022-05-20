@@ -432,3 +432,47 @@
 - 강제로 잠금을 해제하려면 `KILL` 명령을 이용해 강제 종료하면 된다.
 - `SHOW PROCESSLIST`로 각 스레드(트랜잭션)의 상태를 볼 수 있다.
 - 더 자세하게 보고 싶다면 `SELECT * FROM performance_schema.data_locks`를 보면 된다.
+
+## MySQL의 격리 수준
+- `SERIALIZABLE` 격리 수준이 아니라면 크게 성능 개선이나 저하는 발생하지 않는다.
+
+|     | DIRTY READ | NON-REPEATABLE READ | PHANTOM READ |
+| --- | --- | --- | --- |
+| READ UNCOMMITED | 발생 | 발생 | 발생 |
+| READ COMMITED | 없음 | 발생 | 발생 |
+| REAPEATABLE READ | 없음 | 없음 | 발생(InnoDB X) |
+| SERIALIZABLE | 없음 | 없음 | 없음 |
+
+- 일반적인 온라인 서비스 용도의 데이터 베이스는 MySQL에서는 `REPEATABLE READ`를 주로 사용한다.
+
+### READ UNCOMMITED
+- 각 트랜잭션에서의 변경 내용이 `COMMIT`이나 `ROLLBACK` 여부와 상관없이 다른 트랜잭션에서 보인다.
+- 이런 현상을 더티 리드라고한다.
+- MySQL을 사용한다면 최소환 `READ COMMITED` 이상의 격리 수준을 사용할 것을 권장한다.
+
+### READ COMMITED
+- 온라인 서비스에서 가장 많이 선택되는 격리 수준이다.
+- 커밋 전에는 다른 트랜잭션에서 언두 영억의 백업된 레코드에서 가져온다.
+- NON-REPEATABLE READ가 발생할 수 있다.
+- 금전적인 트랜잭션에서는 조심해야한다.
+
+### REPEATABLE READ
+- InnoDB 스토리지 엔진에서 기본으로 사용되는 격리수준이다.
+- 바이너리 로그를 가진 MySQL 서버에서는 최소 `REPEATABLE READ` 격리 수준 이상을 사용해야한다.
+- 이 격리 수준에서는 `NON-REPEATABLE READ` 부정합이 발생하지 않는다.
+- `REPEATABLE READ`는 MVCC를 위해 언두 영역에 백업된 이전 데이터를 이용해 동일 트랜잭션 내에서 동일한 결과를 보여줄 수 있게 보장한다.
+- `REPEATABLE READ`와 `READ COMMITED`의 차이는 언두 영역에 백업된 레코드의 여러 버전 가운데 몇 번째 이전 버전까지 찾아 들어가야 하느냐에 있다.
+- 모든 InnoDB 트랜잭션은 고유한 트랜잭션 번호를 가진다.
+- 언두 영역에 백업된 모든 레코드에는 변경을 발생시킨 트랜잭션의 번호가 포함돼있다.
+- 언두 영역의 백업된 데이터는 InnoDB 스토리지 엔진이 불필요하다고 판단하는 시점에 주기적으로 삭제한다.
+- 트랜잭션 번호가 자신보다 작은 트랜잭션에서 변경한 것만 보게 된다.
+- 그래서 장시간 트랜잭션을 종료하지 않으면 언두 영역이 백업된 데이터로 무한정 커질 수 있다.
+- 다른 트랜잭션에서 수행한 변경 작업에 의해 레코드가 보였다 안 보였다 하는 현상을 RHANTOM READ라고 한다. (주로 새로 추가된 로우에 의해 발생)
+- `SELECT ... FOR UPDATE`는 레코드에 쓰기 잠금을 걸 수는 있지만 언두 레코드에는 잠금을 걸 수 없다.
+
+### SERIALIZABLE
+- 가장 엄격한 격리 수준이어서 그만큼 동시 처리 성능도 다른 트랜잭션 격리 수준보다 떨어진다.
+- 읽기 작업도 공유 잠금을 획득해야한다.
+- 하지만 InnoDB 스토리지 엔진에서는 갭 락과 넥스트 키 락 덕분에 `REPEATABLE READ` 격리 수준에서도 팬텀 리드가 발생하지 않는다.
+- [이미지 참고](https://letmecompile.s3.amazonaws.com/wp/wp-content/uploads/2018/06/next_key_lock.png)
+  - Lock을 광범위하게 잡아버리면 gap lock과 record lock이 합쳐진 next-key lock으로 무시무시한 락이 걸려버린다.
