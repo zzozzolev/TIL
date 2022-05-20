@@ -158,3 +158,36 @@
 - 모니터링 도구 보족
   - 로거별 로그 레벨 미지원
   - 메트릭이 실시간 값을 보여주지 않음.
+
+## 새로운 Amazon S3 클래스로 비용 절감하기
+### 스토리지 클래스 선택
+![S3 스토리지 클래스](./images/S3%20%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80%20%ED%81%B4%EB%9E%98%EC%8A%A4.png)
+
+### S3 Inelligent-Tiering
+- 3개의 티어를 가짐.
+- 가장 접근이 빈번한 오브젝트들은 Frequent Access Tier에 둠.
+- 30일 이상 접근이 없으면 Infrequetn Access Tier로 넘김.
+- 60일 이상 접근이 없으면 Archive Instant Access Tier로 옮기는 방식.
+- 접근이 없는 오브젝트들을 비용이 저렴한 티어로 옮기기 때문에 저장비용이 알아서 자동으로 줄어들게 됨.
+- 단, 오브젝트 접근 패턴을 분석하기 위한 모니터링 비용 발생.
+- 128KB 이하의 오브젝트
+
+### Standard vs Glacier
+- 스탠다드는 저장 비용이 비싸지만 파일 복구 비용이 없음.
+- Standard에서 Glacier로 갈수록 오브젝트를 저장하는 비용은 감소하지만 빼내오는 비용이 높아짐.
+
+### 기준
+- 오브젝트 매일 접근 -> standard
+- 한 달에 한 번 -> standard infrequent access
+- 분기당 한 번 -> Glacier Instant Retrieval
+  - 수년간 저장된 아카이브 데이터
+  - 아주 간혹 데이터 접근
+  - 필요할 때 즉각적인 접근 필요
+- 반 년 또는 일년에 한 번 -> Glacier Flexible Retrieval
+- 수년에 한 번 -> Glacier Deep Archive
+
+### S3 Storage Lens
+- 15가지 Usage 지표와 14가지 Activity 지표
+- 리전, 스토리지 클래스, 버킷, Prefix 단위로 세부 분석
+- 비용 효율성 및 데이터 보호 모범 사례 추천  
+- 단, Prefix 단위 세부 분석, 모범 사례 추천은 고급 지표 기능
