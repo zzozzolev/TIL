@@ -1,3 +1,12 @@
+## Features
+- automatic documentation
+  - swagger
+  - redoc
+- standard python3
+- security and authentication
+- dependency injection
+- testing - 100% coverage
+
 ## Data conversion
 - 함수에 타입을 명시하면 해당 타입으로 파싱을 해준다.
 ```python
