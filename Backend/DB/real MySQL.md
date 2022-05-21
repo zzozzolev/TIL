@@ -477,3 +477,14 @@
 - [이미지 참고](https://letmecompile.s3.amazonaws.com/wp/wp-content/uploads/2018/06/next_key_lock.png)
   - 다른 예시, https://stackoverflow.com/a/57343438
   - Lock을 광범위하게 잡아버리면 gap lock과 record lock(on the index record)이 합쳐진 next-key lock으로 무시무시한 락이 걸려버린다.
+
+## 8. 인덱스
+## 디스크 읽기 방식
+### HDD와 SSD
+- 순차 I/O에서는 비슷할 수도 있지만 랜덤 I/O가 훨씬 빠르다.
+- 데이터 베이스 서버에서 순차 I/O 작업은 그다지 비중이 크지 않고 랜덤 I/O를 통해 작은 데이터를 읽고 쓰는 작업이 대부분이다.
+- SSD의 장점은 DBMS용 스토리지에 최적이다.
+
+### 랜덤 I/O와 순차 I/O
+- 순차 I/O는 랜덤 I/O보다 디스크 기록을 위한 시스템 콜 횟수가 더 적다.
+- 쿼리를 튜닝하는 것은 랜덤 I/O 자체를 줄여주는 게 목적이다. 즉, 쿼리를 처리하는 데 꼭 필요한 데이터만 읽도록 쿼리를 개선하는 것을 의미한다.
