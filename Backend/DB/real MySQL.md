@@ -475,4 +475,5 @@
 - 읽기 작업도 공유 잠금을 획득해야한다.
 - 하지만 InnoDB 스토리지 엔진에서는 갭 락과 넥스트 키 락 덕분에 `REPEATABLE READ` 격리 수준에서도 팬텀 리드가 발생하지 않는다.
 - [이미지 참고](https://letmecompile.s3.amazonaws.com/wp/wp-content/uploads/2018/06/next_key_lock.png)
-  - Lock을 광범위하게 잡아버리면 gap lock과 record lock이 합쳐진 next-key lock으로 무시무시한 락이 걸려버린다.
+  - 다른 예시, https://stackoverflow.com/a/57343438
+  - Lock을 광범위하게 잡아버리면 gap lock과 record lock(on the index record)이 합쳐진 next-key lock으로 무시무시한 락이 걸려버린다.
