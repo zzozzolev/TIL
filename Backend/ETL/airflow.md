@@ -139,3 +139,22 @@
 2. 레디스에 푸쉬된다.
 3. 워커 중 하나가 레디스로부터 태스크를 빼간다.
 - `worker_concurrency` 파라미터는 워커 내에서 최대로 실행할 수 있는 태스크의 개수를 정의한다.
+
+## Concurrency parameters
+- `parallelism` in airflow config
+  - 전체 airflow 인스턴스에서 수행할 수 있는 최대 태스크 수를 정할 수 있다.
+  - 리소스에 맞게 에어플로우를 실행할 수 있게 해준다.
+- `concurrency` in airflow config
+  - 각 DAG에서 최대로 "실행"할 수 있는 task의 개수를 정한다.
+  - 예를 들어 `parallelism`이 32이고 `dag_concurrency`가 1이면 스케줄은 여러개 되지만 딱 하나의 task만 `running` 상태가 된다.
+- `concurrency` in dag python file.
+  - `airflow.DAG`에 파라미터로 넘겨줄 수 있다.
+  - 그러면 해당 DAG에만 적용된다.
+  ```python
+  with DAG(concurrency=1)
+  ```
+- `max_active_runs_per_dag` in airflow config
+  - DAG당 액티브한 DAG의 최대 개수이다.
+  - 예를 들어 해당 설정을 1로 바꾸면 최대 1개의 DAG만 스케줄되고 싫행된다.
+  - `concurrency`처럼 파이썬 파일내에서 지정가능하다.
+- [관련 설명](https://jybaek.tistory.com/923)
