@@ -158,3 +158,17 @@
   - 예를 들어 해당 설정을 1로 바꾸면 최대 1개의 DAG만 스케줄되고 싫행된다.
   - `concurrency`처럼 파이썬 파일내에서 지정가능하다.
 - [관련 설명](https://jybaek.tistory.com/923)
+
+## SubDAGs
+- 여러 태스크들을 하나의 그룹으로 묶고 싶을 때 사용한다.
+- `SubDagOperator`를 사용한다.
+- dag 오브젝트를 반환하는 함수를 만들면 된다.
+- subDAG의 `dag_id`는 `{parent_dag_id}.{child_dag_id}`로 하면 된다.
+```python
+def subdag_parallel_dag(parent_dag_id, child_dag_id, default_args):
+    with DAG(dag_id=f'{parent_dag_id}.{child_dag_id}', default_args=default_args) as dag:
+```
+- 하지만 다음과 같은 이유로 프로덕션에는 권장되지 않는다.
+  - 데드락
+  - 복잡성
+  - 시퀀셜 익스큐터
