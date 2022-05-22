@@ -168,7 +168,13 @@
 def subdag_parallel_dag(parent_dag_id, child_dag_id, default_args):
     with DAG(dag_id=f'{parent_dag_id}.{child_dag_id}', default_args=default_args) as dag:
 ```
-- 하지만 다음과 같은 이유로 프로덕션에는 권장되지 않는다.
+- **하지만 다음과 같은 이유로 프로덕션에는 권장되지 않는다.**
   - 데드락
   - 복잡성
   - 시퀀셜 익스큐터
+
+## Task Groups
+- sub DAG 대신 사용해라.
+- sub DAG와 달리 별도의 파일, 함수를 만들어서 인자를 넘겨줄 필요가 없다.
+- 같은 dag 파이썬 파일안에 `TaskGroup`으로 묶어주기만 하면 된다.
+- 서로 다른 태스크끼리는 같은 `task_id`를 사용해도 된다.
