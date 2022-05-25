@@ -178,3 +178,15 @@ def subdag_parallel_dag(parent_dag_id, child_dag_id, default_args):
 - sub DAG와 달리 별도의 파일, 함수를 만들어서 인자를 넘겨줄 필요가 없다.
 - 같은 dag 파이썬 파일안에 `TaskGroup`으로 묶어주기만 하면 된다.
 - 서로 다른 태스크끼리는 같은 `task_id`를 사용해도 된다.
+
+## XComs
+- 태스크 간에 데이터를 공유할 수 있는 방법이다.
+- Cross communication의 줄임말이다.
+- 작은 양의 데이터를 교환할 수 있도록 해준다.
+- XComs를 사용하는 건 데이터를 에어플로우의 메타 데이터베이스에 저장하는 것이다.
+- XComs는 제한된 크기의 데이터만 저장할 수 있다. 그리고 DB에 따라 다르다.
+- XCom을 푸쉬하는 가장 쉬운 방법은 오퍼레이터에서 해당 값을 리턴하는 것이다.
+- 값을 리턴할 때마다, 에어플로우는 키로 `return_value`를 할당한다.
+- `xcom_pull`과 `xcom_push`를 이용해 task 간에 결과를 공유할 수 있다.
+- 특정 오퍼레이터들은 기본적으로 XCom을 만든다. 예를 들면, bash operator가 있다.
+- 이럴 때 오퍼레이터에 파라미터로 `do_xcom_push=False`를 넘겨주면 xcom이 생성되지 않는다.
