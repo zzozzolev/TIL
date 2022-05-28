@@ -190,3 +190,8 @@ def subdag_parallel_dag(parent_dag_id, child_dag_id, default_args):
 - `xcom_pull`과 `xcom_push`를 이용해 task 간에 결과를 공유할 수 있다.
 - 특정 오퍼레이터들은 기본적으로 XCom을 만든다. 예를 들면, bash operator가 있다.
 - 이럴 때 오퍼레이터에 파라미터로 `do_xcom_push=False`를 넘겨주면 xcom이 생성되지 않는다.
+
+## Condition
+- `BranchPythonOperator`를 사용하면 된다.
+- `BranchPythonOperator`에서 리턴하는 태스크 아이디에 맞는 태스크를 실행한다.
+- 하지만 별도 설정이 없으면 그 다음 태스크가 스킵될 수 있다.
