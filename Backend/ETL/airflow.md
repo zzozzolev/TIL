@@ -195,3 +195,13 @@ def subdag_parallel_dag(parent_dag_id, child_dag_id, default_args):
 - `BranchPythonOperator`를 사용하면 된다.
 - `BranchPythonOperator`에서 리턴하는 태스크 아이디에 맞는 태스크를 실행한다.
 - 하지만 별도 설정이 없으면 그 다음 태스크가 스킵될 수 있다.
+
+## Trigger rules
+- 에어플로우에는 9개의 다른 트리거 룰이 있다.
+  - `all_success`: 디폴트 설정. 이전 태스크가 모두 성공하면 해당 태스크도 실행한다. 하나라도 실패하면 해당 것도 실패한다.
+  - `all_failed`: 이전 태스크가 모두 실패하면 해당 태스크가 실행된다. 이전 태스크가 하나라도 성공하면 해당 태스크는 스킵된다.
+  - `all_done`: 이전 태스크 상태에 상관없이 이전 태스크가 모두 실행됐다면 해당 태스크가 실행된다.
+  - `one_success`: 이전 태스크 중 하나라도 성공하자마자 해당 태스크가 실행된다.
+  - `one_failed`: 이전 태스크 중 하나라도 실패하자마자 해당 태스크가 실행된다.
+  - `none_failed`: 이전 태스크가 모두 성공하거나 스킵되면 해당 태스크가 실행된다.
+  - `none_failed_or_skipped`: 이전 태스크가 모두 실패하지 않고 하나라도 성공하면 해당 태스크가 실행된다.
