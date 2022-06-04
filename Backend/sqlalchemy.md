@@ -15,6 +15,26 @@
 - 세션에서 개체를 "분리"하고 계속 사용하는 것이 가능하지만 이 방법에는 주의 사항이 있다.
 - 일반적으로 분리된 개체를 다시 작업하고 싶을 때 다른 `Session`과 다시 연결하여 데이터베이스 상태를 나타내는 정상적인 작업을 재개할 수 있도록 하기 위한 것이다.
 
+### 세션 열고 닫기
+- 세션은 특정한 DB URL과 관련이 있는지 `Engine`을 이용해 인스턴스화된다.
+- 파이썬의 컨텍스트 매니저(`with`)을 이용하면 자동으로 블록 끝에서 닫힌다. `Session.close()` 메서드를 호출하는 것과 같다.
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+
+# an Engine, which the Session will use for connection
+# resources
+engine = create_engine('postgresql://scott:tiger@localhost/')
+
+# create session and add objects
+with Session(engine) as session:
+    session.add(some_object)
+    session.add(some_other_object)
+    session.commit()
+```
+- `commit()`은 새로운 데이터를 DB에 영속화할 때만 사용한다. 단순 읽기 쿼리에서는 불필요하다.
+- `Session.commit()`이 호출된 후에는 세션과 연관된 모든 객체들은 만료된다. 즉, 내용이 모두 지워진다.
+- 만약 객체들이 대신 detach 되면, `Session.expire_on_commit` 파라미터가 사용되지 않는 한 새로운 세션과 다시 연관될 때까지 non-functional 하게 된다.
 
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
