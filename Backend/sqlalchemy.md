@@ -63,6 +63,32 @@ with Session(engine) as session:
     # outer context calls session.close()
     ```
 
+### sessionmaker 사용하기
+- `sessionmaker`의 목적은 고정 config로 세션 객체에 대한 팩토리를 제공하는 것이다.
+    ```python
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+
+    # an Engine, which the Session will use for connection
+    # resources, typically in module scope
+    engine = create_engine('postgresql://scott:tiger@localhost/')
+
+    # a sessionmaker(), also in the same scope as the engine
+    Session = sessionmaker(engine)
+
+    # we can now construct a Session() without needing to pass the
+    # engine each time
+    with Session() as session:
+        session.add(some_object)
+        session.add(some_other_object)
+        session.commit()
+    # closes the session
+    ```
+- `Engine.begin()`과 유사한 자체 `sessionmaker.begin()` 메서드도 있다. 이 메서드는 `Session` 객체를 반환하고 begin/commit/rollback 블록도 유지한다.
+- 세션은 양 쪽 모두에서 `with` 블록이 끝날 때 닫힐 뿐만 아니라, 자신의 트랜잭션을 커밋시킬 것이다.
+- 어플리케이션을 작성할 때, `sessionmaker` 팩토리는 `create_enging()`에 의해 생성되는 `Engine` 객체와 똑같은 스코프를 가져야한다. 보통 모듈 레벨 혹은 글로벌 스코프이다.
+- 이 객체들은 둘 다 팩토리이기 때문에, 어떤 함수나 쓰레드들에서 동시에 사용될 수 있다.
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
