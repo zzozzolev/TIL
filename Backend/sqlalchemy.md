@@ -36,6 +36,33 @@ with Session(engine) as session:
 - `Session.commit()`이 호출된 후에는 세션과 연관된 모든 객체들은 만료된다. 즉, 내용이 모두 지워진다.
 - 만약 객체들이 대신 detach 되면, `Session.expire_on_commit` 파라미터가 사용되지 않는 한 새로운 세션과 다시 연관될 때까지 non-functional 하게 된다.
 
+### 시작 / 커밋 / 롤백 블록 구성
+- 또한 데이터베이스에 데이터를 커밋할 경우 컨텍스트 관리자 내에서 `Session.commit()` 호출과 트랜잭션의 전체 "framing"을 묶을 수 있다.
+- "framing"이란 모든 작업이 성공하면 `Session.commit()` 메서드가 호출되지만 예외가 발생하면 `Session.rollback()` 메서드가 호출되어 트랜잭션이 이전에 즉시 롤백됨을 의미한다. 예외를 외부로 전파한다.
+    ```python
+    # verbose version of what a context manager will do
+    with Session(engine) as session:
+        session.begin()
+        try:
+            session.add(some_object)
+            session.add(some_other_object)
+        except:
+            session.rollback()
+            raise
+        else:
+            session.commit()
+    ```
+- 위의 방식은 `Session.begin()`메서드에서 반환되는 `SessionTransaction` 객체를 이용하면 더 간결하게 처리할 수 있다.
+    ```python
+    # create session and add objects
+    with Session(engine) as session:
+        with session.begin():
+        session.add(some_object)
+        session.add(some_other_object)
+        # inner context calls session.commit(), if there were no exceptions
+    # outer context calls session.close()
+    ```
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
