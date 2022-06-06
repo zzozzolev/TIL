@@ -94,6 +94,20 @@ with Session(engine) as session:
 - `Query` 메서드들은 하나의 완전한 엔티티가 요청되는 경우 바로 ORM 맵핑 객체들을 반환한다.
 - 하지만 `Session.execute()`에 의해 반환되는 `Result` 객체는 항상 기본적으로 로우들을 (named tuples) 반환한다.
 
+### 새롭거나 이미 존재하는 아이템 추가하기
+- `Session.add()`는 세션에 인스턴스들을 위치시키는데 사용된다.
+- `transient`(brand new) 인스턴스들에 대해서는 다음 플러시 때 그런 인스턴스들이 인서트되게 하는 효과가 있다.
+- `persisten` 인스턴스들 즉, 세션에의해 로딩됐던 인스턴스들에 대해서는 이미 존재해 추가될 필요가 없다.
+- `detached` 인스턴스들 즉, 세션에서 삭제된 인스턴스들에 대해서는 세션과 다시 연관을 맺게 한다.
+    ```python
+    user1 = User(name='user1')
+    user2 = User(name='user2')
+    session.add(user1)
+    session.add(user2)
+
+    session.commit()     # write changes to the database
+    ```
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
