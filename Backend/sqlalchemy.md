@@ -89,6 +89,11 @@ with Session(engine) as session:
 - 어플리케이션을 작성할 때, `sessionmaker` 팩토리는 `create_enging()`에 의해 생성되는 `Engine` 객체와 똑같은 스코프를 가져야한다. 보통 모듈 레벨 혹은 글로벌 스코프이다.
 - 이 객체들은 둘 다 팩토리이기 때문에, 어떤 함수나 쓰레드들에서 동시에 사용될 수 있다.
 
+### Querying(2.0 style)
+- 2.0 부터는 `Session.execute()`를 사용할 수 있다.
+- `Query` 메서드들은 하나의 완전한 엔티티가 요청되는 경우 바로 ORM 맵핑 객체들을 반환한다.
+- 하지만 `Session.execute()`에 의해 반환되는 `Result` 객체는 항상 기본적으로 로우들을 (named tuples) 반환한다.
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
