@@ -108,6 +108,32 @@ with Session(engine) as session:
     session.commit()     # write changes to the database
     ```
 
+### 삭제하기
+- `Session.delete()` 메서드는 삭제될 거라고 마크되는 세션의 객체 리스트에 인스턴스를 추가한다.
+    ```python
+    # mark two objects to be deleted
+    session.delete(obj1)
+    session.delete(obj2)
+
+    # commit (or flush)
+    session.commit()
+    ```
+- `Session.delete()`는 삭제 대상을 표시하므로 영향을 받는 각 기본 키에 대해 DELETE 문이 생성된다.
+- DELETE 후에는 세션에서 제거되며 트랜잭션이 커밋된 후 영구적이게 된다.
+- `Session.delete()` 작업, 특히 다른 개체 및 컬렉션에 대한 관계가 처리되는 방식과 관련된 다양한 중요한 동작이 있다.
+- `relationship()` 디렉티브를 통해 삭제된 개체와 관련된 매핑된 개체에 해당하는 행들은 **기본적으로 삭제되지 않는다.**
+- 만약 그런 객체들이 삭제되는 로우에 대한 FK 제약조건이 있다면, 그러 컬럼들은 NULL로 설정된다. 이건 그 컬럼들이 non-nullable이면 제약 조건 위배를 일으킬 것이다.
+- "SET NULL"로 설정되는 걸 관련 객체 로우의 삭제로 변경하려면, `relationship()`에서 삭제 cascade를 사용해라.
+- `relationship.secondary` 파라미터를 통해 many-to-many 테이블로 연결된 테이블에 있는 로우들은 객체가 삭제될 때 모든 경우에 삭제된다.
+- 관련 객체가 삭제되는 객체에 대한 FK 제약 조건을 포함하고 해당 객체가 속한 관련 컬렉션이 현재 메모리에 로드되지 않을 때, uow는 모든 관련 로우들을 가져오기 위해 SELECT를 내보내므로, PK 값을 사용하여 관련 행에서 UPDATE 또는 DELETE 문을 내보낼 수 있다.
+- 이러한 방식으로 추가 지시가 없는 ORM은 이것이 핵심 `ForeignKeyConstraint` 객체에 구성되어 있더라도 ON DELETE CASCADE의 기능을 수행한다.
+- `relationship.passive_deletes` 파라미터를 사용해 이 동작을 조정하고 "ON DELETE CASCADE"에 보다 자연스럽게 의존할 수 있다.
+- 해당 파라미터를 True로 설정하면, SELECT 작업이 더 이상 발생하지 않지만 로컬에 있는 로우들은 여전히 ​​명시적 SET NULL 또는 DELETE의 적용을 받는다.
+- `relationship.passive_deletes`를 "all" 문자열로 설정하면 관련된 모든 객체의 업데이트/삭제가 비활성화된다.
+- 삭제 표시가 된 객체에 대한 DELETE가 발생하면, 객체는 참조하는 컬렉션이나 이것을 참조하는 객체 참조로부터 자동으로 제거되지 않는다.
+- 세션이 만료되면 이러한 컬렉션이 다시 로드되어 객체가 더 이상 존재하지 않을 수 있다. (`session.flush()` 이후에도 여전히 삭제된 객체가 보이고, `session.commit()`을 해야 보이지 않음.)
+- 그러나 이런 객체에 대해 `Session.delete()`를 사용하는 대신, 컬렉션에서 객체를 제거한 다음 해당 컬렉션 제거의 부차적인 효과로 삭제되도록 `delete-orphan`을 사용해야한다.
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
