@@ -134,6 +134,27 @@ with Session(engine) as session:
 - 세션이 만료되면 이러한 컬렉션이 다시 로드되어 객체가 더 이상 존재하지 않을 수 있다. (`session.flush()` 이후에도 여전히 삭제된 객체가 보이고, `session.commit()`을 해야 보이지 않음.)
 - 그러나 이런 객체에 대해 `Session.delete()`를 사용하는 대신, 컬렉션에서 객체를 제거한 다음 해당 컬렉션 제거의 부차적인 효과로 삭제되도록 `delete-orphan`을 사용해야한다.
 
+### 플러싱
+- `flush`는 펜딩 중인 모든 객체 생성, 삭제 및 수정을 INSERT, DELETE, UPDATE 등으로 데이터베이스에 기록하는 것이다.
+- 세션이 기본 설정으로 사용될 때 플러시 단계는 거의 항상 투명하게 수행된다. (암시적으로?)
+- 특히, 플러시는 `Query` 또는 2.0 스타일 `Session.execute()` 호출의 결과로 개별 SQL 문이 실행되기 전에 발생하고 트랜잭션이 커밋되기 전에 `Session.commit()` 호출 내에서 발생한다.
+- `Session.flush()` 메서드를 호출하여 언제든지 세션 플러시를 강제할 수 있다.
+- 특정 메서드 범위 내에서 자동으로 발생하는 플러시를 `autoflush`라고 한다.
+- `Autoflush`는 다음을 포함한 메소드의 시작 부분에서 발생하는 구성 가능한 자동 플러시 호출로 정의된다.
+    - `Session.execute()` and other SQL-executing methods.
+    - When a `Query` is invoked to send SQL to the database.
+    - Within the `Session.merge()` method before querying the database.
+    - When objects are `refreshed`.
+    - When ORM `lazy load` operations occur against unloaded object attributes.
+- 플러시가 무조건 발생하는 지점도 있다. 이러한 지점은 다음을 포함하는 주요 거래 경계 내에 있다.
+    - `Session.commit()` 메서드의 프로세스 내에서
+- 이전 항목 목록에 적용된 `autoflush` 동작은 `Session.autoflush` 매개변수를 `False`로 전달하는 `Session` 또는 `Sessionmaker`를 구성하여 비활성화할 수 있다.
+- 플러시 프로세스는 DBAPI가 드라이버 수준 `autocommit`모드가 아닌 경우 항상 트랜잭션 내에서 발생한다. (데이터베이스 트랜잭션의 격리 수준에 따라 다름)
+- 여기에는 더 이상 사용되지 않는 `Session.autocommit` 설정으로 세션이 구성된 경우에도 포함된다.
+- 트랜잭션이 없으면 `Session.flush()`는 자체 트랜잭션을 만들고 커밋한다. 즉, 데이터베이스 연결이 트랜잭션 설정 내에서 원자성을 제공한다고 가정하면 플러시 내부의 개별 DML 문이 실패하면 전체 작업이 롤백된다.
+- `Session.autocommit`을 사용하는 것 외에, 플러시 내에서 오류가 발생하면 동일한 세션을 계속 사용하기 위해 기반 트랜잭션이 이미 롤백되었더라도 플러시가 실패한 후 `Session.rollback()`에 대한 명시적 호출이 필요하다.
+    - 자세한 건 [해당 링크](https://docs.sqlalchemy.org/en/14/faq/sessions.html#this-session-s-transaction-has-been-rolled-back-due-to-a-previous-exception-during-flush-or-similar) 참고!
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
