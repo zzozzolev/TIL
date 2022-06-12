@@ -155,6 +155,36 @@ with Session(engine) as session:
 - `Session.autocommit`을 사용하는 것 외에, 플러시 내에서 오류가 발생하면 동일한 세션을 계속 사용하기 위해 기반 트랜잭션이 이미 롤백되었더라도 플러시가 실패한 후 `Session.rollback()`에 대한 명시적 호출이 필요하다.
     - 자세한 건 [해당 링크](https://docs.sqlalchemy.org/en/14/faq/sessions.html#this-session-s-transaction-has-been-rolled-back-due-to-a-previous-exception-during-flush-or-similar) 참고!
 
+### 임의의 WHERE 절이 있는 UPDATE 및 DELETE
+- 반환된 결과 객체는 `CursorResult`의 인스턴스이다. UPDATE 또는 DELETE 문과 일치하는 로우수를 검색하려면 `CursorResult.rowcount`를 사용하면 된다.
+
+#### 동기화 전략 선택
+- ORM 지원 업데이트 및 삭제의 1.x 및 2.0 형식 모두에서 다음과 같은 동기화 세션 값이 지원된다.
+    - `False`
+        - 세션을 동기화하지 않는다.
+        - 이 옵션은 가장 효율적이며 세션이 만료됐을 때도 신뢰할 수 있다. 일반적으로 만료는 `commit()` 후에 발생하거나 명시적으로 `expire_all()`을 사용했을 때 발생한다.
+        - 만료되기 전에 데이터베이스에서 업데이트되거나 삭제된 객체가 오래된 값으로 세션에 남아 있을 수 있으며, 이로 인해 혼란스러운 결과가 발생할 수 있다.
+    - `'fetch'`
+        - UPDATE 또는 DELETE 전에 SELECT를 수행하거나 데이터베이스가 지원하는 경우 RETURNING을 사용하여 영향을 받는 로우들의 PK 아이덴티티를 검색한다.
+        - 작업의 영향을 받는 메모리 내 객체를 새 값으로 새로 고치거나(업데이트) 세션에서 제거(삭제)할 수 있다.
+    - `'evaluate'`
+        - 세션 내에서 일치하는 객체를 찾기 위해 Python의 UPDATE 또는 DELETE 문에 제공된 WHERE 기준을 평가한다.
+        - 이 접근 방식은 어떤 라운드 트립도 추가하지 않으며 RETURNING 지원이 없는 경우 더 효율적이다.
+        - 기준이 복잡한 UPDATE 또는 DELETE 문의 경우 `'evaluate'` 전략이 Python에서 표현식을 평가하지 못할 수 있으며 오류가 발생한다.
+        - 만약 그렇다면, `'fetch'`를 사용해라.
+        - UPDATE 작업이, 만료된 많은 개체가 있는 세션에서 실행되는 경우 이 전략을 피해야한다.
+        - 각 객체에 대해 SELECT를 내보내는 위치에 따라 해당 객체를 새로 고쳐야 하기 때문이다.
+        - 세션이 여러 `Session.commit()` 호출에서 사용되고 있고 `Session.expire_on_commit` 플래그가 기본값인 `True`인 경우 세션에 만료된 개체가 있을 수 있다.
+- ORM 지원 UPDATE 및 DELETE 기능은 ORM 작업 단위 자동화를 우회하여 복잡성 없이 한 번에 여러 행과 일치하는 단일 UPDATE 또는 DELETE 문을 내보낼 수 있다.
+- 해당 작업들은 in-Python 릴레이션쉽 캐스케이딩을 제공하지 않는다.
+- ON UPDATE CASCADE 및/또는 ON DELETE CASCADE가 이를 필요로 하는 모든 외래 키 참조에 대해 구성되어 있다고 가정한다.
+- 그렇지 않으면 외래 키 참조가 실행 중인 경우 데이터베이스가 무결성 위반을 내보낼 수 있다.
+- UPDATE 또는 DELETE 후에 관련 테이블에서 ON UPDATE CASCADE 또는 ON DELETE CASCADE에 의해 영향을 받은 세션의 종속 객체는 현재 상태를 포함하지 않을 수 있다. 이 이슈는 세션이 만료되면 해결된다.
+- MySQL이나 SQLite는 RETURNING을 지원하지 않는다. 그래서 추가적인 SELECT문이 나가기 때문에 퍼포먼스를 감소시킨다.
+- ORM 사용 UPDATE 및 DELETE는 조인된 테이블 상속을 자동으로 처리하지 않는다.
+- 여러 테이블에 대한 작업인 경우 일반적으로 개별 테이블에 대한 개별 UPDATE/DELETE 문을 사용해야 한다.
+
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
