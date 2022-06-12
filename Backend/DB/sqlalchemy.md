@@ -155,6 +155,34 @@ with Session(engine) as session:
 - `Session.autocommit`을 사용하는 것 외에, 플러시 내에서 오류가 발생하면 동일한 세션을 계속 사용하기 위해 기반 트랜잭션이 이미 롤백되었더라도 플러시가 실패한 후 `Session.rollback()`에 대한 명시적 호출이 필요하다.
     - 자세한 건 [해당 링크](https://docs.sqlalchemy.org/en/14/faq/sessions.html#this-session-s-transaction-has-been-rolled-back-due-to-a-previous-exception-during-flush-or-similar) 참고!
 
+
+### 익스파이어링 / 리프레싱
+- 세션을 사용할 때 자주 제기되는 중요한 고려 사항은 트랜잭션의 현재 상태와 동기화된 상태를 유지한다는 점에서 데이터베이스에서 로드된 객체에 있는 상태를 처리하는 것이다.
+- SQLAlchemy ORM은 객체가 SQL 쿼리에서 "로드될" 때 특정 데이터베이스 아이덴티디에 해당하는 고유한 Python 객체 인스턴스가 유지되는 것과 같은 `identity map`의 개념을 기반으로 한다.
+- 즉, 각각 동일한 행에 대해 두 개의 개별 쿼리를 내보내고 매핑된 객체를 다시 가져오면 두 쿼리가 동일한 Python 객체를 반환한다.
+    ```python
+    u1 = session.query(User).filter(id=5).first()
+    u2 = session.query(User).filter(id=5).first()
+    u1 is u2
+    ```
+- 이에 따라 ORM이 쿼리에서 행을 다시 가져올 때 이미 로드된 **객체의 속성을 채우는 것을 건너뛴다.**
+- 여기에서 설계 가정은 완벽하게 격리된 트랜잭션을 가정한 다음, 트랜잭션이 격리되지 않은 정도까지 어플리케이션이 데이터베이스 트랜잭션에서 객체를 새로 고치기 위해, 필요에 따라 조치를 취할 수 있다는 것아다.
+- ORM 매핑된 개체가 메모리에 로드될 때 현재 트랜잭션의 새 데이터로 내용을 새로 고치는 세 가지 일반적인 방법이 있습니다.
+    - `expire()`: 객체의 선택된 또는 모든 속성의 내용을 지울 것이므로 다음에 접근할 때 데이터베이스에서 로드된다. 예를 들면 지연 로딩 패턴을 사용한다.
+        ```python
+        session.expire(u1)
+        u1.some_attribute  # <-- lazy loads from the transaction
+        ```
+    - `refresh()`: `expire()` 메서드가 수행하는 모든 작업을 수행하지만 하나 이상의 SQL 쿼리를 즉시 내보내 객체의 내용을 실제로 새로 고친다.
+        ```python
+        session.refresh(u1)  # <-- emits a SQL query
+        u1.some_attribute  # <-- is refreshed from the transaction
+        ```
+    - `populate_existing()`: 실제로 `Query` 객체에 `Query.populate_existing()`으로 표시되며 데이터베이스의 내용에서 무조건 다시 채워지는 객체를 반환해야 함을 나타낸다.
+        ```python
+        u2 = session.query(User).populate_existing().filter(id=5).first()
+        ```
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
