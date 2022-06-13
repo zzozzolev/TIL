@@ -19,3 +19,9 @@
 - 메세지를 처리함. (예시: 메세지를 RDS DB에 넣음.)
 - SDK를 이용해 메세지를 삭제함.
   - 다른 컨수머들이 이 메세지를 볼 수 없게 함.
+
+## SQS - Multiple EC2 Instances Consumers
+- 컨수머들은 병렬적으로 메세지를 받고 처리함.
+- At least once delivery: 빨리 처리되지 못하면 다른 컨수머가 받음.
+- Best-effort message ordering
+- 컨수머들은 메세지를 처리한 후 삭제함.
