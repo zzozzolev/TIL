@@ -29,3 +29,10 @@
 ## SQS Queue Access Policy
 - Account 걸쳐서 접근: 계정을 넘어서 액세스할 수 있음.
 - S3 이벤트 알림을 SQS 큐에 퍼블리쉬
+
+## SQS - Message Visibility Timeout
+- 메세지가 컨수머에 의해 폴링된 후에, 다른 컨수머들에게 invisible 한 상태가 됨.
+- 기본적으로, "message visibility timeout"은 30초임.
+- 즉, 메세지가 30초 내에 처리돼야함.
+- message visibility timeout이 지난 후에는, 메세지가 SQS에서 visible 하게 됨.
+- 즉, 다른 컨수머가 처리할 수 있음.
