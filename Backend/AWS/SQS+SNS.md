@@ -25,3 +25,7 @@
 - At least once delivery: 빨리 처리되지 못하면 다른 컨수머가 받음.
 - Best-effort message ordering
 - 컨수머들은 메세지를 처리한 후 삭제함.
+
+## SQS Queue Access Policy
+- Account 걸쳐서 접근: 계정을 넘어서 액세스할 수 있음.
+- S3 이벤트 알림을 SQS 큐에 퍼블리쉬
