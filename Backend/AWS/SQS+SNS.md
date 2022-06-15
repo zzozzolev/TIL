@@ -42,3 +42,11 @@
 - 컨수머는 더 많은 시간을 얻기 위해, `ChangeMessageVisibility`를 호출 할 수 있음.
 - 만약 visibility timeout이 많고 컨수머가 크래쉬 된다면, 재처리는 시간이 걸릴 수 있음.
 - 만약 visibility timeout이 너무 적으면, 중복을 얻을 수 있음.
+
+## Amazon SQS - Dead Letter Queue
+- 이전에 봤던 것처럼 visibility timeout 내에 메세지가 처리되지 않으면 큐에 다시 들어감.
+- 메세지가 몇 번 동안 큐에 다시 돌아갈지 쓰레스 홀드를 정할 수 있음.
+- `MaximumReceives` 쓰레스홀드가 초과된 이후에, 메세지는 dead letter queue (DLQ)에 들어감.
+- 디버깅에 도움이 됨.
+- 만료되기 전에 DLQ에 있는 메세지를 확실히 처리해야함.
+  - DLQ에 있는 리텐션을 14일로 설정하는 게 좋음.
