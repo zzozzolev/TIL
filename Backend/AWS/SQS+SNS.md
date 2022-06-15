@@ -36,3 +36,9 @@
 - 즉, 메세지가 30초 내에 처리돼야함.
 - message visibility timeout이 지난 후에는, 메세지가 SQS에서 visible 하게 됨.
 - 즉, 다른 컨수머가 처리할 수 있음.
+
+## SQS - Message Visibility Timeout
+- 메세지가 visibility timeout 내에 처리되지 않는다면, 두 번 처리될 수 있음.
+- 컨수머는 더 많은 시간을 얻기 위해, `ChangeMessageVisibility`를 호출 할 수 있음.
+- 만약 visibility timeout이 많고 컨수머가 크래쉬 된다면, 재처리는 시간이 걸릴 수 있음.
+- 만약 visibility timeout이 너무 적으면, 중복을 얻을 수 있음.
