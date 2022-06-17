@@ -60,3 +60,11 @@
 - 기본은 0초임. (메세지를 바로 이용가능함)
 - 큐 레벨에서 디폴트를 설정할 수 있음.
 - `DelaySeconds` 파라미터를 이용해서 보낼 때 디폴트를 오버라이드할 수 있음.
+
+## SQS - Long Polling
+- 컨수머가 큐에서 메세지들을 요청할 때, 만약 큐에 아무것도 없다면 메세지가 도착하는 것을 기다릴 수도 있음.
+- 이걸 `Long Polling`이라고 부름.
+- Long Polling은 효율성을 높이고 레이턴시를 줄이면서 SQS에 대한 API 호출 횟수를 줄임.
+- 웨잇 타임은 1초에서 20초 사이로 설정할 수 있음. (20초가 선호됨)
+- Long Polling가 Short Polling 보다 선호됨.
+- Long Polling은 `WaitTimeSeconds`를 통해 큐 레벨 혹은 API 레벨에서 활성화할 수 있음.
