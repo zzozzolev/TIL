@@ -68,3 +68,8 @@
 - 웨잇 타임은 1초에서 20초 사이로 설정할 수 있음. (20초가 선호됨)
 - Long Polling가 Short Polling 보다 선호됨.
 - Long Polling은 `WaitTimeSeconds`를 통해 큐 레벨 혹은 API 레벨에서 활성화할 수 있음.
+
+## SQS - FIFO Queue
+- FIFO = First In First Out (ordering of messages in the queue)
+- 제한된 쓰루풋: 300 msg/s without batching, 3000 msg/s with
+- Exactly-once send capability (중복 제거)
