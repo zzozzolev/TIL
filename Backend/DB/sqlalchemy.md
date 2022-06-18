@@ -222,6 +222,12 @@ with Session(engine) as session:
 - 일반적으로 기본 키, 외래 키 또는 "not nullable" 제약 조건 위반과 같은 이유로 `Session.flush()`가 실패하면 롤백이 자동으로 실행된다. (현재 부분 실패 후 플러시를 계속할 수 없음)
 - 그러나 이 시점에서 세션은 "inactive"으로 알려진 상태가 된다. 그리고 호출하는 어플리케이션은 항상 `Session.rollback()` 메서드를 명시적으로 호출하여 세션이 사용 가능한 상태로 돌아갈 수 있도록 해야한다.
 
+### Closing
+- `Session.close()` 메서드는 세션에서 모든 ORM 매핑 객체를 제거하고 바인딩된 엔진 객체에서 트랜잭션/커넥션 리소스를 해제하는 `Session.expunge_all()`을 실행한다. 커넥션이 커넥션 풀로 반환되면 트랜잭션 상태도 롤백된다.
+- `Session`이 닫히면 기본적으로 처음 생성될 때와 같은 원래 상태가 되며 **다시 사용할 수 있다.**
+- 이런 의미에서 `Session.close()` 메서드는 "데이터베이스 닫기" 메서드가 아니라 깨끗한 상태로 다시 "재설정"하는 것과 비슷하다.
+("It’s recommended" 부터)
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
