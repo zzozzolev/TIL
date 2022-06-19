@@ -26,6 +26,26 @@
 - `relationship.back_populates` 파라미터는 `relationship.backref`라는 매우 일반적인 SQLAlchemy 기능의 최신 버전이다.
 - 두 가지 보완(complementing) 관계인 `Address.user`와 `User.addresses`는 양방향 관계라고 하며 SQLAlchemy ORM의 핵심 기능이다.
 
+## Relationship Configuration
+- [공식 문서](https://docs.sqlalchemy.org/en/14/orm/relationships.html) 내용 기록
+### Linking Relationships with Backref
+- 다음과 같이 `User`와 `Address`가 선언돼있다고 하자.
+    ```python
+    class User(Base):
+        __tablename__ = "user"
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+
+        addresses = relationship("Address", backref="user")
+
+
+    class Address(Base):
+        __tablename__ = "address"
+        id = Column(Integer, primary_key=True)
+        email = Column(String)
+        user_id = Column(Integer, ForeignKey("user.id"))
+    ```
+
 ## Session Basics
 - [공식 문서](https://docs.sqlalchemy.org/en/14/orm/session_basics.html) 내용 기록
 
