@@ -228,6 +228,13 @@ with Session(engine) as session:
 - 이런 의미에서 `Session.close()` 메서드는 "데이터베이스 닫기" 메서드가 아니라 깨끗한 상태로 다시 "재설정"하는 것과 비슷하다.
 - 세션의 범위는 특히 `Session.commit()` 또는 `Session.rollback()` 메서드가 사용되지 않는 경우 마지막에 `Session.close()`를 호출하여 제한하는 것이 좋다.
 
+## Session Frequently Asked Questions
+### Is the Session a cache?
+- 네...니오.
+- 아이덴티티 냅 패턴을 구현하고 기본 키에 키가 지정된 개체를 저장한다는 점에서 캐시로 다소 사용된다.
+- 하지만 어떤 종류의 쿼리 캐싱도 수행하지 않는다.
+- 세션은 모두가 객체의 레지스트리로 참조하는 글로벌 객체로 설계되지 않았다.
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
