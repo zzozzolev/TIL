@@ -226,7 +226,7 @@ with Session(engine) as session:
 - `Session.close()` 메서드는 세션에서 모든 ORM 매핑 객체를 제거하고 바인딩된 엔진 객체에서 트랜잭션/커넥션 리소스를 해제하는 `Session.expunge_all()`을 실행한다. 커넥션이 커넥션 풀로 반환되면 트랜잭션 상태도 롤백된다.
 - `Session`이 닫히면 기본적으로 처음 생성될 때와 같은 원래 상태가 되며 **다시 사용할 수 있다.**
 - 이런 의미에서 `Session.close()` 메서드는 "데이터베이스 닫기" 메서드가 아니라 깨끗한 상태로 다시 "재설정"하는 것과 비슷하다.
-("It’s recommended" 부터)
+- 세션의 범위는 특히 `Session.commit()` 또는 `Session.rollback()` 메서드가 사용되지 않는 경우 마지막에 `Session.close()`를 호출하여 제한하는 것이 좋다.
 
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
