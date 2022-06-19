@@ -307,3 +307,14 @@ async def read_items(
   - 만약, starlette의 `BackgroundTask`를 사용한다면 별도로 객체를 만들어서 처리해야한다.
   - 시간이 오래 걸리지 않는 간단한 작업이나 FastAPI와 컨텍스트를 공유해야한다면 `BackgroundTasks`를 사용하는게 좋고, 그렇지 않다면 Celery를 사용하는 게 좋다.
   
+  ## FastAPI에서 SQLAlchemy 사용하기
+- SQLAlchemy에서는 쓰레드당 세션을 보장하기 위해 `scoped_session`을 쓸 것을 권장한다.
+- 하지만, FastAPI는 코루틴 기반으로 async 하게 동작하기 때문에 하나의 쓰레드가 하나 이상의 리퀘스트를 핸들링할 수 있다.
+- 아래는 해당 문제에 대한 FastAPI 저자의 직접적인 코멘트이다.
+
+> SQLAlchemy scoped_session is based on thread locals. As XXX points out, those are not mapped 1:1 to requests when using async stuff. In summary, **a single thread can handle more than one request, and at the same time, a single request could be handled by more than one thread** (so it's actually not 1:1 but many:many). The alternative would be ContextVars, those are made to solve these use cases. But they don't behave exactly the same as thread locals and there are some caveats.
+
+- 실제로 어떤 사람은 파이썬의 코루틴이 쓰레드와 1:1 매핑이 안 되기 때문에, 동작하지 않는 걸 봤다고 한다. 여러 코루틴들이 같은 쓰레드 로컬 세션에 트랜잭션을 시작했다고 한다. 그래서 `scoped_session` 쓰는 걸 멈췄다고...
+- `SQLAlchemy`에서 [asyncio scoped session](https://docs.sqlalchemy.org/en/14/orm/extensions/asyncio.html#using-asyncio-scoped-session)을 지원해주기는 한다.
+- [패스트 API 튜토리얼](https://fastapi.tiangolo.com/advanced/sql-databases-peewee/)에서는 `Peewee`라는 쓰레드 로컬을 사용하는 라이브러리를 `contextvars`를 사용하도록 변경한다.
+- 해당 [포스트](https://www.hides.kr/1103?category=666044)에서 `ContextVar`와 미들웨어를 다뤄서 처리한 방법을 공유한다. `AsyncSession`을 이용한 건 이 [포스트](https://www.hides.kr/1101)에 있다.
