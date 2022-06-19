@@ -235,6 +235,11 @@ with Session(engine) as session:
 - 하지만 어떤 종류의 쿼리 캐싱도 수행하지 않는다.
 - 세션은 모두가 객체의 레지스트리로 참조하는 글로벌 객체로 설계되지 않았다.
 
+### Is the session thread-safe?
+- 세션은 일반적으로 한 번에 하나의 스레드만 의미하는 non-concurrent 방식으로 사용하기 위한 것이다.
+- 세션은 단일 트랜잭션 내에서 단일 일련의 작업에 대해 하나의 인스턴스가 존재하는 방식으로 사용해야 한다.
+- 더 큰 요점은 여러 concurrent 스레드가 있는 세션을 사용하지 않아야 한다는 것이다.
+
 ## backref vs back_populates
 - 객체간에 관계가 있을 때 사용하는 어트리뷰트.
 - https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
