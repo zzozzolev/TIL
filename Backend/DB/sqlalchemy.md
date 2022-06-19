@@ -1,3 +1,31 @@
+## Object Relational Tutorial
+- [공식 문서](https://docs.sqlalchemy.org/en/14/orm/tutorial.html) 내용 기록
+
+### Building a Relationship
+- 예를 들어 아래와 같은 클래스가 있다고 해보자.
+    ```python
+    >>> class Address(Base):
+    ...     __tablename__ = 'addresses'
+    ...     id = Column(Integer, primary_key=True)
+    ...     email_address = Column(String, nullable=False)
+    ...     user_id = Column(Integer, ForeignKey('users.id'))
+    ...
+    ...     user = relationship("User", back_populates="addresses")
+    ...
+    ...     def __repr__(self):
+    ...         return "<Address(email_address='%s')>" % self.email_address
+
+    >>> User.addresses = relationship(
+    ...     "Address", order_by=Address.id, back_populates="user")
+    ```
+- 자식 테이블에 `ForeignKey`로 부모 테이블 PK를 명시한다.
+- `relationship()`은 `Address.user` 속성을 사용하여 `Address` 클래스 자체가 `User` 클래스에 연결되어야 함을 ORM에 알려준다.
+- `relationship()`은 두 테이블 간의 외래 키 관계를 사용하여 이 연결의 특성을 결정하고 `Address.user`가 다대일임을 결정한다.
+- 추가 `relationship()` 지시문은 `User.addresses` 속성 아래의 사용자 매핑 클래스에 배치된다.
+- 두 `relationship()` 지시문에서 파라미터 `relationship.back_populates`는 보완적인 속성 이름을 참조하기 위해 할당된다.
+- `relationship.back_populates` 파라미터는 `relationship.backref`라는 매우 일반적인 SQLAlchemy 기능의 최신 버전이다.
+- 두 가지 보완(complementing) 관계인 `Address.user`와 `User.addresses`는 양방향 관계라고 하며 SQLAlchemy ORM의 핵심 기능이다.
+
 ## Session Basics
 - [공식 문서](https://docs.sqlalchemy.org/en/14/orm/session_basics.html) 내용 기록
 
