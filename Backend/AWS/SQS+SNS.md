@@ -73,3 +73,10 @@
 - FIFO = First In First Out (ordering of messages in the queue)
 - 제한된 쓰루풋: 300 msg/s without batching, 3000 msg/s with
 - Exactly-once send capability (중복 제거)
+
+## SNS
+- 이벤트 프로듀서는 하나의 SNS 토픽에만 메세지를 보냄.
+- SNS 토픽 알림을 듣기 원하는 만큼 많은 이벤트 리시버 (subscriptions)가 있을 수 있음.
+- 토픽에 대한 각각의 구독자는 모든 메세지를 얻음. (메세지를 필터링하는 새로운 피처)
+- 많은 AWS 서비스들이 알림을 위해 SAS에 바로 데이터를 보낼 수 있음.
+- SDK를 이용해서 토픽 퍼블리쉬 가능.
