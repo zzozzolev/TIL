@@ -80,3 +80,15 @@
 - 토픽에 대한 각각의 구독자는 모든 메세지를 얻음. (메세지를 필터링하는 새로운 피처)
 - 많은 AWS 서비스들이 알림을 위해 SAS에 바로 데이터를 보낼 수 있음.
 - SDK를 이용해서 토픽 퍼블리쉬 가능.
+
+## SNS + SQS: Fan Out
+- SNS에 한 번 보내고, 구독자인 모든 SQS 큐들에서 받을 수 있음.
+- 완전히 decoupled, 데이터 로스 없음.
+- SQS는 data persistence, 지연된 프로세싱, 재시도를 할 수 있도로 해줌.
+- 시간이 지남에 따라 더 많은 SQS 구독자들을 추가하는 능력도 있음.
+- SQS access policy에 SNS가 쓸 수 있도록 해야함.
+- 예를 들면, 다음과 같이 구성할 수 있음.
+  ```
+  (Buying Service) -> (SNS Topic) -> (SQS Queue1) -> (Fraud Service)
+                                  -> (SQS Queue2) -> (Shipping Service)
+  ```
