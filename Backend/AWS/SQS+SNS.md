@@ -101,3 +101,7 @@
 - SQS FIFO 큐만 구독자로 할 수 있음.
 - 제한된 쓰루풋
 - fan out + ordering + deduplication: SNS FIFO Topic + SQS FIFO Queue
+
+## SNS - Message Filtering
+- JSON 정책은 SNS 토픽의 구독자들에게 보내지는 메세지들을 거르기 위해 사용됨.
+- 만약 구독자가 필터 정책이 없으면, 모든 메세지를 받음.
