@@ -92,3 +92,12 @@
   (Buying Service) -> (SNS Topic) -> (SQS Queue1) -> (Fraud Service)
                                   -> (SQS Queue2) -> (Shipping Service)
   ```
+
+## Amazon SNS - FIFO Topic
+- FIFO = First In First Out (토픽 내 메세지의 순서)
+- SQS FIFO와 비슷한 피처:
+  - Message Group ID에 따른 순서 (같은 그룹내의 모든 메세지들은 정렬됨)
+  - Deduplication ID 혹은 Content Based Deduplication을 사용해서 중복 제거
+- SQS FIFO 큐만 구독자로 할 수 있음.
+- 제한된 쓰루풋
+- fan out + ordering + deduplication: SNS FIFO Topic + SQS FIFO Queue
