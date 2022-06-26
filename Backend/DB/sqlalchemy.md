@@ -45,6 +45,16 @@
         email = Column(String)
         user_id = Column(Integer, ForeignKey("user.id"))
     ```
+- 위의 설정은 `User.addresses`라는 `User`에 대한 `Address` 오브젝트 컬렉션을 설정한다.
+- 또한 부모 `User` 객체를 참조하는 `Address`에 대한 `.user` 속성을 설정한다.
+- 사실, `relationship.backref` 키워드는 `Address` 매팡에 두 번째 `relationship()`을 배치하기 위한 흔한 쇼트컷이다.
+- 양쪽에 `back_populates`를 설정하는 것과 똑같다.
+- 두 관계 모두에서 `relationship.back_populates` 지시문은 서로 간에 "bidirectional" 동작을 설정해야 함을 나타내는 다른 관계에 대해 각 관계에 알려준다.
+- 이 구성의 주요 효과는 relationship이 "여기에서 추가 또는 설정 이벤트가 발생하면, 이 특정 속성 이름을 사용하는 인커밍 속성에 설정"하는 동작을 갖는 두 속성에 이벤트 핸들러를 추가한다는 것이다.
+- 위의 예시로 보면, `u1` 이라는 `User` 인스턴스의 `addresses`에 `Address` 인스턴스가 추가되면 `u1`에 추가됨은 물론, 해당 `Address` 인스턴스의 `user`에도 `u1`이 추가된다.
+- `.addresses` 컬렉션과 `.user` 속성의 조작은 SQL 데이터베이스와의 상호 작용 없이 전적으로 Python에서 발생한다.
+- `relationship.backref/relationship.back_populates` 동작은 일반적인 bidirectional 연산이 데이터베이스 왕복 없이 올바른 상태를 반영할 수 있다는 이점이 있다.
+
 
 ## Session Basics
 - [공식 문서](https://docs.sqlalchemy.org/en/14/orm/session_basics.html) 내용 기록
