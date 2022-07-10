@@ -25,6 +25,9 @@
 - 두 `relationship()` 지시문에서 파라미터 `relationship.back_populates`는 보완적인 속성 이름을 참조하기 위해 할당된다.
 - `relationship.back_populates` 파라미터는 `relationship.backref`라는 매우 일반적인 SQLAlchemy 기능의 최신 버전이다.
 - 두 가지 보완(complementing) 관계인 `Address.user`와 `User.addresses`는 양방향 관계라고 하며 SQLAlchemy ORM의 핵심 기능이다.
+- 대부분 RDB에서 FK 제약은 PK 혹은 UNIQUE 제약 조건을 가지는 컬럼에만 연결할 수 있다.
+
+## Eager Loading
 
 ## Relationship Configuration
 - [공식 문서](https://docs.sqlalchemy.org/en/14/orm/relationships.html) 내용 기록
@@ -298,6 +301,26 @@ with Session(engine) as session:
 - 세션은 단일 트랜잭션 내에서 단일 일련의 작업에 대해 하나의 인스턴스가 존재하는 방식으로 사용해야 한다.
 - 더 큰 요점은 여러 concurrent 스레드가 있는 세션을 사용하지 않아야 한다는 것이다.
 
-## backref vs back_populates
-- 객체간에 관계가 있을 때 사용하는 어트리뷰트.
-- https://velog.io/@inourbubble2/SQLAlchemy%EC%9D%98-backref%EC%99%80-backpopulates%EC%9D%98-%EC%B0%A8%EC%9D%B4
+## backref 궁금한 점
+- 모델 양쪽에 선언이 가능한가?
+  - 불가능하다. 다음과 같이 선언하고, `DBUser`를 생성하려고 하면 에러가 난다.
+  ```python
+  class DBUser(Base):
+    id = Column(Integer, primary_key=True, index=True)
+    items = relationship("DBArticle", backref="user")
+
+
+  class DBArticle(Base):
+    id = Column(Integer, primary_key=True, index=True)
+    user = relationship("DBUser", backref="items")
+  ```
+  ```
+  sqlalchemy.exc.ArgumentError: Error creating backref 'user' on relationship 'DBUser.items': property of that name exists on mapper 'mapped class DBArticle->articles'
+  ```
+- `relationship`을 선언한쪽에서 변경했을 때와 상대 쪽에서 변경했을 때 자동 반영에 차이가 있는가?
+  - 없다.
+    |     | 새로운 객체 | 존재하는 객체 |
+    | --- | -------- | ---------- |
+    | child 관계 사용 | 변경 | 변경 | 
+    | parent 관계 사용 | 변경 | 변경 |
+  - `backref`나 `back_populates`나 똑같다.
