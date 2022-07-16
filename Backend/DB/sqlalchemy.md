@@ -58,6 +58,41 @@
 - `.addresses` 컬렉션과 `.user` 속성의 조작은 SQL 데이터베이스와의 상호 작용 없이 전적으로 Python에서 발생한다.
 - `relationship.backref/relationship.back_populates` 동작은 일반적인 bidirectional 연산이 데이터베이스 왕복 없이 올바른 상태를 반영할 수 있다는 이점이 있다.
 
+## Relationship Loading Techniques
+- relationship의 로딩은 세 가지 카테고리로 나뉜다.
+    1. lazy loading
+    2. eager loading
+    3. no loading
+- lazy loading은 관련 객체가 처음에 로드되지 않고 쿼리에서 객체가 반환됨을 나타낸다.
+- 특정 객체에서 지정된 컬렉션 또는 참조에 처음 액세스하면 요청된 컬렉션이 로드되도록 추가 SELECT 문이 내보내진다.
+- eager loading은 이미 로드된 관련 컬렉션 또는 스칼라 참조가 있는 쿼리에서 반환된 객체를 나타낸다.
+- `Query`는 일반적으로 관련된 행에 동시에 로드하기 위해 JOIN과 함께 내보내는 SELECT 문을 확장하거나, 컬렉션 또는 스칼라 참조를 한 번에 로드하기 위해 기본 SELECT 문 다음에 추가 SELECT 문을 내보냄으로써 이를 달성한다.
+- "No" loading은 원하지 않는 lazy load를 방지하기 위해 속성이 비어 있고 로드되지 않거나 액세스할 때 오류가 발생하는 주어진 관계에서 로드를 비활성화하는 것을 나타낸다.
+- lazy loading
+  - `lazy='select'` or `lazyload()`
+  - 한 번에 단일 개체에 대한 관련 참조를 느리게 로드하기 위해 어트리뷰트 액세스 시간에 SELECT 문을 내보내는 로드 형식
+- joined loading
+  - `lazy='joined'` or `joinedload()`
+  - 이 형식의 로드는 관련 행이 동일한 결과 집합에 로드되도록 지정된 SELECT 문에 JOIN을 적용한다.
+- subquery loading
+  - `lazy='subquery'` or `subqueryload()`
+  - 이 형식의 로드는 서브 쿼리 내부에 포함된 원래 쿼리를 다시 설명하는 두 번째 SELECT 문을 내보낸다.
+  - 그런 다음 관련 컬렉션/스칼라 참조의 모든 멤버를 한 번에 로드하기 위해 로드할 관련 테이블에 대한 하위 쿼리를 JOIN한다.
+- select IN loading
+  - `lazy='selectin'` or `selectinload()`
+  - 이 형식의 로드는 부모 객체의 PK identifier를 IN 절로 조합하는 두 번째(또는 그 이상) SELECT 문을 내보낸다.
+  - 관련 컬렉션/스칼라 참조의 모든 멤버가 PK로 한 번에 로드되도록 한다.
+- raise loading
+  - `lazy='raise'` or `lazy='raise_on_sql` or `raiseload()`
+  - 이러한 형태의 로딩은 일반적으로 lazy load가 발생하는 동시에 트리거된다.
+  - 애플리케이션이 원치 않는 lazy load를 만드는 것을 방지하기 위해 ORM 예외를 발생시키는 것을 제외한다.
+- no loading
+  - `lazy='noload'` or `noload()`
+  - 이 로딩 스타일은 속성을 로드하지 않거나 로딩 효과가 없는 빈 속성(`None` 또는 `[]`)으로 바꾼다.
+  - 거의 사용되지 않는 이 전략은 빈 속성이나 컬렉션이 배치된 상태에서 객체가 로드될 때 Eager Loader처럼 작동한다.
+  - 그러나 만료된 객체의 경우 액세스 시 반환되는 속성의 기본값에 의존한다.
+  - `noload`는 "write-only" 속성을 구현하는 데 유용할 수 있지만 이 사용법은 현재 테스트되거나 공식적으로 지원되지 않는다.
+
 
 ## Session Basics
 - [공식 문서](https://docs.sqlalchemy.org/en/14/orm/session_basics.html) 내용 기록
