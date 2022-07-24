@@ -117,6 +117,15 @@
       user = relationship(User, lazy="joined", innerjoin=True)
     ```
 
+### Joined eager loading and result set batching
+- 컬렉션에 적용할 때 결합된 즉시 로드의 중심 개념은 `Query` 객체가 쿼리되는 선행 엔터티에 대해 행 중복을 제거해야 한다는 것이다.
+- 위와 같이 로드한 `User` 객체가 3개의 `Address` 객체를 참조한다면 SQL 문의 결과는 3개의 행을 가지게 된다. 하지만 `Query`는 하나의 `User` 객체만 반환한다.
+- 이전 행에 방금 로드된 `User` 객체에 대한 추가 행이 수신되면, 새 `Address` 객체를 참조하는 추가 열이 해당 특정 객체의 `User.addresses` 컬렉션 내의 추가 결과로 전달된다.
+- 이 프로세스는 매우 투명하지만 joined eager loading이 컬렉션 로드에 사용될 때, `Query.yield_per()` 메서드에서 제공하는 "일괄 처리된" 쿼리 결과와 호환되지 않음을 의미한다.
+- 그러나 스칼라 참조에 사용되는 joined eager loading는 `Query.yield_per()`와 호환된다.
+- `Query.yield_per()` 메서드는 컬렉션 기반 joined eager loader가 실행 중인 경우 예외가 발생한다.
+- 컬렉션 기반 joined eager loading과의 ​​호환성을 유지하면서 임의의 큰 결과 데이터 세트로 쿼리를 "일괄 처리"하려면, 각각 `WHERE` 절을 사용하여 행의 하위 집합을 참조하는 여러 SELECT 문을 내보내라.
+- 또는 `Query.yield_per()`와 잠재적으로 호환되는 "select IN" eager loading 사용을 고려해라.
 
 #### Preventing unwanted lazy loads using raiseload
 - `lazyload()` 전략은 ORM에서 언급되는 가장 일반적인 문제 중 하나인 효과를 생성한다.
