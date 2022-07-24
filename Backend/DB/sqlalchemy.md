@@ -142,6 +142,16 @@
 - 컬렉션 기반 joined eager loading과의 ​​호환성을 유지하면서 임의의 큰 결과 데이터 세트로 쿼리를 "일괄 처리"하려면, 각각 `WHERE` 절을 사용하여 행의 하위 집합을 참조하는 여러 SELECT 문을 내보내라.
 - 또는 `Query.yield_per()`와 잠재적으로 호환되는 "select IN" eager loading 사용을 고려해라.
 
+### The Zen of Joined Eager Loading
+- joined eager loading은 `Query.join()`의 사용과 많은 유사점을 가지고 있기 때문에, 언제, 어떻게 사용해야 하는지 혼동을 일으키는 경우가 많다.
+- `Query.join()`은 쿼리 결과를 변경하는 데 사용되지만, `joinedload()`는 쿼리 결과를 변경하지 않고 대신 렌더링된 조인의 효과를 숨기기 위해 많은 시간을 거쳐야 한다는 차이점을 이해하는 것이 중요하다.
+- 로더 전략의 기본 철학은 특정 쿼리에 모든 loading schemes를 적용할 수 있으며 결과는 변경되지 않는다는 것이다. 관련 객체와 컬렉션을 완전히 로드하는데 필요한 SQL 문의 수만 변경된다.
+- 쿼리에 대한 다른 수정 없이 전략을 변경할 수 있으며 결과는 동일하게 유지되지만 더 적은 수의 SQL 문을 내보낸다.
+- 특히 `joinedload()`가 어떤 식으로든 반환된 엔터티 행에 영향을 주지 않고 이러한 결과를 얻는 방법은 쿼리에 추가하는 조인의 익명 alias를 생성한다는 것이다.
+- 그래서 `joinedload()`로 지정한 테이블은 다른 쿼리에서 접근할 수 없다.
+- `Query.join()`을 사용하는 것은 뒤이은 쿼리 기준에 사용하려는 JOIN 절을 제공하는 것이지만, `joinedload()`는 컬렉션의 로드에만 관련이 있다.
+- joined eager loading을 사용할 때, 쿼리에 DISTINCT, LIMIT, OFFSET 또는 이와 동등한 것을 사용할 때와 같이 조인에 대해 외부적으로 반환된 행에 영향을 주는 수정자가 포함되어 있으면 완료된 명령문이 먼저 서브 쿼리 내부에 래핑되고 조인이 특별히 사용된다. joined eager loading이 서브 쿼리에 적용된다.
+
 ## Session Basics
 - [공식 문서](https://docs.sqlalchemy.org/en/14/orm/session_basics.html) 내용 기록
 
