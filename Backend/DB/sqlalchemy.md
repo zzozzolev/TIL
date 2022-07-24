@@ -101,6 +101,23 @@
 - SQL이 내보내지지 않는 한 가지 경우는 관련 객체가 기본 키로 식별될 수 있고 해당 객체가 이미 현재 세션에 있는 단순한 다대일 관계의 경우이다.
 - 이러한 이유로 지연 로딩은 관련 컬렉션에 대해 비용이 많이 들 수 있지만, 상대적으로 작은 가능한 대상 객체 집합에 대해 간단한 다대일을 사용하여 많은 개체를 로드하는 경우,지연 로딩은 이러한 컬렉션을 참조할 수 있다. 상위 객체 수만큼 SELECT 문을 내보내지 않고 객체를 로컬로 가져온다.
 
+### Joined Eager Loading
+- ORM에서 가장 기본적인 Eager loading 스타입이다.
+- JOIN(기본적으로 LEFT OUTER 조인)을 쿼리에서 내보낸 SELECT 문에 연결해 작동한다. 부모의 것과 동일한 결과 집합에서 대상 스칼라/컬렉션을 채운다.
+- Joined Eager loading은 일반적으로 매핑의 기본 로딩 옵션이 아니라 쿼리에 대한 옵션으로 적용된다. 특히 many-to-one 참조가 아닌 컬렉션에 사용되는 경우에 적용된다.
+- `joinedload()` 로더 옵션을 사용해서 달성된다.
+- 기본적으로 내보낸 JOIN은 관련 행을 참조하지 않는 리드 객체를 허용하기 위해 LEFT OUTER JOIN이다.
+- 참조하는 foreign key가 NULL이 아닌 관련 객체에 대한 many-to-one 참조와 같이 엘리먼트가 있다고 보장되는 속성의 경우, inner join을 사용해 쿼리를 보다 효율적으로 만들 수 있다.
+- 매핑 레벨에서 아래와 같은 플래그로 가능하다.
+    ```python
+    class Address(Base):
+      # ...
+
+      user_id = Column(ForeignKey('users.id'), nullable=False)
+      user = relationship(User, lazy="joined", innerjoin=True)
+    ```
+
+
 #### Preventing unwanted lazy loads using raiseload
 - `lazyload()` 전략은 ORM에서 언급되는 가장 일반적인 문제 중 하나인 효과를 생성한다.
 - `N+1` 문제, 로드된 N 객체에 대해 지연 로드 속성에 액세스하면 N+1 SELECT 문이 방출됨을 의미한다.
