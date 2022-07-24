@@ -101,6 +101,21 @@
 - SQL이 내보내지지 않는 한 가지 경우는 관련 객체가 기본 키로 식별될 수 있고 해당 객체가 이미 현재 세션에 있는 단순한 다대일 관계의 경우이다.
 - 이러한 이유로 지연 로딩은 관련 컬렉션에 대해 비용이 많이 들 수 있지만, 상대적으로 작은 가능한 대상 객체 집합에 대해 간단한 다대일을 사용하여 많은 개체를 로드하는 경우,지연 로딩은 이러한 컬렉션을 참조할 수 있다. 상위 객체 수만큼 SELECT 문을 내보내지 않고 객체를 로컬로 가져온다.
 
+#### Preventing unwanted lazy loads using raiseload
+- `lazyload()` 전략은 ORM에서 언급되는 가장 일반적인 문제 중 하나인 효과를 생성한다.
+- `N+1` 문제, 로드된 N 객체에 대해 지연 로드 속성에 액세스하면 N+1 SELECT 문이 방출됨을 의미한다.
+- SQLAlchemy에서 N+1 문제에 대한 일반적인 완화는 매우 유능한 Eager 로드 시스템을 사용하는 것이다.
+- 그러나 eager loading은 로드할 속성이 쿼리와 함께 미리 지정되어야 한다.
+- lazy loading이 바람직하지 않은, 빠르게 로드되지 않은 다른 속성에 액세스할 수 있는 코드 문제는 `raiseload()` 전략을 사용하여 해결할 수 있다.
+- 이 로더 전략은 lazy loading 동작을 레이즈되는 informative error로 대체한다.
+- 아래 쿼리에서 로드된 `User` 객체에는 `.addresses` 컬렉션이 로드되지 않는다. 나중에 일부 코드가 이 속성에 액세스하려고 하면 ORM 예외가 발생한다.
+  ```sql
+  from sqlalchemy.orm import raiseload
+  session.query(User).options(raiseload(User.addresses))
+  ```
+- 단, 1.4.0 부터는 UOW 플러시 과정내에서는 발생하지 않는다. 즉, UOW가 작업을 완료하기 위해 특정 속성을 로드해야 하는 경우 로드를 수행함을 의미한다.
+- `lazy="raise"` 케이스는 애플리케이션 공간 내에서 명시적 속성 액세스를 위한 것이다.
+
 ### Joined Eager Loading
 - ORM에서 가장 기본적인 Eager loading 스타입이다.
 - JOIN(기본적으로 LEFT OUTER 조인)을 쿼리에서 내보낸 SELECT 문에 연결해 작동한다. 부모의 것과 동일한 결과 집합에서 대상 스칼라/컬렉션을 채운다.
@@ -126,21 +141,6 @@
 - `Query.yield_per()` 메서드는 컬렉션 기반 joined eager loader가 실행 중인 경우 예외가 발생한다.
 - 컬렉션 기반 joined eager loading과의 ​​호환성을 유지하면서 임의의 큰 결과 데이터 세트로 쿼리를 "일괄 처리"하려면, 각각 `WHERE` 절을 사용하여 행의 하위 집합을 참조하는 여러 SELECT 문을 내보내라.
 - 또는 `Query.yield_per()`와 잠재적으로 호환되는 "select IN" eager loading 사용을 고려해라.
-
-#### Preventing unwanted lazy loads using raiseload
-- `lazyload()` 전략은 ORM에서 언급되는 가장 일반적인 문제 중 하나인 효과를 생성한다.
-- `N+1` 문제, 로드된 N 객체에 대해 지연 로드 속성에 액세스하면 N+1 SELECT 문이 방출됨을 의미한다.
-- SQLAlchemy에서 N+1 문제에 대한 일반적인 완화는 매우 유능한 Eager 로드 시스템을 사용하는 것이다.
-- 그러나 eager loading은 로드할 속성이 쿼리와 함께 미리 지정되어야 한다.
-- lazy loading이 바람직하지 않은, 빠르게 로드되지 않은 다른 속성에 액세스할 수 있는 코드 문제는 `raiseload()` 전략을 사용하여 해결할 수 있다.
-- 이 로더 전략은 lazy loading 동작을 레이즈되는 informative error로 대체한다.
-- 아래 쿼리에서 로드된 `User` 객체에는 `.addresses` 컬렉션이 로드되지 않는다. 나중에 일부 코드가 이 속성에 액세스하려고 하면 ORM 예외가 발생한다.
-  ```sql
-  from sqlalchemy.orm import raiseload
-  session.query(User).options(raiseload(User.addresses))
-  ```
-- 단, 1.4.0 부터는 UOW 플러시 과정내에서는 발생하지 않는다. 즉, UOW가 작업을 완료하기 위해 특정 속성을 로드해야 하는 경우 로드를 수행함을 의미한다.
-- `lazy="raise"` 케이스는 애플리케이션 공간 내에서 명시적 속성 액세스를 위한 것이다.
 
 ## Session Basics
 - [공식 문서](https://docs.sqlalchemy.org/en/14/orm/session_basics.html) 내용 기록
