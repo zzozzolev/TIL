@@ -19,3 +19,10 @@
 - 토픽을 여러 토픽으로 쪼개서 카프카 클러스터 내의 별도의 노드에 저장할 수 있다.
 - 메세지에 키가 없다면 라운드 로빈으로 파티션에 할당한다. 키가 있다면 해당 키를 이용해 어떤 파티션에 넣을지 결정한다.
 - 같은 키를 가지는 메세지는 항상 같은 파티션에 있다. 따라서 항상 정렬된 순서로 들어간다.
+
+## Day 5: Brokers
+- computer, instance, or container running the Kafka process.
+- manage partitions.
+- handle write and read requests.
+- manage replication of partitions.
+- intentionally very simple.
