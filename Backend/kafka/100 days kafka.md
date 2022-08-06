@@ -21,8 +21,16 @@
 - 같은 키를 가지는 메세지는 항상 같은 파티션에 있다. 따라서 항상 정렬된 순서로 들어간다.
 
 ## Day 5: Brokers
-- computer, instance, or container running the Kafka process.
-- manage partitions.
-- handle write and read requests.
-- manage replication of partitions.
-- intentionally very simple.
+- Computer, instance, or container running the Kafka process.
+- Manage partitions.
+- Handle write and read requests.
+- Manage replication of partitions.
+- Intentionally very simple.
+
+## Day 6: Producers
+- Client application.
+- Puts messages into topics.
+- Connection pooling.
+- Network buffering.
+- Partitioning.
+  - 메세지를 어떤 파티션에 보낼지 결정한다.
