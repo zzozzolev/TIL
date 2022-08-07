@@ -49,3 +49,20 @@
 - 이 과정은 기본적으로 일어난다. API 레벨에서 해줄 건 없다.
 - 파티션 개수보다 더 많은 인스턴스가 추가되면 해당 인스턴스는 idle한 상태가 된다 왜냐하면 어떤 파티션도 할당되지 않기 때문이다.
 - horizontal scale과 strongest ordering guarantee를 보장할 수 있다.
+
+## Day 8: Kafka Connect
+### Kafka Connect
+- Data integration system and ecosystem.
+- Because some other systems are not kafka.
+- External client process; does not run on Brokers.
+- Horizontally scalable.
+- Fault tolerant.
+- Declarative.
+  - 카프카 커넥트를 통해 유저가 직접 코드를 작성하지 않고 config 파일만 작성하면 된다.
+
+### Connectors
+- Pluggable software component.
+- Interfaces to external system and to Kafka.
+- Also exist as runtime entities.
+- Source connectors act as Producers.
+- Sink connectors act as Consumers.
