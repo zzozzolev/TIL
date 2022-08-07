@@ -34,3 +34,18 @@
 - Network buffering.
 - Partitioning.
   - 메세지를 어떤 파티션에 보낼지 결정한다.
+
+## Day 7: Consumers
+- Client application.
+- Reads messages from topics.
+- Connection pooling.
+- Network protocol.
+- Horizontally and elastically scalable.
+- Maintains ordering within partitions at scale.
+- 서로 다른 컨수머 그룹이 하나의 토픽을 읽을 수 있다.
+- 파티션 내에서의 순서는 보장하지만, 파티션 간의 순서는 보장하지 않는다.
+- 같은 컨수머 그룹 내의 여러 컨수머 인스턴스는 서로 다른 파티션을 읽도록 만든다. (rebalancing process)
+- rebalancing process는 컨수머 그룹 인스턴스를 추가하거나 제거할 때마다 반복한다.
+- 이 과정은 기본적으로 일어난다. API 레벨에서 해줄 건 없다.
+- 파티션 개수보다 더 많은 인스턴스가 추가되면 해당 인스턴스는 idle한 상태가 된다 왜냐하면 어떤 파티션도 할당되지 않기 때문이다.
+- horizontal scale과 strongest ordering guarantee를 보장할 수 있다.
