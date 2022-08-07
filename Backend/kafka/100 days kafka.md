@@ -66,3 +66,14 @@
 - Also exist as runtime entities.
 - Source connectors act as Producers.
 - Sink connectors act as Consumers.
+
+## Day 9: Kafka Streams
+- Functional JAVA API.
+- Filtering, grouping, aggregating, joining, and more.
+- Scalable, fault-tolerant state management.
+- Scalable computation based on Consumer Groups.
+  - kafka streams 어플리케이션은 컨수머 그룹이다.
+- Integrates within your services as a library.
+  - infra가 아님.
+- Runs in the context of your application.
+- Does not require special infrastructure.
