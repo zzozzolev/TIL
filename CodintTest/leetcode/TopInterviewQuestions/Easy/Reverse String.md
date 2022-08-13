@@ -1,3 +1,42 @@
+## java
+### 소모 시간
+- 15분 57초
+
+### 통과 여부
+- 100%
+
+### my solution
+```java
+class Solution {
+    public void reverseString(char[] s) {
+        int half = s.length / 2;
+        for(int i = 0; i < half; i++) {
+            char tmp = s[s.length - 1 - i];
+            s[s.length - 1 - i] = s[i];
+            s[i] = tmp;
+        }
+    }
+}
+```
+
+### other solution
+```java
+class Solution {
+    public void reverseString(char[] s) {
+        int i = 0;
+        int j = s.length - 1;
+        
+        while(i <= j){
+            char temp = s[i];
+            s[i] = s[j];
+            s[j] = temp;
+            i++;
+            j--;
+        }
+    }
+}
+```
+
 ### 소모 시간
 - 9분 57초
 
