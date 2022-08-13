@@ -77,3 +77,9 @@
   - infra가 아님.
 - Runs in the context of your application.
 - Does not require special infrastructure.
+
+## Day 10: ksqlDB
+- A database optimized for stream processing.
+- Runs on its own scalable, fault-tolerant cluster adjacent to the Kafka cluster.
+- Stream processing programs written in SQL.
+- 단, RDB를 대체하는 용도로 사용하면 안 된다.
