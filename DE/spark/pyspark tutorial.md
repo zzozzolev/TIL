@@ -52,3 +52,15 @@
   print(df.schema.fieldNames.contains("firstname"))
   print(df.schema.contains(StructField("firstname",StringType,true)))
   ```
+
+## PySpark UDF (User Defined Function)
+### Special Handling
+#### Execution order
+- spark에서는 subexpression의 평가 순서를 보장하지 않는다. 즉, 왼쪽에 적은게 먼저 실행된다고 보장하지 않는다.
+
+#### Handling null check
+- `None`일 수 있는 컬럼은 UDF에서 확실하게 `None` 처리를 해줘야한다.
+
+#### Performance concern using UDF
+- UDF는 spark에게 블랙 박스이다. 그래서 최적화를 할 수 없다.
+- 가능하다면 spark sql 빌트인 함수를 써야한다.
