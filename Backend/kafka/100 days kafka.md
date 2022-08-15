@@ -98,4 +98,53 @@
 - JSON Schema
 - Avro
 - Protocol Buffers
-  
+
+## Day 27 Why Avro?
+- we have found Apache Avro to be one of the better choices for stream data.
+
+### Why Use Avro with Kafka?
+- Confluent Platform works with any data format you prefer, but we added some special facilities for Avro because of its popularity.
+- 예시
+  ```json
+  {
+    "time": 1424849130111,
+    "customer_id": 1234,
+    "product_id": 5678,
+    "quantity":3,
+    "payment_type": "mastercard"
+  }
+
+  {
+    "type": "record",
+    "doc":"This event records the sale of a product",
+    "name": "ProductSaleEvent",
+    "fields" : [
+      {"name":"time", "type":"long", "doc":"The time of the purchase"},
+      {"name":"customer_id", "type":"long", "doc":"The customer"},
+      {"name":"product_id", "type":"long", "doc":"The product"},
+      {"name":"quantity", "type":"int"},
+      {"name":"payment",
+       "type":{"type":"enum",
+  	     "name":"payment_types",
+               "symbols":["cash","mastercard","visa"]},
+       "doc":"The method of payment"}
+    ]
+  }
+  ```
+- The schemas protect downstream data consumers from malformed data, as only valid data will be permitted in the topic.
+
+### The Need For Schemas
+- Schemas—when done right—can be a huge boon, keep your data clean, and make everyone more agile.
+- Robustness: One of the primary advantages of this type of architecture where data is modeled as streams is that applications are decoupled.
+- Clarity and Semantics: Keeping an up-to-date doc string for each field means there is always a canonical definition of what that value means.
+- Compatibility: Schemas make it possible for systems with flexible data format like Hadoop or Cassandra to track upstream data changes and simply propagate these changes into their own storage without expensive reprocessing.
+- Schemas are a Conversation: Unlike an application’s database, the writer of the data is, almost by definition, not the reader.
+- Schemas Eliminate The Manual Labor of Data Science: they do give a tool by which you can enforce a standard like this.
+
+### Back to Avro
+- It has a pure JSON representation for readability but also a binary representation for efficient storage.
+- Effective Avro
+  - Use enumerated values whenever possible instead of magic strings.
+  - Require documentation for all fields.
+  - Avoid non-trivial union types and recursive types.
+  - Enforce reasonable schema and field naming conventions.
