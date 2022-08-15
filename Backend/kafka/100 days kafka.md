@@ -83,3 +83,19 @@
 - Runs on its own scalable, fault-tolerant cluster adjacent to the Kafka cluster.
 - Stream processing programs written in SQL.
 - 단, RDB를 대체하는 용도로 사용하면 안 된다.
+
+## Day 26 Schema Registry
+- Server process external to Kafka brokers.
+- Maintains a database of schemas.
+- HA deployment option available.
+- Consumer/Producer API component.
+- Defined schema compatibility rules per topic.
+- Producer API prevents incompatible messages from being produced.
+- Consumer API prevents incompatible messages from being comsumed.
+- 소규모 시스템이 아니면 schema registry는 필수이다.
+
+### Supported Formats
+- JSON Schema
+- Avro
+- Protocol Buffers
+  
