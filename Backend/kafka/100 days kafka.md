@@ -148,3 +148,29 @@
   - Require documentation for all fields.
   - Avoid non-trivial union types and recursive types.
   - Enforce reasonable schema and field naming conventions.
+
+## Day 34 Schema Compatibility Evolution
+### Schema Evolution
+- After the initial schema is defined, applications may need to evolve it over time.
+- Without thinking through data management and schema evolution carefully, people often pay a much higher cost later on.
+- When using Avro or other schema formats, one of the most important things is to manage the schemas and consider how these schemas should evolve.
+- Schema compatibility checking is implemented in Schema Registry by versioning every single schema.
+
+### Backward Compatibility
+- `BACKWARD` compatibility means that consumers using the new schema can read data produced with the last schema.
+
+### Forward Compatibility
+- `FORWARD` compatibility means that data produced with a new schema can be read by consumers using the last schema, even though they may not be able to use the full capabilities of the new schema.
+
+### Full Compatibility
+- `FULL` compatibility means schemas are both backward and forward compatible. Schemas evolve in a fully compatible way.
+
+### No Compatibility Checking
+- `NONE` compatibility type means schema compatibility checks are disabled.
+- Sometimes we make incompatible changes. For example, modifying a field type from `Number` to `String`.
+
+### Transitive Property
+- If compatibility is configured as transitive, then it checks compatibility of a new schema against all previously registered schemas; otherwise, it checks compatibility of a new schema only against the latest schema.
+
+### Order of Upgrading Clients
+- 이거 할 차례
