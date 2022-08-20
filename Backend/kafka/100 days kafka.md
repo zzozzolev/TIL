@@ -173,4 +173,6 @@
 - If compatibility is configured as transitive, then it checks compatibility of a new schema against all previously registered schemas; otherwise, it checks compatibility of a new schema only against the latest schema.
 
 ### Order of Upgrading Clients
-- 이거 할 차례
+- `BACKWARD` or` BACKWARD_TRANSITIVE`: Upgrade all consumers before you start producing new events.
+- `FORWARD` or `FORWARD_TRANSITIVE`: First upgrade all producers to using the new schema and make sure the data already produced using the older schemas are not available to consumers, then upgrade the consumers.
+- `FULL` or `FULL_TRANSITIVE`: You can upgrade the producers and consumers independently.
