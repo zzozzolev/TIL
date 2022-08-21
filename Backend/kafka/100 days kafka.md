@@ -176,3 +176,9 @@
 - `BACKWARD` or` BACKWARD_TRANSITIVE`: Upgrade all consumers before you start producing new events.
 - `FORWARD` or `FORWARD_TRANSITIVE`: First upgrade all producers to using the new schema and make sure the data already produced using the older schemas are not available to consumers, then upgrade the consumers.
 - `FULL` or `FULL_TRANSITIVE`: You can upgrade the producers and consumers independently.
+
+## Day 37 Basic Operations
+### Event Streams
+- 같은 키를 가져도 서로 다른 이벤트이다.
+- Mapping으로 각각의 이벤트에 함수를 적용할 수 있다. map 보다는 mapvalues가 더 좋다.
+- Filtering으로 원하는 값만 아웃풋으로 받을 수 있다.
