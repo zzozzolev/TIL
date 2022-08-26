@@ -189,3 +189,7 @@
 - 최신 상태를 저장한다.
 - KTable에서는 어떤 이벤트가 들어왔는지 보다는, 키의 최신 상태가 무엇인지를 신경쓴다.
 - global KTable은 일반 KTable과는 달리 모든 파티션에 걸친 레코드들을 가지고 있는다.
+
+## Day 39 Serialization
+- Serdes: Serializer/Deserializer
+- 미리 존재하는 serdes가 있다.
