@@ -193,3 +193,16 @@
 ## Day 39 Serialization
 - Serdes: Serializer/Deserializer
 - 미리 존재하는 serdes가 있다.
+
+## Day 40 Joins
+- Kafka Streams offers join operations.
+- Stream-Stream joins.
+  - Combine two event streams into a new event stream.
+  - Join of events based on a common key.
+  - Records arrive within a defined window of time.
+  - Possible to compute a new value type.
+  - Keys are available in read-only mode can be used in computing the new value.
+- Stream-Table joins.
+  - KStream-KTable.
+  - KStream-GlobalKTable.
+- Table-Table joins.
