@@ -23,12 +23,17 @@
 - 별도의 컬럼을 이용해 제한된 히스토리를 트랙킹함.
 - 제한된 히스토리는 히스토리를 기록할 컬럼 개수만큼만 기록됨.
 
-### Type 4: Add history table
-- 보통 history table이라고 불림.
+### Type 4: Add Mini-Dimension.
+```
+위키피디아에는 history table이라고 나오지만 kimball group 글을 보면 아님.
+```
+- 자주 변화하는 컬럼들만 별도의 디멘전 테이블로 분리해서 관리함. (mini-dimension)
 - 하나의 테이블은 최신 데이터를 유지하고 추가적인 테이블은 레코드의 변경을 유지함.
 
-### Type 5: 4 + 1
-- 잘 이해못함; 예시가 없음 ㅠㅠ
+### Type 5: Add Mini-Dimension and Type 1 Outrigger
+- currnet mini-dimension을 base dimension 테이블에서 레퍼런스함.
+- view로 base dimension과 current mini-dimension을 합쳐서 보여줌.
+- ETL 팀은 current mini-dimension이 바뀔 때마다 업데이트/오버라이트 해줘야됨.
 
 ### Type 6: Combined approach
 - type (1 + 2 + 3)을 섞은 방법.
@@ -37,10 +42,12 @@
 - 특정 컬럼에 이전 컬럼 값을 저장함. (type 3)
 
 ### Type 7: Hybrid
-- 이것도 잘 모르겠음;
+- 이전의 방법들은 surrogate key만 팩트 테이블에 넣었음.
+- 하지만 Type 7은 surrogate key와 natural key 모두를 팩트 테이블에 넣는 방법임.
 
 ### reference
 - https://en.wikipedia.org/wiki/Slowly_changing_dimension
+- https://www.kimballgroup.com/2013/02/design-tip-152-slowly-changing-dimension-types-0-4-5-6-7/
 
 ## Fact vs Dimension Tables
 ### Star schema
