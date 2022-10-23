@@ -41,3 +41,33 @@
 
 ### reference
 - https://en.wikipedia.org/wiki/Slowly_changing_dimension
+
+## Fact vs Dimension Tables
+### Star schema
+- 하나의 팩트 테이블과 여러 개의 디멘전 테이블들로 구성됨.
+- 팩트 테이블이 모델 다이어그램의 중앙에 있고 디멘전 테이블이 둘러싸고 있어 star schema라고 이름 붙여짐.
+
+### Fact and Dimension Tables
+- Fact Table
+  - 레퍼런스되는 디멘전 테이블들의 pk들을 갖고 있음.
+  - 정량적 매트릭스를 가지고 있음.
+  - 흔한 예시가 주문, 로그 이런 종류의 데이터임.
+- Dimension Table
+  - 팩트 테이블의 레코드들에 포함되는 모든 관련 필드들에 대한 설명 정보를 담고 있음.
+  - 흔한 예시가 고객정보, 상품 정보임.
+- 디멘전 테이블에서 팩트를 구분하는 방법은 명사로 표현되는지 동사로 표현되는지 생각해보는 것임. 즉, 이벤트이냐 이벤트가 아니냐임.
+- 명사로 표현되는 것은 이벤트 없이도 존재할 수 있음. 예를 들면 고객, 상품은 특정 이벤트 없이도 존재할 수 있음.
+- 동사로 표현되는, 즉 이벤트는 이벤트가 있어야만 존재할 수 있음. 예를 들면, 주문은 주문이 일어나야지만 존재할 수 있음.
+
+### Benefits of Star Schema
+- 모델의 비정규화적인 특성 때문에 start schema는 퍼포먼스 측면에서 더 빠름.
+- 팩트 테이블은 하나의 레벨의 디멘전 테이블과 조인되기 때문임.
+
+### When (not) to use Star Schema
+- 비정규화때문에 테이블에서 값이 반복됨.
+- 그래서 저장 비용이 더 많이 듦.
+- 또한 데이터 중복 때문에 data integrity가 더 위험함.
+- 데이터가 변경될 때마다 integrity에 영향을 줌.
+
+### refrence
+- https://towardsdatascience.com/star-schema-924b995a9bdf
