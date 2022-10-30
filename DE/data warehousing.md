@@ -78,3 +78,66 @@
 
 ### refrence
 - https://towardsdatascience.com/star-schema-924b995a9bdf
+
+## Clarifying Data Warehouse Design with Historical Dimensions
+### Introduction
+- SCD Type 1은 간단한 오버라이트이고 SCD Type 3(컬럼에 오래된 값 기록)는 다소 특별한 목적을 가지고 제한돼있다.
+- 따라서 디멘전 히스토리의 핵심은 SCD Type 2이다.
+- 보통 Type 2 히스토리를 포함하는 디멘전들은 effective date와 expiration date가 있다. 그리고 current indicator가 있다. 그리고 이것들은 Type 2 SCD 로우들이 삽입될 때 관리돼야한다.
+
+### Limitations of Type 2 SCD
+- SCD Type 1에서 SCD Type 2로 가는 게 겉보기에는 변화가 크게 없는 것 같지만 그렇지 않다.
+- 근본적으로 해당 디멘전이 무엇을 담고 있는지를 변화시키는 것이다.
+- **팩트 테이블의 로우와 마찬가지로 디멘전 테이블의 로우도 비지니스 관점에서 무엇을 나타내는지 정확하게 알아야한다.**
+- 예를 들어 고객 정보를 나타내는 디멘전 테이블이 있다고 해보자.
+  - SCD Type 1에서는 각 로우가 고객의 최신 정보를 나타낸다. SCD Type 2는 특정 시점의 고객 정보를 나타낸다.
+  - 그래서 비지니스 유저는 디멘전을 이해하기 전에 히스토리 테크닉을 완전히 이해해야만한다.
+  - 얼마나 많은 고유한 유저수가 있는지 알기 위해 SCD Type 1은 단순한 `COUNT(*)`로 충분하지만, SCD Type2는 `DISTINCT` 또는 `WHERE current_indicator`를 사용해야한다.
+- SCD Type 2는 동시에 현재 뷰와 히스토리컬 뷰를 나타내려고 하기 때문에 복잡성을 도입한다.
+- **과거의 팩트와 현재의 디멘전을 이용하려고 할 때도 어려운 점이 있다. 과거의 팩트는 과거의 디멘전을 가리킬 수 있다.**
+  - 예를 들어, 지난 쿼터에 특정 상품들을 구입한 모든 고객들에게 이메일을 보내려고 할 때
+- 또 다른 문제는 스냅샷 팩트 테이블이 누적되면서 발생한다. 이런 종류의 팩트 테이블은 시간이 지남에 따라 달라지는 디멘전 엔티티의 통계를 추적한다.
+- **SCD Type2를 사용하면 몇몇 디멘전 키가 같은 디멘전 엔티티를 가리켜 최신 디멘전 키만 가리키게 보장해야한다.**
+
+### Historical Dimensions Add Clarity
+- 간단하게 히스토리로부터 분리된 current 밸류의 카피를 유지하면 된다.
+- 다음과 같이 정의를 따르면 된다.
+
+| Table Type | Content | Table Prefix | Surrogate Key Suffix | History Type | SCD Type | Column Prefix |
+| ---------- | ------- | ------------ | -------------------- | ------------ | -------- | ------------- |
+| Dimension  | Current | Dim          | Key                  | Overwrite    | 1        |               |
+| Historical Dimension | Past + Current | HDim | HKey | Insert | 2 | Hist_ |
+
+- 히스토리컬 디멘전은 디멘전 테이블에 있는 모든 컬럼을 포함한다. 여기에 자신의 surrogate pk, effective date, expiration date, current indicator륻 더하면 된다.
+- 테이블을 분리하면 동일한 테이블에서 현재와 히스토리 값을 가져와 디멘전에 대한 비지니스 유저의 이해를 흐리는 것을 방지할 수 있다.
+
+### Historical Dimensions Add Flexibility
+- 팩트 테이블들은 관련된 디멘전들의 Key와 HKey를 모두 포함할 수 있다.
+- 유저가 'as was then' 값을 보고 싶다면 HDim과 조인하면 되고, 'as is now' 값을 보고 싶다면 Dim과 조인하면 된다.
+
+### Historical Dimensions Ease the ETL Burden
+- current dimension과 historical dimension을 분리하는 건 ETL 과정을 간단하게 만든다.
+- 먼저 디멘전 로드 과정에의해 변경된 모든 로우들을 식별할 방법이 있어야한다.
+- Kimball은 Audit Key를 권장한다. 만약 적절한 키가 없다면 날짜 변경 타임스탬프를 사용할 수 있다.
+- 두번째는 각각의 디멘전 컬럼에 대해서 어떤 종류의 업데이트가 돼야하는지 메타데이터를 정의해라.
+
+### Add Historical Dimensions at Your Own Pace
+- 이미 존재하는 디멘전에 Type 2 히스토리를 더하는 건 브레이킹 체인지이다.
+- 하지만, 히스토리컬 디멘전을 더하는 건 그렇지 않다. 기존 쿼리를 수정하지 않아도 된다.
+
+### Historical Dimensions Compared to Kimball SCD 7 and Wikipedia SCD 4
+- Kimball SCD 7에서 Type 1과 Type 2 디멘전을 섞으라고 했다.
+- 하지만 두 디멘전을 분리하지 않은 결정적 결함을 가지고 있다.
+- 일반적으로 중복되는 current 디멘전을 피하기 위해 뷰를 사용하는 건 권장하지 않는다.
+- 자동화된 히스토리컬 디멘전 로딩이 있어서 더 이상 중복에 대해 고려하지 않아도 된다.
+- 위키피디아에서는 히스토리 테이블을 SCD Type 4라고 했다. 하지만 구현상 부족한 부분이 있다.
+- 주어진 예시에서 히스토리 테이블에 새로 추가된 로우의 surrogate 키는 current 디멘전의 키를 업데이트하는데 사용된다.
+- 이건 current 디멘전에서 안정적인 키를 사용하지 못하도록 한다.
+- current과 history 사이의 명백한 분리를 잃게한다.
+
+### Put Historical Dimensions to Work
+- star 스키마 디자인이 효과적이다. 명백하고 쿼리하기가 쉽기 때문이다.
+
+### reference
+- https://www.red-gate.com/simple-talk/databases/sql-server/bi-sql-server/clarifying-data-warehouse-design-with-historical-dimensions/
+
