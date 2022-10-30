@@ -16,3 +16,12 @@
 
 ### reference
 - https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/business-process/
+
+## Grain
+- grain은 하나의 팩트 테이블 로우가 무엇을 나타내는지를 확립한다.
+- grain은 모든 후보 디멘전과 팩트가 grain과 일관성이 있어야하기 때문에 디멘전과 팩트를 고르기 전에 선언돼야한다.
+- atomic grain은 비지니스 프로세스에의해 캡처되는 데이터의 가장 낮은 수준이다.
+- 유저 쿼리가 어떻게 될지 모르기 때문에 atomic grain부터 시작하는 게 좋다.
+
+### reference
+- https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/grain/
