@@ -148,3 +148,6 @@
 
 ### reference
 - https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/audit-dimension/
+
+## Star Schema vs Snowflake Schema
+- https://www.keboola.com/blog/star-schema-vs-snowflake-schema
