@@ -141,3 +141,10 @@
 ### reference
 - https://www.red-gate.com/simple-talk/databases/sql-server/bi-sql-server/clarifying-data-warehouse-design-with-historical-dimensions/
 
+## Audit Dimensions
+- ETL 처리 당시 아는 메타데이터를 포함하는 디멘전.
+- environment variables: ETL master version, 실행 타임스탬프 등등
+- data quality indicators: missing data 등등
+
+### reference
+- https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/audit-dimension/
