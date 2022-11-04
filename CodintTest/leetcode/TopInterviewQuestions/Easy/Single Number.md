@@ -24,3 +24,25 @@ class Solution:
         no_dup_sum = dup_sum - unique_sum
         return unique_sum - no_dup_sum
 ```
+
+### my solution (java)
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        Map<Integer, Integer> counter = new HashMap<>();
+        
+        for (int i = 0; i < nums.length; i++) {
+            if (!counter.containsKey(nums[i]))
+                counter.put(nums[i], 1);
+            else
+                counter.put(nums[i], counter.get(nums[i]) + 1);
+        }
+
+        for (Integer num: counter.keySet() ) {
+            if (counter.get(num).equals(1))
+                return num;
+        }
+        return 0;
+    }
+}
+```
