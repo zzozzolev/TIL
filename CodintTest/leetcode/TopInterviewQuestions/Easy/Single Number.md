@@ -25,7 +25,7 @@ class Solution:
         return unique_sum - no_dup_sum
 ```
 
-### my solution (java)
+### my solution (java1)
 ```java
 class Solution {
     public int singleNumber(int[] nums) {
@@ -43,6 +43,19 @@ class Solution {
                 return num;
         }
         return 0;
+    }
+}
+```
+
+### my solution (java2)
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        Integer uniqueSum = Arrays.stream(nums).boxed().collect(Collectors.toSet()).stream().reduce(0, Integer::sum);
+        Integer dupSum = Arrays.stream(nums).boxed().reduce(0, Integer::sum);
+        Integer noDupSum = dupSum - uniqueSum;
+
+        return uniqueSum - noDupSum;
     }
 }
 ```
