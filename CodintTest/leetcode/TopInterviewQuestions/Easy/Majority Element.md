@@ -9,7 +9,7 @@
 - `nums`를 반복문으로 한 번 돌면서 엘리먼트 개수를 카운트하고 최대 카운트를 얻는다.
 - value가 최대 카운트인 element를 반환한다.
 
-### my solution
+### my solution (java1)
 ```java
 class Solution {
     public int majorityElement(int[] nums) {
@@ -35,6 +35,35 @@ class Solution {
                 
         }
         return answer;
+    }
+}
+```
+
+### my solution (java2)
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        Map<Integer, Integer> counter = new HashMap<>();
+
+        // Count elems.
+        for (int num: nums) {
+            if (!counter.containsKey(num))
+                counter.put(num, 1);
+            else
+                counter.put(num, counter.get(num) + 1);
+        }
+
+        // Get max count
+        Integer maxNum = 0;
+        Integer maxCount = 0;
+        for (Map.Entry<Integer, Integer> entry: counter.entrySet()) {
+            if (maxCount < entry.getValue()) {
+                maxNum = entry.getKey();
+                maxCount = entry.getValue();
+            }
+        }
+
+        return maxNum;
     }
 }
 ```
