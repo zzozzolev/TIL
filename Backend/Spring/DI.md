@@ -5,6 +5,9 @@
 ## IoC(Inversion of Control)
 - 프로그램의 제어 흐름을 직접 제어하는 게 아니라 외부에서 관리하는 것.
 
+## 스프링 컨테이너
+- 일반적으로 `ApplicationContext`를 지칭함.
+
 ## 동적으로 bean을 선택해야할 때
 - 멤버 변수로 `Map<String, Type>` 혹은 `List<Type>`을 이용해 의존 관계를 주입할 수 있다.
 - 스프링이 알아서 해당 타입의 빈을 등록해준다.
