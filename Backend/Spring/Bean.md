@@ -110,3 +110,12 @@
   - request: 웹 요청이 들어오고 나갈때 까지 유지되는 스코프이다.
   - session: 웹 세션이 생성되고 종료될 때까지 유지되는 스코프이다.
   - application: 웹의 서블릿 컨텍스트와 같은 범위로 유지되는 스코프이다.
+
+## Request Scope Bean
+- `value = request`의 경우, `proxyMode`를 사용하면 obeject provider로 필요할 때 주입받는 효과를 낼 수 있다.
+  - `ScopedProxyMode.TARGET_CLASS`: class
+  - `ScopedProxyMode.INTERFACES`: interface
+- 스프링 컨테이너는 CGLIB라는 바이트 코드 조작 라이브러리를 이용해 가짜 프록시 객체를 생성한다.
+- DI시에 가짜 프록시 객체가 주입된다.
+- 가짜 프록시 객체는 실제 요청이 오면 그때 내부에서 실제 빈을 요청하는 위임 로직이 있다.
+- 가짜 프록시 객체는 싱글톤처럼 동작한다.
