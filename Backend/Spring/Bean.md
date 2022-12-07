@@ -45,7 +45,9 @@
 - 기본 메세지 컨버터
   1. `ByteArrayHttpMessageConverter`
   2. `StringHttpMessageConverter`
+    - 클래스 타입: `String`, 미디어타입: `*/*`
   3. `MappingJackson2HttpMessageConverter`
+    - 클래스 타입: 객체 또는 `HashMap`, 미디어타입: `application/json` 관련
     - `@RequestBody`가 바이트도 아니고 스트링도 아니면서 `Content-Type`이 `application/json`일 때
     - 즉, `application/json`이 아니면 적용이 안 되니 주의해야한다.
 
