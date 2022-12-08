@@ -23,6 +23,7 @@
 ## @Data
 - `@Getter`, `@Setter`, `@ToString`, `@EqualsAndHashCode`, `@RequiredArgsConstructor`를 자동으로 적용해준다.
 - 하지만 도메인에 사용하는 걸 권장하지 않는다.
+- [인프런 관련 질문 & 답변](https://www.inflearn.com/questions/387088/lombok-data-%EC%82%AC%EC%9A%A9-%EA%B4%80%EB%A0%A8)
 
 ## @Data vs @Value
 - `@Value`는 immutable objects를 만드는데 쓰인다.
