@@ -2,6 +2,12 @@
 ```
 HTTP 요청 -> WAS -> 필터 -> 서블릿 -> 스프링 인터셉터 -> 컨트롤러
 ```
+1. `preHandle`: 컨트롤러 호출 전
+2. `handle(handler)`
+3. `ModelAndView` 반환
+4. `postHandle`: 컨트롤러 호출 후에 호출된다. (예외 발생시 호출 X)
+5. `render(model)` 호출
+6. `afterCompletion`: 뷰가 렌더링된 이후에 호출된다. (예외 발생시 호출)
 
 ### 스프링 인터셉터 제한
 ```
