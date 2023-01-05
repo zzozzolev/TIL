@@ -17,3 +17,11 @@ WAS 에러 페이지 다시 요청 -> 필터 -> 서블릿 -> 인터셉터 -> 컨
 - `ExceptionResolver`를 사용하면 컨트롤러에서 예외가 발생해도 `ExceptionResolver`에서 예외를 처리한다.
 - 예외가 발생해도 서블릿 컨테이너까지 예외가 전달되지 않고 스프링 MVC에서 예외 처리는 끝이 난다.
 - 결과적으로 WAS 입장에서는 정상 처리가 된다. 예외를 이곳에서 모두 처리할 수 있다는 게 핵심이다.
+
+## 스프링이 제공하는 ExceptionResolver
+- `HandlerExceptionResolverComposite`에 다음 순서로 등록
+1. `ExceptionHandlerExceptionResolver`
+2. `ResponseStatusExceptionResolver`
+  - 예외에 따라서 HTTP 상태 코드를 지정해주는 역할을 한다.
+  - `@ResponseStatus`가 달려있는 예외, `ResponseStatusException` 예외
+3. `DefaultHandlerExceptionResolver`
