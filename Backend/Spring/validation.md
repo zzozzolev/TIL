@@ -1,6 +1,12 @@
 ## 참고
 - [공식 문서](https://beanvalidation.org/2.0/spec/#builtinconstraints)
 
+## 클라이언트 검증과 서버 검증
+- 클라이언트 검증은 조작할 수 있으므로 보안에 취약하다.
+- 서버만으로 검증하면 즉각적인 고객 사용성이 부족해진다.
+- 둘을 적절히 섞어서 사용하되 최종적으로 서버 검증은 필수이다.
+- API 방식을 사용하면 API 스펙을 잘 정의해서 검증 오류를 API 응답 결과에 잘 남겨줘야 한다.
+
 ## 스프링에서 validator 동작 원리
 - 스프링 부트가 `spring-boot-starter-validation` 라이브러리를 넣으면 자동으로 Bean Validator를 인지하고 스프링에 통합한다.
 - `LocalValidatorFactoryBean`을 글로벌 밸리데이터로 등록한다.
