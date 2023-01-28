@@ -273,3 +273,8 @@ Page<MemberDto> dtoPage = page.map(m -> new MemberDto());
 ### 참고
 - [Do DELETE queries take the same amount of time as SELECT](https://stackoverflow.com/questions/68767313/do-delete-queries-take-the-same-amount-of-time-as-select)
 - [InoDB-잠금-1-S락-X락-IS락-IX락](https://rosebud90.tistory.com/entry/InoDB-%EC%9E%A0%EA%B8%88-1-S%EB%9D%BD-X%EB%9D%BD-IS%EB%9D%BD-IX%EB%9D%BD)
+
+## JpaTransactionManager의 다양한 지원
+- `JpaTransactionManager`는 `DataSourceTransactionManager`가 제공하는 기능도 대부분 제공한다.
+- JPA라는 기술도 결국 내부에서는 DataSource와 JDBC 커넥션을 사용하기 때문이다.
+- 따라서 `JdbcTemplate`, `MyBatis`와 함께 사용할 수 있다.
