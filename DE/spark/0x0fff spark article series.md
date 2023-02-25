@@ -1,4 +1,5 @@
 # Spark Memory Management
+- https://0x0fff.com/spark-memory-management/
 ## UnifiedMemoryManager
 - ![spark memory menagement](./images/spark%20memory%20management.png)
 
@@ -36,6 +37,3 @@
 - 4GB 힙을 사용하더라도 결국 실제로 각 메모리 영역에서 사용하는 건 1423MB 밖에 안 됨.
 - 스파크 캐시를 사용할 때 executor에 캐시된 데이터 양이 처음 Storage Memory 리전과 크기가 동일한 경우, eviction으로 데이터를 제거해 더 작게 만들 수 없음.
 - 하지만 Execution Memory 리전이 Storage Memory를 채우기 전에 처음 크기보다 커지면, Execution Memory는 강제로 내쫓을 수 없어서 더 작은 Storage Memory를 가지게 된다.
-
-## link
-- https://0x0fff.com/spark-memory-management/
