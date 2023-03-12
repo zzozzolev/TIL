@@ -24,3 +24,20 @@
 - 영속성 컨텍스트를 비우지 않음.
 - 영속성 컨텍스트의 변경 내용을 DB에 동기화.
 - 트랜잭션이라는 작업 단위가 중요함.
+
+## `@GeneratedValue`
+### IDENTITY
+- PK 생성을 DB에 위임함.
+- 주로 MySQL, PostgreSQL, SQL Server에서 사용.
+  - MySQL의 `AUTO_INCREMENT`
+- JPA는 트랜잭션 커밋 시점에 INSERT SQL 실행함.
+- `AUTO_INCREMENT`는 데이터베이스에 INSERT SQL을 실행한 이후에 ID 값을 알 수 있음.
+- `IDENTITY` 전략은 `em.persiste()` 시점에 즉시 INSERT SQL 실행하고 DB에서 식별자를 조회함.
+
+### SEQUENCE
+- 유일한 값을 순서대로 생성하는 특별한 DB 오브젝트.
+- 오라클, PostgreSQL, H2 데이터베이스에서 사용.
+
+### TABLE 전략
+- 키 생성 전용 테이블을 하나 만들어서 DB 시퀀스를 흉내내는 전략.
+- 모든 DB에 적용 가능하지만 성능이 안 좋음.
