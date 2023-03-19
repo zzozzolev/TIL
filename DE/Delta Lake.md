@@ -24,13 +24,44 @@
 - 여러 액션이 있는데 세부 액션을 블로그 참고.
 - 액션들은 트랜잭션 로그에 커밋이라고 하는 정렬된 원자 단위로 기록된다.
 
-### The Delta Lake Transaction Log at the File Level
+#### The Delta Lake Transaction Log at the File Level
 - 유저가 델타 레이크 테이블을 생성할 때, 해당 테이블의 트랜잭션 로그는 자동으로 `_delta_log` 서브 디렉토리에 생성된다.
 - 유저가 테이블에 변경을 만들면 해당 변경 사항이 트랜잭션 로그에 정렬된 원자성 커밋으로 기록된다.
 - 각각의 커밋은 json 파일로 써진다.
 - 커밋마다 번호가 1씩 증가한다.
 - 델타 레이크는 이미 지워진 데이터일지라도 원자적 커밋을 유지한다. 테이블에 대한 감사나 time travel을 하기 위함이다.
 - 또한 스파크는 디스크에서 파일들을 바로 지우지 않는다.
+
+#### Quickly Recomputing State With Checkpoint Files
+- 델타 레이크는 `_delta_log` 서브 디렉토리에 파켓 포맷의 체크포인트 파일을 저장한다.
+- 체크포인트는 그 순간의 테이블의 전체 상태를 저장한다.
+- 테이블의 최신 상태와 싱크를 맞출 때, 이후의 모든 트랜잭션을 읽지 않는다.
+- 스피드를 높이기 위해 스파크는 `listFrom`로 현재 커밋 이후의 최신 체크포인트 파일을 읽고, 딱 그 이후의 json 커밋만 읽는다.
+
+#### Dealing With Multiple Concurrent Reads and Writes
+- 델타 레이크는 아파치 스파크를 이용하기 때문에 여러 유저가 동시에 테이블을 변경한다고 가정한다.
+- 이 경우를 처리하기 위해 optimistic concurrency control을 사용한다.
+
+#### What Is Optimistic Concurrency Control?
+- 낙관적 동시성 제어는 서로 다른 사용자가 테이블에 수행한 트랜잭션(변경)이 서로 충돌하지 않고 완료될 수 있다고 가정하는 동시 트랜잭션을 처리하는 방법이다.
+
+#### Solving Conflicts Optimistically
+- 델타 레이크는 두 개 이상의 커밋이 동시에 이루어졌을 때, 이를 다루기 위한 방법으로 mutual exclusion을 따른다.
+- 이 프로토콜은 ACID의 isolation을 가능하게 해준다.
+- 여러 동시의 쓰기 이후에도 테이블의 결과 상태가 그런 쓰기가 순차적으로 일어났던 것과 동일하다.
+- 델타 레이크는 변경 전에 읽은 테이블의 시작 테이블 버전을 기록한다.
+- 동시에 변경이 이루어지면 mutual exclusion을 사용한다.
+- 특정 유저의 커밋이 먼저 쓰여지고 다른 유저의 커밋은 에러가 나기보다는 낙관적으로 처리한다.
+- 테이블에 새로운 커밋이 쓰였는지 확인하고 해당 변경을 반영하기 위해 테이블을 업데이트한다. 그래서 그 다음 커밋이 된다.
+- 대부분의 경우에 핸들링은 조용히 성공적으로 된다. 하지만 조용히 해결하지 못한다면 에러가 발생한다.
+
+### Other Use Cases
+#### Time Travel
+- 원래 테이블에서 시작하고 해당 시점 이전에 이루어진 커밋만 처리하여 언제든지 테이블 상태를 다시 만들 수 있다.
+
+#### Data Lineage and Debugging
+- 트랜잭션 로그는 유저에게 거버넌스, 어딧, 컴플라이언스 목적에 유용한 데이터 리니지를 제공한다.
+- 또한 파이프라인의 변경 사항을 추적해 버그를 디버깅할 수도 있다.
 
 ### Refrence
 https://www.databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-transaction-log.html
