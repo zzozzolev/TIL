@@ -56,3 +56,21 @@
 - **주인이 아닌 쪽은 읽기만 가능.**
 - 주인은 `mappedBy` 속성 사용 X.
 - 주인이 아니면 `mappedBy` 속성으로 주인 지정.
+
+## 연관관계 주의점
+- 연관관계의 주인에 값을 입력하지 않으면 업데이트 쿼리가 나가지 않아서 FK가 설정되지 않음.
+- 연관관계의 주인이 아닌 곳에 값을 입력하지 않고 연관관계의 주인을 조회하면 1차 캐시에 있는 게 그대로 사용돼서 조회가 안 됨.
+- 양방향 연관관계를 설정하는 편의 메서드를 생성해야함. setter로 하기보다는 별도 이름을 쓰는 게 좋음. 한 곳만 선언해야함.
+  ```java
+  public void changeTeam(Team team) {
+    this.team = team;
+    team.getMembers().add(this);
+  }
+
+  public void addMember(Member member) {
+    member.setTeam(this);
+    members.add(member);
+  }
+  ```
+- 양방향 매핑시에 무한 루프 조심해야함.
+  - `toString()`, lombok, json 생성 라이브러리
