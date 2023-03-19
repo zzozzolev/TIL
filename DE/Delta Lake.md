@@ -65,3 +65,15 @@
 
 ### Refrence
 https://www.databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-transaction-log.html
+
+## Schema Enforcement & Evolution
+### Understanding Table Schemas
+- 델타 레이크는 트랜잭션 로그 내에 json 포맷으로 테이블의 스키마를 저장한다.
+
+### What Is Schema Enforcement?
+- schema enforcement는 schema validation으로도 알려져있다.
+- 테이블의 스키마와 매치되지 않는 쓰기를 거절해 데이터 퀄리티를 보장하는 것이다.
+
+
+### Reference
+- https://www.databricks.com/blog/2019/09/24/diving-into-delta-lake-schema-enforcement-evolution.html
