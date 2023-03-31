@@ -133,3 +133,21 @@
 - 영속성 컨텍스트의 도움을 받을 수 없는 준영속 상태일 때, 프록시 초기화하면 문제 발생함.
   - ex: `em.clear()`, `em.detach()`
   - 트랜잭션과 영속성 컨텍스트의 라이프사이클이 같아서 트랜잭션이 끝난 뒤 레이지 초기화를 하려고 할 때 에러가 발생함.
+
+## 고아 객체
+- 고아 객체 제거: 부모 엔티티와 연관 관계가 끊어진 자식 엔티티를 자동으로 삭제함.
+- `orphanRemoval = true`
+- 자식 엔티티를 컬렉션에서 제거
+  ```java
+  Parent parent1 = em.find(Parent.class, id);
+  parent1.getChildren().remove(0);
+
+  // DELETE FROM CHILD WHERE ID = ?
+  ```
+
+## 영속성 전이 + 고아 객체, 생명 주기
+- `CascadeType.ALL` + `orphanRemoval = true`
+- 스스로 생명주기를 관리하는 엔티티는 `em.persist()`로 영속화, `em.remove()`로 제거.
+- 두 옵션을 모두 활성화하면 부모 엔티티를 통해서 자식의 생명 주기를 관리할 수 있음.
+- DDD의 Aggregate Root 개념을 구현할 때 유용함.
+- 주의 사항은 자식 엔티티가 하나의 부모에만 속해야됨. 여러 곳에서 참조하면 사용하면 안 됨.
