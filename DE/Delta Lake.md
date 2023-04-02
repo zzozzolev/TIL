@@ -74,6 +74,18 @@ https://www.databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-
 - schema enforcement는 schema validation으로도 알려져있다.
 - 테이블의 스키마와 매치되지 않는 쓰기를 거절해 데이터 퀄리티를 보장하는 것이다.
 
+### How Does Schema Enforcement Work?
+- 델타 레이크는 '쓰기'시점에 스키마 밸리데이션을 한다.
+- 스키마가 호환 가능하지 않다면, 델타 레이크는 트랜잭션을 취소하고 에러를 레이즈한다.
+- 테이블 쓰기가 호환 가능한지 결정하기 위해 다음 룰을 사용한다.
+  - 타겟 테이블 스키마에 없는 컬럼을 포함하면 안 된다. 반대로, 타겟 테이블의 스키마에 없는 추가 컬럼은 괜찮다.
+    - 단, merge를 all로 한다면 데이터 프레임과 타겟 테이블의 스키마가 일치해야한다.
+  - 타겟 테이블의 컬럼 데이터 타입과 다른 컬럼 데이터 타입을 가지면 안 된다.
+  - 영어 대소문자만 다른 컬럼을 사용하면 안 된다.
+
+### How Is Schema Enforcement Useful?
+- schema enforcement 덕분에 프로덕션 데이터를 깨끗하게 관리할 수 있다.
+- 허들이 생기지 않기 위해, 브론즈-실버-골드의 레이어를 두는 `multi-hop` 아키텍처를 많이 이용한다.
 
 ### Reference
 - https://www.databricks.com/blog/2019/09/24/diving-into-delta-lake-schema-enforcement-evolution.html
