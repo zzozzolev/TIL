@@ -87,5 +87,22 @@ https://www.databricks.com/blog/2019/08/21/diving-into-delta-lake-unpacking-the-
 - schema enforcement 덕분에 프로덕션 데이터를 깨끗하게 관리할 수 있다.
 - 허들이 생기지 않기 위해, 브론즈-실버-골드의 레이어를 두는 `multi-hop` 아키텍처를 많이 이용한다.
 
+### Preventing Data Dilution
+- 컬럼을 테이블에 자유롭게 추가하지 못하는 게 불만족스러울 수 있다.
+- 하지만 무작위로 컬럼이 추가돼 테이블이 의미를 잃는 것 보다 낫다.
+
+### What Is Schema Evolution?
+- 스키마 진화는 사용자가 시간이 지남에 따라 변경되는 데이터를 수용하기 위해 테이블의 현재 스키마를 쉽게 변경할 수 있는 기능이다.
+- 흔하게 하나 이상의 새로운 컬럼을 포함하도록 스키마를 자동으로 조정하기 위해 append 또는 overwrite 작업을 수행할 때 사용된다.
+
+### How Does Schema Evolution Work?
+- 스키마 진화는 `.write`, `.writeStream` 스파크 커맨드에 `.option('mergeSchema', 'true')`을 추가해서 활성화된다.
+- `mergeSchema` 옵션을 포함하면 DF에 있지만 타겟 테이블에 없는 어떤 컬럼이든 스키마의 끝에 자동으로 추가된다.
+- nested field들도 추가될 수 있다.
+- 다음 유형의 스키마 변경은 테이블 추가 또는 덮어쓰기 중에 스키마 진화에 적합하다.
+  - 새로운 컬럼 추가.
+  - 데이터 타입을 Null에서 다른 타입으로 변경 혹은 upcast.
+- 스키마 진화에 적합하지 않은 다른 변경 사항은 `.option("overwriteSchema", "true")` 를 추가해 스키마와 데이터를 덮어써야함.
+
 ### Reference
 - https://www.databricks.com/blog/2019/09/24/diving-into-delta-lake-schema-enforcement-evolution.html
