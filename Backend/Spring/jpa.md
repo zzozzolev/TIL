@@ -203,3 +203,12 @@
     ```
     SELECT m.username FROM Team t JOIN t.members m;
     ```
+
+## 명시적 조인, 묵시적 조인
+- 명시적 조인: join 키워드 직접 사용 -> `SELECT m FROM Member m JOIN m.team t`
+- 묵시적 조인: 경로 표현식에 의해 묵시적으로 SQL 조인 발생 (inner join만 가능) -> `SELECT m.team FROM Member m`
+
+## 실무 조건
+- 가급적 묵시적 조인 대신에 **명시적 조인 사용.**
+- 조인은 SQL 튜닝에 중요 포인트.
+- 묵시적 조인은 조인이 일어나는 상황을 한눈에 파악하기 어려움.
