@@ -200,3 +200,6 @@
 - 단일 값 연관 경로: inner join 발생, 탐색 O
 - 컬렉션 값 연관 경로: inner join 발생, 탐색 X
   - FROM 절에서 명시적 조인을 통해 별칭을 얻으면 별칭을 통해 탐색 가능.
+    ```
+    SELECT m.username FROM Team t JOIN t.members m;
+    ```
