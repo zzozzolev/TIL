@@ -21,3 +21,5 @@
 - Kinesis Data Firehose는 목적지에 전달하기 전에 특정 사이즈 혹은 특정 기간 동안 인커밍 스트리밍 데이터를 버퍼한다.
 - Buffer Size는 MB 단위이고 Buffer Interval은 초단위이다.
 
+## 참고 자료
+- https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
