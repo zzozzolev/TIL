@@ -23,3 +23,14 @@
 
 ## 참고 자료
 - https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+
+## Transform by lambda
+### Buffer Size
+- 특정 람다를 선택할 수 있음.
+- 람다는 호출 페이로드 쿼타가 6MB임.
+- 람다로 처리한 후에 데이터가 커질 수 있음.
+- 버퍼 사이즈를 작게 할 수록 처리 이후 데이터가 커질 공간이 더 있음.
+
+### Buffer Interval
+- 람다를 호출하기 전에 인커밍 데이터를 버퍼하는 간격임.
+- 람다는 버퍼 사이즈나 버퍼 인터벌에 도달하면 호출됨.
