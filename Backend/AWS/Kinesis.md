@@ -88,3 +88,7 @@
 
 ### S3 buffer hints
 - 파이어호스는 지정된 destination에 전달하기 전에 인커밍 데이터를 버퍼한다.
+
+## Backup Settings
+- 파이어호스는 S3를 모든 혹은 실패된 데이터를 백업하는데 사용한다.
+- S3, Redshift를 destination으로 설정하고 lambda로 처리를 하거나 나머지로 destination을 설정하면 백업을 설정할 수 있다.
