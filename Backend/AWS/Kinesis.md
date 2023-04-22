@@ -103,3 +103,35 @@
 - 매니지드 서비스이기 때문에 data intake pipeline을 만들고 운영하는 부담을 덜어준다.
 - elasticity는 스트림을 스케일 업하고 다운할 수 있기 때문에 만료되기 전에는 절대 데이터 레코드를 유실하지 않는다.
 - 여러 애플리케이션이 하나의 스트림으로부터 컨숨할 수 있다.
+
+### Terminology
+- Kinesis Data Stream
+  - a set of shards
+  - 각각의 샤드는 데이터 레코드들의 시퀀스를 가진다.
+  - 각각의 데이터 레코드는 키네시스 데이터 스트림에의해 할당된 sequence number를 가진다.
+- Data Record
+  - Kinesis Data Stream에 저장되는 데이터 유닛.
+  - sequence number, partition key, data blob으로 구성된다.
+  - data blob is immutable sequence of bytes.
+  - data blob은 1 MB까지 커질 수 있다.
+- Capacity Mode
+  - capacity가 어떻게 관리되고 데이터 스트림의 사용량에 대해 어떻게 비용을 지불할지 결정한다.
+  - `on-demand`와 `provisioned`가 있다.
+  - `on-demand`: 자동으로 샤드를 관리한다. 실제 throughput 만큼만 내면된다.
+  - `provisioned`: 샤드 개수를 지정해야한다. 시간당 샤드 개수로 비용이 청구된다.
+- Retention Period
+  - 데이터 레코드가 스트림에 더해진 뒤 접근 가능한 시간이다.
+  - 디폴트는 생성 이후 24시간이다.
+  - 1년까지 늘릴 수 있다.
+  - 24시간을 넘어가면 추가 비용이 청구된다.
+- Amazon Kinesis Data Streams Application
+  - consumer이다.
+  - 두 가지 타입의 컨수머가 있다.
+    - shared fan-out consumer: 샤드당 전체 2MB/sec로 고정된다. 여러 컨수머가 같은 샤드를 사용하면 throughput을 공유한다.
+    - enhanced fan-out consumer: 컨수머당 독립적으로 2MB/sec을 사용한다.
+- Shard
+  - 스트림에서 고유하게 식별되는 데이터 레코드들의 시퀀스.
+  - 스트림은 하나 이상의 샤드로 구성돼있다.
+  - 각각은 고정된 단위의 capacity만 제공한다.
+  - 스트림의 전체 capacity는 샤드들의 capacity의 합이다.
+  - 샤드 개수는 resharding을 통해 증가시키거나 감소시킬 수 있다.
