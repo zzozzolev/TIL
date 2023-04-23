@@ -93,6 +93,26 @@
 - 파이어호스는 S3를 모든 혹은 실패된 데이터를 백업하는데 사용한다.
 - S3, Redshift를 destination으로 설정하고 lambda로 처리를 하거나 나머지로 destination을 설정하면 백업을 설정할 수 있다.
 
+## Converting Your Input Record Format in Kinesis Data Firehose
+- format conversion은 destination이 S3일 때만 사용가능하다.
+
+### Record Format Conversion Requirements
+- A deserializer to read the JSON of your input data
+  - 같은 record에 여러 개의 JSON 문서가 합쳐져 있을 때, single-line string만 허용한다.
+  - array of json이나 multi-line string 허용하지 않는다.
+  - 문서에는 OpenXJsonSerDe랑 Apache Hive JSON SerDe 중에 고르라고 하는데 콘솔에는 선택할 수 있는 게 없고 무조건 OpenXJsonSerde로 돼있다.
+- A schema to determine how to interpret that data
+  - AWS Glue Catalog를 사용한다.
+  - 키네시스 데이터 파이어호스는 스키마를 레퍼런스하고 인풋 데이터를 해석하는데 사용한다.
+- A serializer to convert the data to the target columnar storage format
+  - Parquet or ORC
+
+### Record Format Conversion Error Handling
+- 키네시스 데이터 파이어호스가 레코드를 parse하거나 deserialize를 하지 못할 때, S3 error prefix에 쓴다.
+  - 예를 들면, 데이터가 스키마에 맞지 않을 때
+- **error prefix에 쓰는 게 실패하면 키네시스 데이터 파이어호스는 영원히 재시도해 더 이상의 딜리버리를 블록킹한다.**
+
+
 ## Kinesis Data Streams
 - 실시간으로 큰 데이터 레코드 스트림을 수집하고 처리할 수 있다.
 - 로그 데이터, 애플리케이션 로그, 소셜 미디어, 마켓 데이터 피드, 웹 클릭 스트림 데이터에 쓰일 수 있다.
