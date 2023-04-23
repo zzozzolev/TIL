@@ -210,3 +210,26 @@
 - on-demand to provisioned
   - 처음에는 전환 전의 샤드 수를 그대로 유지한다.
   - 이 시점부터 모니터링과 샤드 개수에 대한 조정에 대한 책임을 져야한다.
+
+## Amazon Kinesis Data Firehose Data Delivery
+### Data Delivery Format
+- S3에 데이터를 전달할 때, 키네시스 데이터 파이어호스는 딜리버리 스트림의 버퍼링 설정에 따라 여러 개의 인커밋 레코드들은 concat한다.
+- 그 다음에 S3에 S3 object로 전달한다.
+
+### Data Delivery Frequency
+- 각각의 destination마다 각자의 data delivery frequency를 가진다.
+
+#### Amazon S3
+- frequency는 Buffer size와 Buffer interval로 결정된다.
+- 두 조건 중 먼저 만족하는 것이 data delivery를 트리거한다.
+- destination으로의 data delivery가 딜리버리 스트림으로의 쓰기보다 뒤처지면, 파이어호스는 동적으로 버퍼 사이즈를 늘린다.
+- 그러면 캐치업 할 수 있고 모든 데이터를 destination으로 보낼 수 있다.
+
+### Data Delivery Failure Handling
+- 각각의 destination마다 각자의 data delivery failure handling을 가진다.
+
+#### Amazon S3
+- 다양한 이유로 data delivery가 실패할 수 있다.
+- 파이어호스는 딜리버리가 성공할 때까지 24시간동안 재시도를 한다.
+- 파이어호스의 최대 데이터 저장 시간은 24시간이다.
+- **만약 data delivery가 24시간보다 오래되면 데이터가 유실된다.**
