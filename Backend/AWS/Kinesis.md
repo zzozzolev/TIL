@@ -171,3 +171,22 @@
 - 하지만 대량의 인커밍 트래픽을 특정 샤드에 넣는 해시 키를 감지하고 격리하지 않는다.
 - 만약 highly uneven partition keys를 사용한다면 write exception을 계속 경험할 거다.
 - 그런 유즈 케이스는 provisioned capacity mode를 사용하는 걸 권장한다.
+
+### Provisioned Mode
+- 동적으로 콘솔이나 UpdateShardCount API를 통해 샤드 capacity를 늘리거나 줄일 수 있다.
+- 키네시스 데이터 스트림 프로듀서나 컨수머 어플리케이션이 스트림으로부터 읽기나 쓰기를 하는 동안 업데이트를 할 수 있다.
+- **예측이 쉬운 capacity 요구 사항이 있는 예측 가능한 트래픽에 적합하다.**
+- 데이터 스트림을 위한 샤드 개수를 지정해야한다. (공식은 문서 참고)
+- 데이터 스트림을 peak throughput을 처리하도록 설정하지 않았으면 read and write throughput exceptions을 경험할 수 있다. 이런 경우 직접 스케일 업을 해야한다.
+- 또한 uneven data distribution partition key를 사용해도 exeptions를 경험할 수 있다. 이런 경우 그런 샤드를 찾아서 직접 나눠줘야한다.
+
+### Switching Between Capacity Modes
+- 각각의 모드에서 서로의 모드로 바꿀 수 있다.
+- 24시간 내에 두 번을 바꿀 수 있다. (Updating -> Active로 바뀐 후)
+- capacity 모드를 바꾸는 건 어떤 장애도 유발하지 않는다.
+- provisioned to on-demand
+  - 처음에는 전환 전의 샤드 수를 그대로 유지한다.
+  - 이 시점부터 키네시스 데이터 스트림은 데이터 트래픽을 모니터링하고 샤드를 스케일한다.
+- on-demand to provisioned
+  - 처음에는 전환 전의 샤드 수를 그대로 유지한다.
+  - 이 시점부터 모니터링과 샤드 개수에 대한 조정에 대한 책임을 져야한다.
