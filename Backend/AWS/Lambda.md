@@ -20,3 +20,29 @@
 - CloudWatch Logs에서 명시적으로 re-init을 리포트하지 않는다.
 - shutdown 이후에도 handler 메서드 밖에 선언된 객체는 초기화된 상태로 남아있는다.
 - 함수 코드를 짤 때, lambda가 알아서 뒤이은 함수 invoke에서 execution environment를 재사용할 거라고 가정하면 안 된다.
+
+## Lambda function scaling
+- 초기화된 execution environment가 다음 호출에 바로 사용되면 init 없이 바로 사용될 수 있다.
+- 만약 요청을 처리할 execution environment가 없으면 새로운 execution environment를 사용한다.
+- concurrency는 rps랑 다르다.
+- concurrency는 다음과 같이 계산할 수 있다.
+  ```
+  Concurrency = (average requests per second) * (average request duration in seconds)
+  ```
+
+### Reserved concurrency
+- 함수에서 특정 만큼의 concurrency를 보장하고 싶을 때 사용하면 된다.
+- 함수에서 최대로 수행 가능한 concurrency이다.
+- 대신 reserved concurrency를 설정하면 unreserved concurrency pool을 사용할 수 없다.
+
+### Provisioned concurrency
+- pre-initialized execution environment의 개수이다.
+- init이 이미 끝난 lambda를 바로 사용할 수 있기 때문에 cold start를 겪을 가능성이 줄어든다.
+- reserved concurrency랑 다른 거니 헷갈리지 말자.
+
+### Burst concurrency
+- lambda가 즉시 concurrency를 늘릴 수 있는 정도이다.
+- 리전마다 최대 quota가 다르다. (seoul은 500)
+- 리퀘스트에 대해서 available burst quota만큼 급증시킬 수 있다.
+- burst quota는 1분 후 500씩 다시 찬다. 그래서 다음 burst에서 사용할 수 있다.
+- 현재 active execution environments에서 burst quota만큼 계속 축적해서 maximum scaling capacity를 늘릴 수 있다.
