@@ -12,3 +12,11 @@
 - 람다는 함수를 execition environment에서 호출한다.
 - 함수의 런타임은 Runtime API를 사용해 람타와 통신한다.
 - 런타임과 함수는 execution environment내에서 프로세스로 수행된다.
+- execution enviroment의 lifecycle은 init -> invoke -> shutdown 순으로 진행된다.
+- lambda는 요청을 받자마자 수행 가능한 게 아니고 먼저 init에서 runtime과 모든 extension들에서 준비를 마쳐야한다.
+- init 시간이 길어지면 cold start가 발생할 수 있다.
+- 만약 lambda 함수가 invoke 동안 망가지거나 타임아웃이 발생하면 lambda는 executuin enviroment를 리셋한다. (like shutdown)
+- 해당 environment가 새로운 invocation에 쓰이면 lambda는 re-init을 한다. (called suppressed init)
+- CloudWatch Logs에서 명시적으로 re-init을 리포트하지 않는다.
+- shutdown 이후에도 handler 메서드 밖에 선언된 객체는 초기화된 상태로 남아있는다.
+- 함수 코드를 짤 때, lambda가 알아서 뒤이은 함수 invoke에서 execution environment를 재사용할 거라고 가정하면 안 된다.
