@@ -8,3 +8,9 @@
 - A row group contains exactly one column chunk per column.
 - A single Row Group contains data for all columns for some number of rows.
 - Column chunks contain one or more pages.
+
+## Row groups stats and Page index
+- https://blog.cloudera.com/speeding-up-select-queries-with-parquet-page-indexes/
+
+## Metadata
+- https://parquet.apache.org/docs/file-format/metadata/
