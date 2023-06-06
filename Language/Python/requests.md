@@ -7,8 +7,6 @@
   ```
 - `Session`을 사용하면 매 요청마다 커넥션을 만들지 않고 최초 1회에만 만들어 사용한다.
 
-### 
-
 ### Reference
 - https://requests.readthedocs.io/en/latest/user/advanced/
 - https://requests.readthedocs.io/en/latest/api/?highlight=Session#requests.Session
