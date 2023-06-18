@@ -205,3 +205,10 @@ def subdag_parallel_dag(parent_dag_id, child_dag_id, default_args):
   - `one_failed`: 이전 태스크 중 하나라도 실패하자마자 해당 태스크가 실행된다.
   - `none_failed`: 이전 태스크가 모두 성공하거나 스킵되면 해당 태스크가 실행된다.
   - `none_failed_or_skipped`: 이전 태스크가 모두 실패하지 않고 하나라도 성공하면 해당 태스크가 실행된다.
+
+## `ExternalTaskSensor` 자동 센싱하기
+- `airflow.DAG`에서 `get_last_dagrun().logical_date`를 이용하면 마지막 DAG Run의 `logical_date` 즉, `execution_date`를 얻을 수 있다.
+- 디폴트가 `include_externally_triggered=False`여서 기본적으로 스케줄러에 의해 수행된 게 아니라면 제외된다.
+- 센싱하고 싶은 DAG 혹은 DAG의 task들을 파라미터로 받아서 `ExternalTaskSensor`에 넘겨주면 된다.
+- 센싱을 위한 `execution_date` 관련 파라미터는 아래처럼 설정하면 된다. `execution_date_fn`은 datetime이 들어가야해서 부적절하다.
+  - `execution_delta`: input DAG `execution_date` - target DAG `execution_date`
