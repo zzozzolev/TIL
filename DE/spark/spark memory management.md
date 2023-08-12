@@ -1,6 +1,8 @@
-## UnifiedMemoryManager
-- ![spark memory menagement](./images/spark%20memory%20management.png)
+## Executor Memory
+![Executor Memory](./images/Spark%20Executor%20Memory.png)
+https://selectfrom.dev/spark-performance-tuning-spill-7318363e18cb
 
+## Memory inside JVM
 ### Reserved Memory
 - 스파크 내부 객체를 생성하기 위해 리저브된 영역임.
 - 스파크 익스큐터에 1.5 * Reserved Memory의 JVM heap 영역을 주지 않으면 에러가 발생함.
@@ -52,6 +54,27 @@
 - Storage Memory : (4096MB - 300MB) * 0.75 * 0.5 = 1423MB
 - Execution Memory : (4096MB - 300MB) * 0.75 * (1 - 0.5) = 1423MB
 
+## Memory outside JVM
+- OffHeap memory: JVM 밖의 메모리이지만 JVM 목적으로 쓰이거나 프로젝트 텅스텐을 위해 사용되는 메모리
+- External process memory: R 혹은 Python을 위한 메모리. JVM 밖에 존재하는 프로세스에 의해 사용되는 메모리.
+
+### OffHeap
+- `spark.executor.memoryOverhead`: 익스큐터당 추가적인 non-heap 메모리.
+
+### Python
+- `spark.executor.pyspark.memory`
+  - external process 메모리의 일부임.
+  - 각 익스큐터에서 pyspark에 할당되는 메모리.
+  - default는 지정돼있지 않음.
+  - 지정되면 pyspark의 메모리는 해당 설정값만큼으로 제한됨.
+  - 지정돼있지 않으면 파이썬의 메모리 사용을 제한하지 않음.
+  - 다른 non-JVM 프로세스와 공유하는 overhead 메모리 공간을 초과하지 않도록 알아서 잘 해야됨.
+- `spark.python.worker.memory`
+  - JVM 프로세스와 Python 프로세스는 py4J 브릿지를 통해 커뮤니케이션함.
+  - py4J는 JVM과 파이썬 사이의 오브젝트들을 노추함.
+  - 해당 설정값은 디스크에 스필링을 하기 전에 객체 생성에 py4J가 얼마만큼의 메모리를 사용할 수 있는지 컨트롤함.
+
 ## Reference
 - https://0x0fff.com/spark-memory-management/
 - https://dhkdn9192.github.io/apache-spark/spark_executor_memory_structure/
+- https://stackoverflow.com/questions/68249294/in-spark-what-is-the-meaning-of-spark-executor-pyspark-memory-configuration-opti
