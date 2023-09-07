@@ -1,4 +1,5 @@
 # 어느 날 고민 많은 주니어 개발자가 찾아왔다 2탄: 주니어 시절 설장과 고민들 - 김영한
+- https://www.inflearn.com/course/lecture?courseSlug=%EC%9D%B8%ED%94%84%EC%BD%982023-%EB%8B%A4%EC%8B%9C%EB%B3%B4%EA%B8%B0&unitId=177890
 ## 성장 기본기 - 기술과 비지니스
 - 50:50으로 중요함.
 - 현재 팀에서 사용하는 기술 vs 최신 유행하는 기술
