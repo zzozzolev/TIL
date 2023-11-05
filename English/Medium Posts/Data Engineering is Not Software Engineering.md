@@ -33,6 +33,11 @@
 - be designed to~ : ~을 위해 설계되다.
 - management of ~: ~에 대한 관리
 - offload: 떠넘기다.
+- function: 동작한다.
+- be concerned with: ~와 관련이 있다, ~에 관심이 있다.
+- valuable to ~: ~에 가치있는
+- get to: ~에 도착하다.
+- via: ~을 통해
 
 ### 용법
 - Both는 단독으로 주어로 쓸 수 있다. ex: Both have ...
@@ -49,6 +54,13 @@
 - grow는 타동사로도 자동사로도 쓰임.
 - a relatively small amount of ~: 비교적 작은양의 ~
 - be offloaded to ~: ~에 떠넘기다.
+- place where: ~한 곳
+- be to ~: ~하는 것이다.
+- so that: ~하기 위해
+- pieces of ~: ~의 일부분
+- contrary to ~: ~과 반대로
+- There is/are no ~: ~이 없다.
+- only N is ~: 오직 N만 ~ 하다.
 
 ### 북마크
-- "A web application can be killed and restarted any time; its state is managed by a database that runs in a separate process."부터 읽으면 됨.
+- "Has only a single feature of relevance to the customer"부터 읽으면 됨.
