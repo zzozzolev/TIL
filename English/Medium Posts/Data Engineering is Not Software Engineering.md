@@ -38,6 +38,10 @@
 - valuable to ~: ~에 가치있는
 - get to: ~에 도착하다.
 - via: ~을 통해
+- though ~: ~이긴 하지만, 그래도 ~이기는 하다.
+- in this sense: 이런 의미에서
+- viable: 실행 가능한
+- shoehorn: 작은 공간에 억지로 집어넣다.
 
 ### 용법
 - Both는 단독으로 주어로 쓸 수 있다. ex: Both have ...
@@ -61,6 +65,13 @@
 - contrary to ~: ~과 반대로
 - There is/are no ~: ~이 없다.
 - only N is ~: 오직 N만 ~ 하다.
+- due to vs because of
+  - due to: 형용사적 용법, 무엇 때문에, 문장 중간이나 끝 부분, 문어체
+  - because of: 전치사적 용법, 어떤 것의 원인, 문장 시작, 구어체
+- flavor of ~: ~을 선호하는?
+- map onto something: ~을 ~과 연관시키다.
+- equivalent in ~: ~에 대응하는 것.
+- fit into ~: ~에 꼭 들어맞다. 
 
 ### 북마크
-- "Has only a single feature of relevance to the customer"부터 읽으면 됨.
+- "Most commonly, a column represents a field that may or may not be correlated with the labels"부터 읽으면 됨.
