@@ -42,6 +42,13 @@
 - in this sense: 이런 의미에서
 - viable: 실행 가능한
 - shoehorn: 작은 공간에 억지로 집어넣다.
+- redone: 다시 하다.
+- convoluted: 뒤얽힌
+- a series of: 일련의
+- in place: 제자리에 있는
+- probably: (높은 확신의) 아마도 vs maybe: (낮은 확신의) 아마도
+- on par with ~: ~와 대등한
+- well-designed: 잘 설계된
 
 ### 용법
 - Both는 단독으로 주어로 쓸 수 있다. ex: Both have ...
@@ -71,7 +78,17 @@
 - flavor of ~: ~을 선호하는?
 - map onto something: ~을 ~과 연관시키다.
 - equivalent in ~: ~에 대응하는 것.
-- fit into ~: ~에 꼭 들어맞다. 
+- fit into ~: ~에 꼭 들어맞다.
+- most commonly: 흔히
+- that's why: 그것이 이유이다.
+- would, may: ~일 것이다.
+  - 추측 정도: must > will(would) > should > can(could) > may(might)
+- happy with ~: ~으로 행복하다.
+- half the time: 절반의 시간
+- '다음과 같다'로 나열하고 싶을 때 `:`를 하고 문장을 아래 씀.
+- affect(객관적, 타발적) vs influence(자발적)
+- from ~'s perspective: ~의 관점에서
+- such 명사 that ~: ~한 명사
 
 ### 북마크
 - "Most commonly, a column represents a field that may or may not be correlated with the labels"부터 읽으면 됨.
