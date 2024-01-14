@@ -49,6 +49,13 @@
 - probably: (높은 확신의) 아마도 vs maybe: (낮은 확신의) 아마도
 - on par with ~: ~와 대등한
 - well-designed: 잘 설계된
+- in terms of ~: ~의 관점에서
+- dice: 작은 큐브 모양으로 자르다.
+- inertia: 관성
+  - an inherent inertia: 고유한 관성
+- wasteful ~= not useful
+- signify: 의미하다.
+- bridge the gap: 공백을 메우다.
 
 ### 용법
 - Both는 단독으로 주어로 쓸 수 있다. ex: Both have ...
@@ -89,6 +96,16 @@
 - affect(객관적, 타발적) vs influence(자발적)
 - from ~'s perspective: ~의 관점에서
 - such 명사 that ~: ~한 명사
+- A as well as B: B뿐만 아니라 A도 또한 (A 강조)
+- It's important to ~: ~하는 게 중요하다.
+- ~때문에 접속사별 늬앙스
+  - since: 과거에 일어난 일 때문에
+  - as: 동시간에 발생한 일 때문에
+  - because: 명확한 원인 때문에
+  - for: 무엇을 생각했기 때문에
+- the same as: ~와 똑같은
+- check whether ~: ~인지 점검하다.
+- work as intended: 의도한대로 동작하다.
 
 ### 북마크
-- "Most commonly, a column represents a field that may or may not be correlated with the labels"부터 읽으면 됨.
+- "In this way, a software developer gets rapid feedback during development and can be pretty confident their code works as intended when they open a pull request."부터 읽으면 됨.
