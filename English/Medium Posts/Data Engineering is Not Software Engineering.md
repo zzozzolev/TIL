@@ -56,6 +56,13 @@
 - wasteful ~= not useful
 - signify: 의미하다.
 - bridge the gap: 공백을 메우다.
+- compared to ~: ~과 비교해서
+- occur at ~: ~에서 발생하다.
+- undisclosed: 비공개된
+- account for: ~을 설명하다, 해명하다.
+- dodgy: 부실한 <-> reliable
+- notorious: 악명 높은 (infamous 좀 더 격식)
+- be bad at ~: ~을 못하다.
 
 ### 용법
 - Both는 단독으로 주어로 쓸 수 있다. ex: Both have ...
@@ -106,6 +113,13 @@
 - the same as: ~와 똑같은
 - check whether ~: ~인지 점검하다.
 - work as intended: 의도한대로 동작하다.
+- There is a need to ~: ~할 필요가 있다.
+- why not v: v 하는 게 어때?
+- behave like ~: ~처럼 행동하다.
+- if vs whether
+  - if: ~한다면 (가정)
+  - whether: ~인지 아닌지 (선택)
+- make assumptions: 가정을 하다.
 
 ### 북마크
-- "In this way, a software developer gets rapid feedback during development and can be pretty confident their code works as intended when they open a pull request."부터 읽으면 됨.
+- "Unexpected content or structure in the data will break the pipeline, or at the very least produce an incorrect result."부터 읽으면 됨.
