@@ -63,6 +63,17 @@
 - dodgy: 부실한 <-> reliable
 - notorious: 악명 높은 (infamous 좀 더 격식)
 - be bad at ~: ~을 못하다.
+- sloppy: 엉성한, 헐렁한
+- defend A against B: B로부터 A를 지키다.
+- erroneous: 잘못된
+- adhere to: (규칙, 계약, 어떤 기준, 신념 등) ~을 따르다. ~= stick to (좀 더 비격식)
+- elaborate: 정교한
+- adequately: 적절하게
+- annoyingly: 짜증나게, 귀찮게
+- defeat: 패배시키다.
+- all the rage: 대유형이다.
+- brittle: 다루기 힘든
+- incentivize: (인센티브를 주어) 장려하다.
 
 ### 용법
 - Both는 단독으로 주어로 쓸 수 있다. ex: Both have ...
@@ -120,6 +131,14 @@
   - if: ~한다면 (가정)
   - whether: ~인지 아닌지 (선택)
 - make assumptions: 가정을 하다.
+- None of this is related to ~: 무엇도 ~과 연관이 없다.
+- require A to B: A에게 B를 요구하다.
+- shift ~ from A to B: ~을 A에서 B로 바꾸다. 
+- out of 용법
+  - 벗어나다 ex: I was almost out of my mind.
+  - 숫자 중에서 ex: two out of ten people
+  - 예의상 ex: out of courtesy
+  - 아무도 사용하지 않는 ex: out of service
 
 ### 북마크
-- "Unexpected content or structure in the data will break the pipeline, or at the very least produce an incorrect result."부터 읽으면 됨.
+- "Pipeline Development Can Not Be Parallelized"부터 읽으면 됨.
