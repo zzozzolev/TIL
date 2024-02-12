@@ -74,6 +74,17 @@
 - all the rage: 대유형이다.
 - brittle: 다루기 힘든
 - incentivize: (인센티브를 주어) 장려하다.
+- feed back into ~: ~에 피드백이 되다.
+- counter: 반박하다.
+- plan out: 세심히 계획을 세우다.
+- vehement: (특히 분노를 담아) 격렬한
+- stumble around: 이리저리 비틀거리다.
+- particularity: 독특함.
+- unwieldy: 다루기 힘든
+- brittle: 잘 부러지는, 불안정한
+- shill: 선전하다.
+- backfire: 기대에 어긋난 결과가 되다.
+- inevitably: 필연적으로
 
 ### 용법
 - Both는 단독으로 주어로 쓸 수 있다. ex: Both have ...
@@ -139,6 +150,11 @@
   - 숫자 중에서 ex: two out of ten people
   - 예의상 ex: out of courtesy
   - 아무도 사용하지 않는 ex: out of service
+- in an attempt to ~: ~하려는 시도로
+- as long as: ~하는 한
+- in a sense: 어느 정도
+- They are a means to an end: 그것들은 목적을 위한 수단이다.
+
 
 ### 북마크
-- "Pipeline Development Can Not Be Parallelized"부터 읽으면 됨.
+- "Don’t invest a lot of time in building before a proposed solution is agreed upon by both the customer and the data producers"부터 읽으면 됨.
