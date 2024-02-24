@@ -85,6 +85,7 @@
 - shill: 선전하다.
 - backfire: 기대에 어긋난 결과가 되다.
 - inevitably: 필연적으로
+- costly: 비용이 많이 드는
 
 ### 용법
 - Both는 단독으로 주어로 쓸 수 있다. ex: Both have ...
@@ -154,7 +155,3 @@
 - as long as: ~하는 한
 - in a sense: 어느 정도
 - They are a means to an end: 그것들은 목적을 위한 수단이다.
-
-
-### 북마크
-- "Don’t invest a lot of time in building before a proposed solution is agreed upon by both the customer and the data producers"부터 읽으면 됨.
